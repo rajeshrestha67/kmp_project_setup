@@ -1,5 +1,7 @@
 package dev.rajesh.mobile_banking.domain.auth.login.usecase
 
+import dev.rajesh.datastore.token.model.Token
+import dev.rajesh.datastore.token.repository.TokenRepository
 import dev.rajesh.mobile_banking.domain.auth.login.mapper.toData
 import dev.rajesh.mobile_banking.domain.auth.login.model.LoginData
 import dev.rajesh.mobile_banking.domain.auth.login.repository.UserRepository
@@ -8,10 +10,11 @@ import dev.rajesh.mobile_banking.networkhelper.ApiResult
 import dev.rajesh.mobile_banking.networkhelper.map
 import dev.rajesh.mobile_banking.networkhelper.onError
 import dev.rajesh.mobile_banking.networkhelper.onSuccess
+import kotlinx.coroutines.flow.firstOrNull
 
 class LoginUseCase(
     private val userRepository: UserRepository,
-    //private val tokenRepository: TokenRepository
+    private val tokenRepository: TokenRepository
 ) {
     suspend operator fun invoke(
         username: String,
@@ -30,7 +33,15 @@ class LoginUseCase(
             deviceIdentifier,
         ).map {
             it.toData()
-        }.onSuccess {
+        }.onSuccess { data ->
+            val token = tokenRepository.token.firstOrNull() ?: Token()
+            tokenRepository.saveToken(
+                token.copy(
+                    jwtToken = data.access_token
+                )
+            )
+
+
 
         }.onError {
 

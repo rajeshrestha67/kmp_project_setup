@@ -1,4 +1,4 @@
-package dev.rajesh.mobile_bankingdatastore
+package dev.rajesh.datastore
 
 import kotlin.test.Test
 import kotlin.test.assertEquals

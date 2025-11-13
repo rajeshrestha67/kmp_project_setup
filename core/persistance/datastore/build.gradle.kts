@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidKotlinMultiplatformLibrary)
+    alias(libs.plugins.jetbrains.kotlin.serialization)
 }
 
 kotlin {
@@ -9,7 +10,7 @@ kotlin {
     // which platforms this KMP module supports.
     // See: https://kotlinlang.org/docs/multiplatform-discover-project.html#targets
     androidLibrary {
-        namespace = "dev.rajesh.mobile_bankingdatastore"
+        namespace = "dev.rajesh.datastore"
         compileSdk = 36
         minSdk = 24
 
@@ -60,6 +61,17 @@ kotlin {
             dependencies {
                 implementation(libs.kotlin.stdlib)
                 // Add KMP dependencies here
+                api(libs.androidx.datastore.core.okio)
+                api(libs.androidx.datastore.preferences.core)
+                implementation(libs.okio)
+
+                implementation(libs.koin.core)
+                implementation(libs.koin.compose)
+
+                implementation(libs.kotlinx.serialization.json)
+
+                implementation(projects.core.crypto)
+                implementation(projects.core.model)
             }
         }
 

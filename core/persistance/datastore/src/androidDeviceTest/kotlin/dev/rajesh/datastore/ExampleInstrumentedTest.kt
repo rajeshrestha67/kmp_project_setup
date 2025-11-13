@@ -1,4 +1,4 @@
-package dev.rajesh.mobile_bankingdatastore
+package dev.rajesh.datastore
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4
