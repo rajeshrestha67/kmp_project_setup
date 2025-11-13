@@ -2,7 +2,7 @@ package dev.rajesh.datastore
 
 import dev.rajesh.datastore.token.local.TokenDataStore
 
-expect class DataStoreFactory {
+expect class DataStoreFactory() {
 
     fun getSystemPath(jsonPath: String): String
 

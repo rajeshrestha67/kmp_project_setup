@@ -13,6 +13,9 @@ import org.koin.core.annotation.Single
 class DataStoreModule {
 
     @Single
+    fun getDataStoreFactory(): DataStoreFactory = DataStoreFactory()
+
+    @Single
     fun getTokenDataStore(): TokenDataStore {
         val factory: DataStoreFactory = getKoin().get()
         return factory.getTokenDataStore("token")

@@ -1,5 +1,6 @@
 package dev.rajesh.mobile_banking.di
 
+import dev.rajesh.datastore.token.repository.TokenRepository
 import dev.rajesh.mobile_banking.data.auth.login.UserRepositoryImpl
 import dev.rajesh.mobile_banking.domain.auth.login.repository.UserRepository
 import dev.rajesh.mobile_banking.domain.auth.login.usecase.LoginUseCase
@@ -21,9 +22,11 @@ class AuthModule {
 
     @Factory
     fun loginUseCase(
-        userRepository: UserRepository
+        userRepository: UserRepository,
+        tokenRepository: TokenRepository
     ) = LoginUseCase(
-        userRepository = userRepository
+        userRepository = userRepository,
+        tokenRepository = tokenRepository,
     )
 
     @KoinViewModel
