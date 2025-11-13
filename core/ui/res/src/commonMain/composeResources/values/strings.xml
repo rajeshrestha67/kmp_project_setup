@@ -1,0 +1,31 @@
+<resources>
+    <string name="welcome">Welcome</string>
+    <string name="email">Email</string>
+    <string name="username">Username</string>
+    <string name="mobileNumber">Mobile Number</string>
+    <string name="password">Password</string>
+    <string name="login">Login</string>
+    <string name="enter_your_mobile_number">Enter your mobile number</string>
+    <string name="invalid_mobile_number">Invalid mobile number</string>
+
+    <string name="invalid_email_address">Invalid email address</string>
+    <string name="enter_your_password">Enter your Password</string>
+
+    <string name="required">Required</string>
+    <string name="next">Next</string>
+    <string name="skip">Skip</string>
+    <string name="getStarted">Get Started</string>
+
+    <string name="english">English</string>
+    <string name="nepali">Nepali</string>
+    <string name="light">Light</string>
+    <string name="dark">Dark</string>
+    <string name="system">System</string>
+
+    <string name="invalid_username">Invalid username</string>
+    <string name="invalid_password_uppercase">Must contain at least one uppercase letter</string>
+    <string name="invalid_password_lowercase">Must contain at least one lowercase letter</string>
+    <string name="invalid_password_digit">Must contain at least one digit</string>
+    <string name="invalid_password_length">Password must be at least 6 characters long</string>
+    <string name="invalid_password_special_char">Must contain at least one special character</string>
+</resources>

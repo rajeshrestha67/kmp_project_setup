@@ -1,0 +1,32 @@
+<resources>
+    <string name="welcome">स्वागत छ</string>
+    <string name="email">इमेल</string>
+    <string name="username">प्रयोगकर्ता नाम</string>
+    <string name="mobileNumber">मोबाइल नम्बर</string>
+    <string name="password">पासवर्ड</string>
+    <string name="login">लग इन</string>
+    <string name="enter_your_mobile_number">आफ्नो मोबाइल नम्बर प्रविष्ट गर्नुहोस्</string>
+    <string name="invalid_mobile_number">अमान्य मोबाइल नम्बर</string>
+
+    <string name="enter_your_username">आफ्नो प्रयोगकर्ता नाम प्रविष्ट गर्नुहोस्</string>
+    <string name="invalid_email_address">अमान्य इमेल ठेगाना</string>
+    <string name="enter_your_password">आफ्नो पासवर्ड प्रविष्ट गर्नुहोस्</string>
+
+    <string name="required">आवश्यक छ ।</string>
+    <string name="next">अर्को</string>
+    <string name="skip">छोड्नुहोस्</string>
+    <string name="getStarted">सुरु गर्नुहोस्</string>
+
+    <string name="english">अंग्रेजी</string>
+    <string name="nepali">नेपाली</string>
+    <string name="light">Light</string>
+    <string name="dark">Dark</string>
+    <string name="system">System</string>
+
+    <string name="invalid_username">अमान्य प्रयोगकर्ता नाम</string>
+    <string name="invalid_password_uppercase">कम्तिमा एउटा ठूलो अक्षर हुनुपर्छ</string>
+    <string name="invalid_password_lowercase">कम्तिमा एउटा सानो अक्षर हुनुपर्छ</string>
+    <string name="invalid_password_digit">कम्तिमा एउटा अङ्क हुनुपर्छ</string>
+    <string name="invalid_password_length">पासवर्ड कम्तिमा ६ वर्ण लामो हुनुपर्छ</string>
+    <string name="invalid_password_special_char">कम्तिमा एउटा विशेष वर्ण हुनुपर्छ</string>
+</resources>

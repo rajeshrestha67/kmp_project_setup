@@ -1,0 +1,49 @@
+package dev.rajesh.mobile_banking.res
+
+import mobilebanking.core.ui.res.generated.resources.Poppins_Bold
+import mobilebanking.core.ui.res.generated.resources.Poppins_Italic
+import mobilebanking.core.ui.res.generated.resources.Poppins_Medium
+import mobilebanking.core.ui.res.generated.resources.Res
+import mobilebanking.core.ui.res.generated.resources.*
+
+object SharedRes {
+    fun getRes(path: String): String {
+        return Res.getUri(path)
+    }
+
+    object Fonts {
+        val poppinsMedium = Res.font.Poppins_Medium
+        val poppinsBold = Res.font.Poppins_Bold
+        val poppinsItalic = Res.font.Poppins_Italic
+    }
+
+    object Strings {
+        val welcome = Res.string.welcome
+        val email = Res.string.email
+        val userName = Res.string.username
+        val mobileNumber = Res.string.mobileNumber
+        val password = Res.string.password
+        val login = Res.string.login
+        val enterYourMobileNumber = Res.string.enter_your_mobile_number
+        val invalidUsername = Res.string.invalid_username
+        val invalidEmailAddress = Res.string.invalid_email_address
+        val invalidMobileNumber = Res.string.invalid_mobile_number
+        val enterYourPassword = Res.string.enter_your_password
+        val required = Res.string.required
+        val next = Res.string.next
+        val skip = Res.string.skip
+        val getStarted = Res.string.getStarted
+
+        val english = Res.string.english
+        val nepali = Res.string.nepali
+        val light = Res.string.light
+        val dark = Res.string.dark
+        val system = Res.string.system
+
+        val invalidPasswordUppercase = Res.string.invalid_password_uppercase
+        val invalidPasswordLowercase = Res.string.invalid_password_lowercase
+        val invalidPasswordDigit = Res.string.invalid_password_digit
+        val invalidPasswordLength = Res.string.invalid_password_length
+        val invalidPasswordSpecialChar = Res.string.invalid_password_special_char
+    }
+}
