@@ -63,6 +63,10 @@ kotlin {
 
             implementation(projects.feature.auth.login)
             implementation(projects.feature.dashboard)
+            implementation(projects.feature.home)
+            implementation(projects.feature.banking)
+            implementation(projects.feature.transactionHistory)
+            implementation(projects.feature.menu)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)

@@ -85,6 +85,7 @@ kotlin {
                 implementation(projects.core.persistance.datastore)
 
                 implementation(projects.feature.auth.login)
+                implementation(projects.feature.dashboard)
             }
         }
 

@@ -86,6 +86,11 @@ kotlin {
                 implementation(projects.core.logger)
                 implementation(libs.koin.compose.viewmodel)
                 implementation(compose.components.resources)
+
+                implementation(projects.feature.home)
+                implementation(projects.feature.banking)
+                implementation(projects.feature.transactionHistory)
+                implementation(projects.feature.menu)
             }
         }
 

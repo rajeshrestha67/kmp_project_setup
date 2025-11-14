@@ -28,4 +28,9 @@
     <string name="invalid_password_digit">Must contain at least one digit</string>
     <string name="invalid_password_length">Password must be at least 6 characters long</string>
     <string name="invalid_password_special_char">Must contain at least one special character</string>
+
+    <string name="home">Home</string>
+    <string name="banking">Banking</string>
+    <string name="transactionHistory">Transaction History</string>
+    <string name="menu">menu</string>
 </resources>

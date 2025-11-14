@@ -10,11 +10,12 @@ fun initKoin(config: KoinAppDeclaration? = null) {
         config?.invoke(this)
         modules(
             NetworkModule().module,
-            AuthModule().module,
             CryptographyModule().module,
             FormModule().module,
             PlatformModule().module,
-            DataStoreModule().module
+            DataStoreModule().module,
+            AuthModule().module,
+            DashboardModule().module
         )
     }
 }

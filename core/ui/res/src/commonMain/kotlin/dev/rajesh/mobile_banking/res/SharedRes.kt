@@ -45,5 +45,9 @@ object SharedRes {
         val invalidPasswordDigit = Res.string.invalid_password_digit
         val invalidPasswordLength = Res.string.invalid_password_length
         val invalidPasswordSpecialChar = Res.string.invalid_password_special_char
+        val home = Res.string.home
+        val banking = Res.string.banking
+        val transactionHistory = Res.string.transactionHistory
+        val menu = Res.string.menu
     }
 }
