@@ -1,8 +1,8 @@
 package dev.rajesh.mobile_banking.user.data.mapper
 
-import dev.rajesh.mobile_banking.home.data.remote.dto.AccountDetailDTO
-import dev.rajesh.mobile_banking.home.data.remote.dto.QrDTO
-import dev.rajesh.mobile_banking.home.data.remote.dto.UserDetailsDTO
+import dev.rajesh.mobile_banking.user.data.remote.dto.AccountDetailDTO
+import dev.rajesh.mobile_banking.user.data.remote.dto.QrDTO
+import dev.rajesh.mobile_banking.user.data.remote.dto.UserDetailsDTO
 import dev.rajesh.mobile_banking.user.domain.model.AccountDetail
 import dev.rajesh.mobile_banking.user.domain.model.Qr
 import dev.rajesh.mobile_banking.user.domain.model.UserDetails

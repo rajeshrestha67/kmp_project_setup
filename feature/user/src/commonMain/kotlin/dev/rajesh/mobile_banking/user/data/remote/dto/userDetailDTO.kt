@@ -1,4 +1,4 @@
-package dev.rajesh.mobile_banking.home.data.remote.dto
+package dev.rajesh.mobile_banking.user.data.remote.dto
 
 import kotlinx.serialization.Serializable
 

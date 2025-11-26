@@ -84,7 +84,6 @@ kotlin {
                 implementation(projects.core.domain)
                 implementation(projects.core.model)
                 implementation(projects.core.persistance.datastore)
-                //                implementation(projects.core.persistance.room_database)
                 implementation(projects.core.networkHelper)
 
                 implementation(projects.core.ui.res)
