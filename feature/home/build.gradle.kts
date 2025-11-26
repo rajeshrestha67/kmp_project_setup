@@ -74,18 +74,26 @@ kotlin {
                 implementation(libs.jetbrians.material3)
 
                 implementation(libs.org.jetbrains.navigation)
+
+                implementation(libs.coil.compose)
+                implementation(libs.coil.compose.core)
+                implementation(libs.coil.mp)
+                implementation(libs.coil.network.ktor3)
                 implementation(libs.kotlinx.serialization.json)
+                implementation(libs.koin.compose.viewmodel)
+                implementation(compose.components.resources)
 
                 implementation(projects.core.domain)
                 implementation(projects.core.model)
                 implementation(projects.core.persistance.datastore)
+                //                implementation(projects.core.persistance.room_database)
+
                 implementation(projects.core.networkHelper)
 
                 implementation(projects.core.ui.res)
                 implementation(projects.core.ui.components)
                 implementation(projects.core.logger)
-                implementation(libs.koin.compose.viewmodel)
-                implementation(compose.components.resources)
+                implementation(projects.feature.user)
             }
         }
 

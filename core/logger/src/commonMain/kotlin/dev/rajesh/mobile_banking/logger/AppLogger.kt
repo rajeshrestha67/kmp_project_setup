@@ -1,6 +1,6 @@
 package dev.rajesh.mobile_banking.logger
 
-import com.gurkha.hr.logger.remote.RemoteLogger
+import dev.rajesh.mobile_banking.logger.remote.RemoteLogger
 import dev.rajesh.mobile_banking.model.network.DataError
 import dev.rajesh.mobile_banking.model.network.toException
 import kotlinx.coroutines.CoroutineScope

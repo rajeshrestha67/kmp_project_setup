@@ -1,13 +1,12 @@
 package dev.rajesh.mobile_banking.di
 
 import dev.rajesh.datastore.token.repository.TokenRepository
-import dev.rajesh.mobile_banking.data.auth.login.UserRepositoryImpl
-import dev.rajesh.mobile_banking.domain.auth.login.repository.UserRepository
-import dev.rajesh.mobile_banking.domain.auth.login.usecase.LoginUseCase
+import dev.rajesh.mobile_banking.login.data.repository.UserRepositoryImpl
+import dev.rajesh.mobile_banking.login.domain.usecase.LoginUseCase
 import dev.rajesh.mobile_banking.domain.form.MobileNumberValidateUseCase
 import dev.rajesh.mobile_banking.domain.form.PasswordValidateUseCase
-import dev.rajesh.mobile_banking.domain.form.UsernameValidateUseCase
-import dev.rajesh.mobile_banking.login.LoginViewModel
+import dev.rajesh.mobile_banking.login.domain.repository.UserRepository
+import dev.rajesh.mobile_banking.login.presentation.LoginViewModel
 import io.ktor.client.HttpClient
 import org.koin.android.annotation.KoinViewModel
 import org.koin.core.annotation.Factory

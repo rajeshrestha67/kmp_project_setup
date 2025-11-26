@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.androidKotlinMultiplatformLibrary)
     alias(libs.plugins.composeCompiler)
     alias(libs.plugins.composeMultiplatform)
+    alias(libs.plugins.jetbrains.kotlin.serialization)
 }
 
 kotlin {
@@ -83,8 +84,12 @@ kotlin {
                 implementation(libs.coil.compose.core)
                 implementation(libs.coil.mp)
                 implementation(libs.coil.network.ktor3)
+                implementation(libs.kotlinx.serialization.json)
+
 
                 implementation(projects.core.logger)
+                implementation(projects.core.persistance.datastore)
+
             }
         }
 

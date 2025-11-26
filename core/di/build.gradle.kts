@@ -86,6 +86,9 @@ kotlin {
 
                 implementation(projects.feature.auth.login)
                 implementation(projects.feature.dashboard)
+                implementation(projects.feature.home)
+                implementation(projects.feature.user)
+
             }
         }
 
@@ -105,17 +108,17 @@ kotlin {
         sourceSets.named("commonMain").configure {
             kotlin.srcDir("build/generated/ksp/metadata/commonMain/kotlin")
         }
-       /* sourceSets {
-            val commonMain by getting {
-                kotlin.srcDir("build/generated/ksp/metadata/commonMain/kotlin")
-            }
-            val commonTest by getting {
-                kotlin.srcDir("build/generated/ksp/metadata/commonTest/kotlin")
-            }
-            val androidMain by getting {
-                kotlin.srcDir("build/generated/ksp/android/androidMain/kotlin")
-            }
-        }*/
+        /* sourceSets {
+             val commonMain by getting {
+                 kotlin.srcDir("build/generated/ksp/metadata/commonMain/kotlin")
+             }
+             val commonTest by getting {
+                 kotlin.srcDir("build/generated/ksp/metadata/commonTest/kotlin")
+             }
+             val androidMain by getting {
+                 kotlin.srcDir("build/generated/ksp/android/androidMain/kotlin")
+             }
+         }*/
 
         getByName("androidDeviceTest") {
             dependencies {

@@ -2,6 +2,7 @@ package dev.rajesh.mobile_banking.networkhelper
 
 import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.text.toLowerCase
+import dev.rajesh.datastore.token.repository.TokenRepository
 //import com.gurkha.hr.datastore.token.repository.TokenRepository
 import io.ktor.client.HttpClient
 import io.ktor.client.plugins.onUpload
@@ -113,10 +114,10 @@ suspend inline fun HttpRequestBuilder.appendLocalAttributes(
     endPoint: String,
     block: HttpRequestBuilder.() -> Unit = {}
 ) {
-    /*val tokenRepository: TokenRepository = getKoin().get()
+    val tokenRepository: TokenRepository = getKoin().get()
     tokenRepository.token.firstOrNull()?.jwtToken?.let { token ->
-        accessToken(token)
-    }*/
+        accessToken("bearer$token")
+    }
 
     url(path = endPoint, host = baseUrl.url, scheme = "https")
     block()
