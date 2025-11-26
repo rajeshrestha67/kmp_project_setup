@@ -9,9 +9,9 @@ import dev.rajesh.mobile_banking.networkhelper.get
 import dev.rajesh.mobile_banking.networkhelper.safeCall
 import io.ktor.client.HttpClient
 
-class KtorRemoteUserDetailDataSource(
+class UserDetailRemoteDataSourceImpl(
     val httpClient: HttpClient
-) : RemoteUserDetailDataSource {
+) : UserDetailRemoteDataSource {
 
     override suspend fun fetchUserDetail(): ApiResult<UserDetailResponseDTO, DataError> {
         return safeCall<UserDetailResponseDTO> {

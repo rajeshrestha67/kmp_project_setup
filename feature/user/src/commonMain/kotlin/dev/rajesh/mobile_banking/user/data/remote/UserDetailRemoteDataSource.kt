@@ -4,6 +4,6 @@ import dev.rajesh.mobile_banking.home.data.remote.dto.UserDetailResponseDTO
 import dev.rajesh.mobile_banking.model.network.DataError
 import dev.rajesh.mobile_banking.networkhelper.ApiResult
 
-interface RemoteUserDetailDataSource {
+interface UserDetailRemoteDataSource {
     suspend fun fetchUserDetail(): ApiResult<UserDetailResponseDTO, DataError>
 }
