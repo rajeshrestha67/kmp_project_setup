@@ -86,6 +86,8 @@ kotlin {
                 implementation(projects.core.logger)
                 implementation(libs.koin.compose.viewmodel)
                 implementation(compose.components.resources)
+
+                implementation(projects.feature.user)
             }
         }
 

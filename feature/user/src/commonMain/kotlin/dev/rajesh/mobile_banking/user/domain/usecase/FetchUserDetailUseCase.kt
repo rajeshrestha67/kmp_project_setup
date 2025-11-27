@@ -4,19 +4,23 @@ import dev.rajesh.mobile_banking.user.domain.model.UserDetails
 import dev.rajesh.mobile_banking.user.domain.repository.UserDetailRepository
 import dev.rajesh.mobile_banking.model.network.DataError
 import dev.rajesh.mobile_banking.networkhelper.ApiResult
-import dev.rajesh.mobile_banking.networkhelper.onSuccess
 
 class FetchUserDetailUseCase(
     private val userDetailRepository: UserDetailRepository
-    //private val userLocalDataSource: UserLocalDataSource
 ) {
 
-    suspend operator fun invoke(): ApiResult<UserDetails, DataError>{
-        return userDetailRepository.fetchUserDetail()
-            .onSuccess {
-                //save into local database
-                //userLocalDataSource.saveUserDetails(userDetails)
+    suspend operator fun invoke(force: Boolean = false): ApiResult<UserDetails, DataError> {
+        if (force) {
+            return userDetailRepository.fetchUserDetail()
+        } else {
+            val user = userDetailRepository.fetchUserDetailFromDS()
+            return if (user == null || force) {
+                userDetailRepository.fetchUserDetail()
+            } else {
+                ApiResult.Success(user)
             }
+        }
+
     }
 
 }

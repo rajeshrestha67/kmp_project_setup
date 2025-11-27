@@ -88,6 +88,8 @@ kotlin {
                 implementation(projects.feature.dashboard)
                 implementation(projects.feature.home)
                 implementation(projects.feature.user)
+                implementation(projects.feature.menu)
+
 
             }
         }

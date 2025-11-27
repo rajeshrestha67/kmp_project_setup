@@ -1,6 +1,7 @@
 package dev.rajesh.datastore
 
 import dev.rajesh.datastore.token.local.TokenDataStore
+import dev.rajesh.datastore.userData.datastore.UserDetailDataStore
 
 expect class DataStoreFactory() {
 
@@ -8,7 +9,7 @@ expect class DataStoreFactory() {
 
     fun getTokenDataStore(jsonPath: String): TokenDataStore
 
-    //fun getUserData(jsonPath: String): UserDataDataStore
+    fun getUserDetailsDS(jsonPath: String): UserDetailDataStore
 
 
 }

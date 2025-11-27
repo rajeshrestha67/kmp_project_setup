@@ -17,7 +17,8 @@ fun initKoin(config: KoinAppDeclaration? = null) {
             AuthModule().module,
             DashboardModule().module,
             UserModule().module,
-            HomeScreenModule().module
+            HomeScreenModule().module,
+            MenuScreenModule().module
         )
     }
 }

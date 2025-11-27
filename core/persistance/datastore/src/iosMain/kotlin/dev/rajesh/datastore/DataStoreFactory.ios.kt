@@ -1,6 +1,7 @@
 package dev.rajesh.datastore
 
 import dev.rajesh.datastore.token.local.TokenDataStore
+import dev.rajesh.datastore.userData.datastore.UserDetailDataStore
 import kotlinx.cinterop.ExperimentalForeignApi
 import platform.Foundation.NSDocumentDirectory
 import platform.Foundation.NSFileManager
@@ -28,6 +29,14 @@ actual class DataStoreFactory {
     actual fun getTokenDataStore(jsonPath: String): TokenDataStore {
         return TokenDataStore(
             produceFilePath = {
+                getSystemPath(jsonPath)
+            }
+        )
+    }
+
+    actual fun getUserDetailsDS(jsonPath: String): UserDetailDataStore {
+        return UserDetailDataStore(
+            filePath = {
                 getSystemPath(jsonPath)
             }
         )

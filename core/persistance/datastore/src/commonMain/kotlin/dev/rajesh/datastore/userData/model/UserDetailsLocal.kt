@@ -1,18 +1,10 @@
-package dev.rajesh.mobile_banking.user.domain.model
+package dev.rajesh.datastore.userData.model
 
 import kotlinx.serialization.Serializable
 
-
-//data class UserDetail(
-//    val code: String,
-//    val details: UserDetails?,
-//    val message: String,
-//    val status: String
-//)
-
 @Serializable
-data class UserDetails(
-    val accountDetail: List<AccountDetail> = emptyList(),
+data class UserDetailsLocal(
+    val accountDetail: List<AccountDetailLocal> = emptyList(),
     val addressOne: String = "",
     val addressTwo: String = "",
     val alertType: Boolean = false,
@@ -39,7 +31,7 @@ data class UserDetails(
     val mobileNumber: String = "",
     val oauthTokenCount: Int = 0,
     val otpString: String = "",
-    val qr: List<Qr> = emptyList(),
+    val qr: List<QrLocal> = emptyList(),
     val registered: Boolean = false,
     val smsService: Boolean = false,
     val socketPrefix: String = "",
@@ -48,7 +40,7 @@ data class UserDetails(
     val unseenNotificationCount: Int = 0
 )
 @Serializable
-data class AccountDetail(
+data class AccountDetailLocal(
     val accountNumber: String = "",
     val accountType: String = "",
     val branchCode: String = "",
@@ -60,7 +52,7 @@ data class AccountDetail(
     val sms: String = ""
 )
 @Serializable
-data class Qr(
+data class QrLocal(
     val active: String = "",
     val code: String = "",
     val imageUrl: String = "",

@@ -2,6 +2,8 @@ package dev.rajesh.datastore
 
 import android.content.Context
 import dev.rajesh.datastore.token.local.TokenDataStore
+import dev.rajesh.datastore.userData.datastore.UserDetailDataStore
+import dev.rajesh.datastore.userData.repository.UserDetailLocalDataSource
 import org.koin.mp.KoinPlatform.getKoin
 
 actual class DataStoreFactory {
@@ -18,7 +20,16 @@ actual class DataStoreFactory {
             produceFilePath = {
                 getSystemPath(jsonPath)
             }
-        )    }
+        )
+    }
+    //    fun getUserDetailsDS(jsonPath: String): UserDetailDataStore
 
+    actual fun getUserDetailsDS(jsonPath: String): UserDetailDataStore {
+        return UserDetailDataStore(
+            filePath = {
+                getSystemPath(jsonPath)
+            }
+        )
+    }
 
 }

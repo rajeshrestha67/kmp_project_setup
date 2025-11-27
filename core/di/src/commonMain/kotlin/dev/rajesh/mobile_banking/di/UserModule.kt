@@ -1,5 +1,6 @@
 package dev.rajesh.mobile_banking.di
 
+import dev.rajesh.datastore.userData.repository.UserDetailLocalDataSource
 import dev.rajesh.mobile_banking.user.data.remote.UserDetailRemoteDataSourceImpl
 import dev.rajesh.mobile_banking.user.data.remote.UserDetailRemoteDataSource
 import dev.rajesh.mobile_banking.user.data.repository.UserDetailRepositoryImpl
@@ -17,8 +18,9 @@ class UserModule {
 
     @Factory(binds = [UserDetailRepository::class])
     fun getUserDetailRepository(
-        userDetailRemoteDataSource: UserDetailRemoteDataSource
-    ) = UserDetailRepositoryImpl(userDetailRemoteDataSource)
+        userDetailRemoteDataSource: UserDetailRemoteDataSource,
+        userDetailLocalDataSource: UserDetailLocalDataSource
+    ) = UserDetailRepositoryImpl(userDetailRemoteDataSource, userDetailLocalDataSource)
 
 
     @Factory

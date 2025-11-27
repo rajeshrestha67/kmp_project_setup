@@ -1,5 +1,8 @@
 package dev.rajesh.mobile_banking.user.data.mapper
 
+import dev.rajesh.datastore.userData.model.AccountDetailLocal
+import dev.rajesh.datastore.userData.model.QrLocal
+import dev.rajesh.datastore.userData.model.UserDetailsLocal
 import dev.rajesh.mobile_banking.user.data.remote.dto.AccountDetailDTO
 import dev.rajesh.mobile_banking.user.data.remote.dto.QrDTO
 import dev.rajesh.mobile_banking.user.data.remote.dto.UserDetailsDTO
