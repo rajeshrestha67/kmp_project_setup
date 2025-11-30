@@ -40,6 +40,8 @@ kotlinx-coroutine = "1.10.2"
 room = "2.8.4"
 sqlite = "2.6.2"
 
+datetime = "0.7.1"
+
 
 
 [libraries]
@@ -105,6 +107,9 @@ kotlinx-coroutine = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutine
 androidx-sqlite-bundled = { module = "androidx.sqlite:sqlite-bundled", version.ref = "sqlite" }
 androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
 androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
+
+#datetime
+kotlinx-datetime = { group = "org.jetbrains.kotlinx", name = "kotlinx-datetime", version.ref = "datetime" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

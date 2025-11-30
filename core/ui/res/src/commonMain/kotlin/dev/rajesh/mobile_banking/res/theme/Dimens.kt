@@ -1,7 +1,9 @@
 package dev.rajesh.mobile_banking.res.theme
 
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 
 
 data class Dimens(
@@ -15,6 +17,11 @@ data class Dimens(
     val large: Dp = 0.dp,
     val extraLarge: Dp = 0.dp,
     val borderWidth: Dp = 0.dp,
+    val smallFontSize: TextUnit = 0.sp,
+    val regularFontSize: TextUnit = 0.sp,
+    val mediumFontSize: TextUnit = 0.sp,
+    val largeFontSize: TextUnit = 0.sp,
+    val extraLargeFontSize: TextUnit = 0.sp,
     val onBoardingIndicatorSelected: Dp = 0.dp,
     val onBoardingIndicatorUnSelected: Dp = 0.dp,
     val loginImageSize: Dp = 0.dp,
@@ -27,6 +34,7 @@ data class Dimens(
     val swipeToDismissHeight: Dp = 0.dp,
     val heightForOptionBox: Dp = 0.dp,
     val eventWidth: Dp = 0.dp,
+    val cardCornerRadius: Dp = 0.dp,
 )
 
 
@@ -52,5 +60,11 @@ val CompactDimens = Dimens(
     promptDialogSize = 120.dp,
     swipeToDismissHeight = 72.dp,
     heightForOptionBox = 100.dp,
-    eventWidth= 200.dp
+    eventWidth = 200.dp,
+    cardCornerRadius = 16.dp,
+    smallFontSize = 12.sp,
+    regularFontSize = 14.sp,
+    mediumFontSize = 16.sp,
+    largeFontSize = 20.sp,
+    extraLargeFontSize = 30.sp,
 )

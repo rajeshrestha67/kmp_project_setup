@@ -33,4 +33,12 @@
     <string name="banking">Banking</string>
     <string name="transactionHistory">Transaction History</string>
     <string name="menu">menu</string>
+    <string name="good_morning">Good Morning!</string>
+    <string name="good_afternoon">Good Afternoon!</string>
+    <string name="good_evening">Good Evening!</string>
+    <string name="good_night">Good Night!</string>
+    <string name="a_c_no">A/C No.</string>
+    <string name="availableBalance">Available Balance</string>
+    <string name="actualBalance">Actual Balance</string>
+    <string name="currencyType">NPR.</string>
 </resources>

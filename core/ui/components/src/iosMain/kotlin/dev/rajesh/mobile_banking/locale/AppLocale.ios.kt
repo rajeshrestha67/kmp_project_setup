@@ -2,14 +2,46 @@ package dev.rajesh.mobile_banking.locale
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.ProvidedValue
+import androidx.compose.runtime.staticCompositionLocalOf
+import androidx.compose.ui.InternalComposeUiApi
+import platform.Foundation.NSLocale
+import platform.Foundation.NSUserDefaults
+import platform.Foundation.preferredLanguages
 
+@OptIn(InternalComposeUiApi::class)
 actual object AppLocale {
+    private const val LANG_KEY = "AppleLanguages"
+
+    // Default language from system
+    private val default: String
+        get() = NSLocale.preferredLanguages.firstOrNull() as? String ?: "en"
+
+    private val LocalAppLocale = staticCompositionLocalOf { default }
+
     actual val current: String
-        get() = TODO("Not yet implemented")
+        @Composable get() = LocalAppLocale.current
 
     @Composable
     actual infix fun provides(value: String?): ProvidedValue<*> {
-        TODO("Not yet implemented")
+        val newLang = when (value) {
+            null -> default
+            "ne-rNP" -> "ne" // normalize for iOS
+            else -> value
+        }
+
+
+        // Save selected language in UserDefaults
+        //        val userDefaults = NSUserDefaults.standardUserDefaults
+        //        userDefaults.setObject(newLang, LANG_KEY)
+
+
+        // Provide new language to Composition
+        if (value == null) {
+            NSUserDefaults.standardUserDefaults.removeObjectForKey(LANG_KEY)
+        } else {
+            NSUserDefaults.standardUserDefaults.setObject(arrayListOf(newLang), LANG_KEY)
+        }
+        return LocalAppLocale.provides(newLang)
     }
 
 }

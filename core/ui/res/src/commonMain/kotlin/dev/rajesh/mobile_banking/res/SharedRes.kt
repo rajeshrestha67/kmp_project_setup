@@ -17,6 +17,12 @@ object SharedRes {
         val poppinsItalic = Res.font.Poppins_Italic
     }
 
+    object Icons {
+        val logout = Res.drawable.outline_logout_24
+        val ic_notification = Res.drawable.ic_notification
+        val ic_qr_scanner = Res.drawable.ic_qr_scanner
+    }
+
     object Strings {
         val welcome = Res.string.welcome
         val email = Res.string.email
@@ -49,5 +55,14 @@ object SharedRes {
         val banking = Res.string.banking
         val transactionHistory = Res.string.transactionHistory
         val menu = Res.string.menu
+        val goodMorning = Res.string.good_morning
+        val goodAfternoon = Res.string.good_afternoon
+        val goodEvening = Res.string.good_evening
+        val goodNight = Res.string.good_night
+        val a_c_no = Res.string.a_c_no
+        val actualBalance = Res.string.actualBalance
+        val availableBalance = Res.string.availableBalance
+        val currencyType = Res.string.currencyType
+
     }
 }

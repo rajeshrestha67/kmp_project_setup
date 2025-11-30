@@ -6,6 +6,12 @@ import androidx.compose.ui.graphics.Color
 
 @Immutable
 data class AppColorPalette(
+    val primaryColor: Color = Color.Unspecified,
+    val backgroundColor: Color = Color.Unspecified,
+    val surfaceColor: Color = Color.Unspecified,
+    val primaryContainerColor: Color = Color.Unspecified,
+    val onPrimary: Color = Color.Unspecified,
+
     val imageBackgroundColor: Color = Color.Unspecified,
     val lightGreenColor: Color = Color.Unspecified,
     val primaryTextColor: Color = Color.Unspecified,
@@ -38,6 +44,12 @@ data class AppColorPalette(
 )
 
 val lightPalette = AppColorPalette(
+    primaryColor = primaryLight,
+    backgroundColor = backgroundLight,
+    surfaceColor = surfaceLight,
+    primaryContainerColor = primaryContainerLight,
+    onPrimary = onPrimaryLight,
+
     imageBackgroundColor = Color(0xFFF5F5F5),
     lightGreenColor = Color(0xFF4CAF50),
     primaryTextColor = Color(0xFF646884),
@@ -68,10 +80,15 @@ val lightPalette = AppColorPalette(
     box4BackgroundColor = Color(0xFFFFEBEE),
 
 
-
-)
+    )
 
 val darkPalette = AppColorPalette(
+    primaryColor = primaryDark,
+    backgroundColor = backgroundDark,
+    surfaceColor = surfaceDark,
+    primaryContainerColor = primaryContainerDark,
+    onPrimary = onPrimaryDark,
+
     imageBackgroundColor = Color(0xFF212121),
     lightGreenColor = Color(0xFF90EE90),
     primaryTextColor = Color(0XFFcbcdd9),

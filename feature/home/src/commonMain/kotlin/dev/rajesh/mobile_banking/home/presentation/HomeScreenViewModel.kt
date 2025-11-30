@@ -7,6 +7,7 @@ import dev.rajesh.mobile_banking.model.network.toErrorMessage
 import dev.rajesh.mobile_banking.networkhelper.onError
 import dev.rajesh.mobile_banking.networkhelper.onSuccess
 import dev.rajesh.mobile_banking.user.domain.usecase.FetchUserDetailUseCase
+import dev.rajesh.mobile_banking.utils.DateUtils
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.onStart
@@ -26,12 +27,20 @@ class HomeScreenViewModel(
     val state = _state
         .onStart {
             fetchUserDetails(isRefreshing = false)
+            updateGreeting()
         }
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5000),
             initialValue = HomeScreenState()
         )
+
+    private fun updateGreeting() {
+        val greetings = DateUtils.getGreetingForCurrentTime()
+        _state.update {
+            it.copy(greetingMsg = greetings)
+        }
+    }
 
     private fun fetchUserDetails(isRefreshing: Boolean) = viewModelScope.launch {
         _state.update {
@@ -43,14 +52,18 @@ class HomeScreenViewModel(
         userDetailUseCase(true).onSuccess { userDetail ->
             _state.update {
                 it.copy(
-                    fullName = userDetail.fullName,
-                    lastName = userDetail.lastName
+                    fullName = /*userDetail.fullName*/"Rajesh Shrestha",
+                    firstName = userDetail.firstName,
+                    lastName = userDetail.lastName,
+                    accountNumber =  "0012595678958",
+                    accountName = "Premium Super Talap Khata"
                 )
             }
-        }.onError { error->
-            AppLogger.e(tag = TAG,
+        }.onError { error ->
+            AppLogger.e(
+                tag = TAG,
                 "Fetching user detail failed: ${error.toErrorMessage()}"
-                )
+            )
         }
 
     }

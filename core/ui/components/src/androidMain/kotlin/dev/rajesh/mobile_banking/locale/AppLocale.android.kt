@@ -2,14 +2,35 @@ package dev.rajesh.mobile_banking.locale
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.ProvidedValue
+import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalResources
+import java.util.Locale
 
 actual object AppLocale {
+    private var default: Locale? = null
     actual val current: String
-        get() = TODO("Not yet implemented")
+        @Composable get() = Locale.getDefault().toString()
 
     @Composable
     actual infix fun provides(value: String?): ProvidedValue<*> {
-        TODO("Not yet implemented")
+        val configuration = LocalConfiguration.current
+
+        if (default == null) {
+            default = Locale.getDefault()
+        }
+
+        val new = when (value) {
+            null -> default!!
+            "ne-rNP" -> Locale("ne", "NP")
+            "en" -> Locale("en")
+            else -> Locale(value)
+        }
+        Locale.setDefault(new)
+        configuration.setLocale(new)
+        val resources = LocalResources.current
+
+        resources.updateConfiguration(configuration, resources.displayMetrics)
+        return LocalConfiguration.provides(configuration)
     }
 
 }

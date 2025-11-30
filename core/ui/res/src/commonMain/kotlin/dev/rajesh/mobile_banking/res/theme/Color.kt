@@ -5,10 +5,10 @@ import androidx.compose.ui.graphics.Color
 //0xFFE7F5DA
 
 
-val primaryLight = Color(0xFF4B662C)
-val onPrimaryLight = Color(0xFFFFFFFF)
-val primaryContainerLight = Color(0xFFCCEDA4)
-val onPrimaryContainerLight = Color(0xFF344E16)
+val primaryLight = Color(0xFF1f839a) //Main brand color
+val onPrimaryLight = Color(0xFFFFFFFF) //Text/icon color on primary-colored surfaces
+val primaryContainerLight = Color(0xFFc0dce3) //secondary buttons, textFields states, status indicator, progress bar/dialogs,c0dce3
+val onPrimaryContainerLight = Color(0xFF224e59) //on top of primaryContainerLight
 val secondaryLight = Color(0xFF57624A)
 val onSecondaryLight = Color(0xFFFFFFFF)
 val secondaryContainerLight = Color(0xFFDBE7C8)
@@ -21,10 +21,12 @@ val errorLight = Color(0xFFBA1A1A)
 val onErrorLight = Color(0xFFFFFFFF)
 val errorContainerLight = Color(0xFFFFDAD6)
 val onErrorContainerLight = Color(0xFF93000A)
-val backgroundLight = Color(0xFFF9FAEF)
-val onBackgroundLight = Color(0xFF1A1C16)
-val surfaceLight = Color(0xFFF9FAEF)
-val onSurfaceLight = Color(0xFF1A1C16)
+//val backgroundLight = Color(0xFFF9FAEF) //main app background color
+//val backgroundLight = Color(0xFFf8fbfc)
+val backgroundLight = Color(0xFFeaf1fb)
+val onBackgroundLight = Color(0xFF1A1C16) //on top of backgroundLight
+val surfaceLight = Color(0xFFf2f6fc) //Card/layout/surface background color
+val onSurfaceLight = Color(0xFF1A1C16) //primary Text on surface
 val surfaceVariantLight = Color(0xFFE1E4D5)
 val onSurfaceVariantLight = Color(0xFF44483D)
 val outlineLight = Color(0xFF75796C)
@@ -113,7 +115,7 @@ val surfaceContainerLightHighContrast = Color(0xFFE2E3D8)
 val surfaceContainerHighLightHighContrast = Color(0xFFD4D5CB)
 val surfaceContainerHighestLightHighContrast = Color(0xFFC6C7BD)
 
-val primaryDark = Color(0xFFB1D18A)
+val primaryDark = Color(0xFF1f839a)
 val onPrimaryDark = Color(0xFF1E3702)
 val primaryContainerDark = Color(0xFF344E16)
 val onPrimaryContainerDark = Color(0xFFCCEDA4)
@@ -129,9 +131,9 @@ val errorDark = Color(0xFFFFB4AB)
 val onErrorDark = Color(0xFF690005)
 val errorContainerDark = Color(0xFF93000A)
 val onErrorContainerDark = Color(0xFFFFDAD6)
-val backgroundDark = Color(0xFF12140E)
+val backgroundDark = Color(0xFF212529)
 val onBackgroundDark = Color(0xFFE2E3D8)
-val surfaceDark = Color(0xFF12140E)
+val surfaceDark = Color(0xFF2a2e32)
 val onSurfaceDark = Color(0xFFE2E3D8)
 val surfaceVariantDark = Color(0xFF44483D)
 val onSurfaceVariantDark = Color(0xFFC5C8BA)
