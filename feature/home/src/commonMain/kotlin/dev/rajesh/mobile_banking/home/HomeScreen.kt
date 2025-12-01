@@ -189,6 +189,7 @@ fun HomeScreenContent(state: HomeScreenState) {
     }
 }
 
+
 fun LazyListScope.userDetailCard(state: HomeScreenState) {
     item(key = "userDetails") {
         ElevatedCard(
