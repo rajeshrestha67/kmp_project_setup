@@ -2,6 +2,7 @@ package dev.rajesh.mobile_banking.home.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dev.rajesh.mobile_banking.home.domain.usecase.FetchBankingServiceUseCase
 import dev.rajesh.mobile_banking.logger.AppLogger
 import dev.rajesh.mobile_banking.model.network.toErrorMessage
 import dev.rajesh.mobile_banking.networkhelper.onError
@@ -16,7 +17,8 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class HomeScreenViewModel(
-    private val userDetailUseCase: FetchUserDetailUseCase
+    private val userDetailUseCase: FetchUserDetailUseCase,
+    private val fetchBankingServiceUseCase: FetchBankingServiceUseCase
 ) : ViewModel() {
 
     companion object {
@@ -27,6 +29,7 @@ class HomeScreenViewModel(
     val state = _state
         .onStart {
             fetchUserDetails(isRefreshing = false)
+            fetchBankingService()
             updateGreeting()
         }
         .stateIn(
@@ -55,7 +58,7 @@ class HomeScreenViewModel(
                     fullName = /*userDetail.fullName*/"Rajesh Shrestha",
                     firstName = userDetail.firstName,
                     lastName = userDetail.lastName,
-                    accountNumber =  "0012595678958",
+                    accountNumber = "0012595678958",
                     accountName = "Premium Super Talap Khata"
                 )
             }
@@ -66,6 +69,15 @@ class HomeScreenViewModel(
             )
         }
 
+    }
+
+    private fun fetchBankingService() = viewModelScope.launch {
+        fetchBankingServiceUseCase().onSuccess { data ->
+            AppLogger.i(TAG, "Fetch Banking Services response: $data")
+        }.onError { error ->
+            AppLogger.i(TAG, "Fetch Banking Services Error: ${error.toErrorMessage()}")
+
+        }
     }
 
 }

@@ -8,6 +8,7 @@ import dev.rajesh.mobile_banking.domain.form.MobileNumberValidateUseCase
 import dev.rajesh.mobile_banking.domain.form.PasswordValidateUseCase
 import dev.rajesh.mobile_banking.logger.AppLogger
 import dev.rajesh.mobile_banking.model.network.toErrorMessage
+import dev.rajesh.mobile_banking.networkhelper.Constants
 import dev.rajesh.mobile_banking.networkhelper.onError
 import dev.rajesh.mobile_banking.networkhelper.onSuccess
 import kotlinx.coroutines.channels.Channel
@@ -93,14 +94,12 @@ class LoginViewModel(
             it.copy(isLoading = true)
         }
 
-        val clientId = "H6FXNHXS61"
-        val clientSecret = "175391"
-        val username = clientId + state.value.mobileNumber
+        val username = Constants.clientId + state.value.mobileNumber
         loginUseCase(
             username = username,
             password = state.value.password,
-            clientId = clientId,
-            clientSecret = clientSecret,
+            clientId = Constants.clientId,
+            clientSecret = Constants.clientSecret,
             grantType = "password",
             deviceIdentifier = getDeviceInfo().deviceUniqueIdentifier
         ).onSuccess { data ->
