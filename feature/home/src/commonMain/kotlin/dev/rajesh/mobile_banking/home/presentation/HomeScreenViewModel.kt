@@ -3,6 +3,7 @@ package dev.rajesh.mobile_banking.home.presentation
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dev.rajesh.mobile_banking.home.domain.usecase.FetchBankingServiceUseCase
+import dev.rajesh.mobile_banking.home.domain.usecase.FetchQuickServicesUseCase
 import dev.rajesh.mobile_banking.logger.AppLogger
 import dev.rajesh.mobile_banking.model.network.toErrorMessage
 import dev.rajesh.mobile_banking.networkhelper.onError
@@ -18,7 +19,8 @@ import kotlinx.coroutines.launch
 
 class HomeScreenViewModel(
     private val userDetailUseCase: FetchUserDetailUseCase,
-    private val fetchBankingServiceUseCase: FetchBankingServiceUseCase
+    private val fetchBankingServiceUseCase: FetchBankingServiceUseCase,
+    private val fetchQuickServicesUseCase: FetchQuickServicesUseCase
 ) : ViewModel() {
 
     companion object {
@@ -30,6 +32,7 @@ class HomeScreenViewModel(
         .onStart {
             fetchUserDetails(isRefreshing = false)
             fetchBankingService()
+            fetchQuickServices()
             updateGreeting()
         }
         .stateIn(
@@ -76,6 +79,15 @@ class HomeScreenViewModel(
             AppLogger.i(TAG, "Fetch Banking Services response: $data")
         }.onError { error ->
             AppLogger.i(TAG, "Fetch Banking Services Error: ${error.toErrorMessage()}")
+
+        }
+    }
+
+    private fun fetchQuickServices() = viewModelScope.launch {
+        fetchQuickServicesUseCase().onSuccess {data->
+                AppLogger.i(TAG, "Fetch Quick Services response: $data")
+        }.onError { error ->
+            AppLogger.i(TAG, "Fetch Quick Services Error: ${error.toErrorMessage()}")
 
         }
     }

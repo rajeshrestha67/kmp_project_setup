@@ -48,7 +48,8 @@ suspend inline fun HttpClient.put(
 
 suspend inline fun HttpClient.get(
     baseUrl: BaseUrl = BaseUrl.Url,
-    endPoint: String, block: HttpRequestBuilder.() -> Unit = {}
+    endPoint: String,
+    block: HttpRequestBuilder.() -> Unit = {}
 ): HttpResponse = get {
     appendLocalAttributes(
         baseUrl = baseUrl,

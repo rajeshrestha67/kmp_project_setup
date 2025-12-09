@@ -18,6 +18,7 @@ fun BankingServiceDetailDTO.toBankingService(): BankingServiceDetail{
     )
 }
 
+//BankingServiceResponseDTO
 fun BankingServiceDTO.toBankingServiceList(): List<BankingServiceDetail>{
     return details.map{
         it.toBankingService()
