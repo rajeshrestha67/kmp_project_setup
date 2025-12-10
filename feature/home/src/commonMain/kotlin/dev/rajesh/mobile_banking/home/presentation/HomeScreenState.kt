@@ -1,5 +1,7 @@
 package dev.rajesh.mobile_banking.home.presentation
 
+import dev.rajesh.mobile_banking.home.domain.model.BankingServiceDetail
+import dev.rajesh.mobile_banking.home.domain.model.QuickServiceDetail
 import dev.rajesh.mobile_banking.res.SharedRes
 import org.jetbrains.compose.resources.StringResource
 
@@ -14,5 +16,11 @@ data class HomeScreenState(
     val accountNumber: String = "",
     val accountName: String = "",
     val actualBalance: String = "",
-    val availableBalance: String = ""
+    val availableBalance: String = "",
+
+    val isBankingServiceLoading: Boolean = false,
+    val isQuickServiceLoading: Boolean = false,
+
+    val bankingServicesList : List<BankingServiceDetail> = listOf(),
+    val quickServicesList : List<QuickServiceDetail> = listOf()
 )

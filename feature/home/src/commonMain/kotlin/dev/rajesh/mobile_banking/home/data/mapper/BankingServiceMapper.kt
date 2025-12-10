@@ -3,24 +3,26 @@ package dev.rajesh.mobile_banking.home.data.mapper
 import dev.rajesh.mobile_banking.home.data.remote.dto.BankingServiceDTO
 import dev.rajesh.mobile_banking.home.data.remote.dto.BankingServiceDetailDTO
 import dev.rajesh.mobile_banking.home.domain.model.BankingServiceDetail
+import dev.rajesh.mobile_banking.networkhelper.BaseUrl
+import dev.rajesh.mobile_banking.networkhelper.Constants
 
 
-fun BankingServiceDetailDTO.toBankingService(): BankingServiceDetail{
+fun BankingServiceDetailDTO.toBankingService(): BankingServiceDetail {
     return BankingServiceDetail(
         name = name,
         uniqueIdentifier = uniqueIdentifier,
         type = type,
-        status= status,
-        imageUrl = imageUrl,
-        appOrder= appOrder,
+        status = status,
+        imageUrl = "${Constants.baseUrl}/$imageUrl",
+        appOrder = appOrder,
         new = new
 
     )
 }
 
 //BankingServiceResponseDTO
-fun BankingServiceDTO.toBankingServiceList(): List<BankingServiceDetail>{
-    return details.map{
+fun BankingServiceDTO.toBankingServiceList(): List<BankingServiceDetail> {
+    return details.map {
         it.toBankingService()
     }
 }

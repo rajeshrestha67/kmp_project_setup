@@ -1,6 +1,7 @@
 package dev.rajesh.mobile_banking.home
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -14,12 +15,15 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.PlusOne
+import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -35,21 +39,30 @@ import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import coil3.compose.AsyncImage
 import dev.rajesh.mobile_banking.components.ProfilePicture
 import dev.rajesh.mobile_banking.components.appColors
 import dev.rajesh.mobile_banking.components.dimens
+import dev.rajesh.mobile_banking.components.shimmer.ShimmerView
+import dev.rajesh.mobile_banking.home.domain.model.BankingServiceDetail
 import dev.rajesh.mobile_banking.home.presentation.HomeScreenState
 import dev.rajesh.mobile_banking.home.presentation.HomeScreenViewModel
+import dev.rajesh.mobile_banking.logger.AppLogger
 import dev.rajesh.mobile_banking.res.SharedRes
 import dev.rajesh.mobile_banking.utils.extractInitials
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
+import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.viewmodel.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -178,14 +191,17 @@ fun HomeScreenContent(state: HomeScreenState) {
     LazyColumn(
         modifier = Modifier.fillMaxSize().background(MaterialTheme.appColors.backgroundColor),
         state = mainListState,
-        verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimens.small3),
+//        verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimens.small3),
         horizontalAlignment = Alignment.CenterHorizontally,
-        contentPadding = PaddingValues(
-            top = MaterialTheme.dimens.small2,
-            bottom = MaterialTheme.dimens.swipeToDismissHeight + MaterialTheme.dimens.bottomBar
-        )
+//        contentPadding = PaddingValues(
+//            bottom = MaterialTheme.dimens.swipeToDismissHeight + MaterialTheme.dimens.bottomBar
+//        )
     ) {
         userDetailCard(state = state)
+        bankingServiceList(
+            isBankingServiceLoading = state.isBankingServiceLoading,
+            bankingServicesList = state.bankingServicesList
+        )
     }
 }
 
@@ -193,7 +209,9 @@ fun HomeScreenContent(state: HomeScreenState) {
 fun LazyListScope.userDetailCard(state: HomeScreenState) {
     item(key = "userDetails") {
         ElevatedCard(
-            modifier = Modifier.fillMaxWidth().padding(MaterialTheme.dimens.small3),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = MaterialTheme.dimens.small3),
             elevation = CardDefaults.cardElevation(
                 defaultElevation = 6.dp
             ),
@@ -311,6 +329,91 @@ fun AddMoneyView() {
                     color = MaterialTheme.appColors.primaryColor,
                     fontSize = MaterialTheme.dimens.smallFontSize
                 )
+            )
+        }
+    }
+
+}
+
+fun LazyListScope.bankingServiceList(
+    isBankingServiceLoading: Boolean,
+    bankingServicesList: List<BankingServiceDetail>
+) {
+    item {
+        when {
+            isBankingServiceLoading -> {
+                LazyRow(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimens.small2)
+                ) {
+                    items(5) {
+                        ShimmerView(
+                            modifier = Modifier
+                                .padding(vertical = 16.dp, horizontal = 16.dp)
+                                .size(width = 80.dp, height = 80.dp)
+                                .clip(MaterialTheme.shapes.small)
+                        )
+                    }
+                }
+            }
+
+            else -> {
+                LazyRow(
+                    modifier = Modifier.fillMaxWidth()
+                        .padding(MaterialTheme.dimens.small3),
+                    horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimens.small2)
+                ) {
+                    items(bankingServicesList) { service ->
+                        BankServiceCard(
+                            service,
+                            onClick = { item ->
+                                AppLogger.i("HomeScreen", "Clicked: ${item.name}")
+                            })
+                    }
+                }
+            }
+        }
+    }
+
+}
+
+@Preview
+@Composable
+fun BankServiceCard(
+    service: BankingServiceDetail,
+    onClick: (BankingServiceDetail) -> Unit
+) {
+    Card(
+        modifier = Modifier
+            .size(height = 80.dp, width = 80.dp)
+            .padding(5.dp)
+            .clickable {
+                onClick(service)
+            },
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.appColors.primaryContainerColor
+        ),
+
+        ) {
+        Column(
+            modifier = Modifier.fillMaxSize()
+                .padding(MaterialTheme.dimens.small1),
+            verticalArrangement = Arrangement.SpaceBetween,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            AsyncImage(
+                model = service.imageUrl,
+                modifier = Modifier.size(30.dp),
+                contentDescription = "Service Image",
+                colorFilter = ColorFilter.tint(MaterialTheme.appColors.primaryColor)
+            )
+            Text(
+                modifier = Modifier.padding(horizontal = MaterialTheme.dimens.small1),
+                text = service.name,
+                fontSize = MaterialTheme.dimens.smallFontSize,
+                style = MaterialTheme.typography.bodySmall,
+                textAlign = TextAlign.Center,
+                minLines = 2
             )
         }
     }

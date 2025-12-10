@@ -10,6 +10,7 @@ import dev.rajesh.mobile_banking.networkhelper.onError
 import dev.rajesh.mobile_banking.networkhelper.onSuccess
 import dev.rajesh.mobile_banking.user.domain.usecase.FetchUserDetailUseCase
 import dev.rajesh.mobile_banking.utils.DateUtils
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.onStart
@@ -75,8 +76,20 @@ class HomeScreenViewModel(
     }
 
     private fun fetchBankingService() = viewModelScope.launch {
+        _state.update {
+            it.copy(isBankingServiceLoading = true)
+        }
+
+        //delay(5000)
         fetchBankingServiceUseCase().onSuccess { data ->
             AppLogger.i(TAG, "Fetch Banking Services response: $data")
+            _state.update {
+                it.copy(
+                    isBankingServiceLoading = false,
+                    bankingServicesList = data
+                )
+            }
+
         }.onError { error ->
             AppLogger.i(TAG, "Fetch Banking Services Error: ${error.toErrorMessage()}")
 
@@ -84,8 +97,8 @@ class HomeScreenViewModel(
     }
 
     private fun fetchQuickServices() = viewModelScope.launch {
-        fetchQuickServicesUseCase().onSuccess {data->
-                AppLogger.i(TAG, "Fetch Quick Services response: $data")
+        fetchQuickServicesUseCase().onSuccess { data ->
+            AppLogger.i(TAG, "Fetch Quick Services response: $data")
         }.onError { error ->
             AppLogger.i(TAG, "Fetch Quick Services Error: ${error.toErrorMessage()}")
 
