@@ -91,18 +91,6 @@ fun DashboardScreenContent(
 
     val navBackStackEntry by dashboardNavController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
-    val currentDestination = navBackStackEntry?.destination
-
-    val shouldShowBottomBar = currentDestination?.route?.let { route ->
-        listOf(
-            DashboardRoute.HomeRoute.route,
-            DashboardRoute.BankingRoute.route,
-            DashboardRoute.TransactionHistoryRoute.route,
-            DashboardRoute.MenuRoute.route
-        ).any { it == route }
-    } ?: false
-
-    AppLogger.i("Dashboard", "shouldShowBottomBar +${shouldShowBottomBar}")
 
     LaunchedEffect(currentRoute) {
         if (currentRoute != null) {
@@ -145,8 +133,8 @@ fun DashboardScreenContent(
                         animationSpec = tween(durationMillis = 200)
                     )
                 }) { visible ->
-                if (shouldShowBottomBar) {
-                    NavigationBar( //can also use material3/navigationBar, code is almost same
+                if (visible) {
+                    NavigationBar(
                         modifier = Modifier.fillMaxWidth()
                     ) {
                         state.screens.forEach { item ->
