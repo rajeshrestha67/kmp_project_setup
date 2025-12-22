@@ -2,6 +2,8 @@ package dev.rajesh.mobile_banking.home.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dev.rajesh.mobile_banking.home.domain.model.BankingServiceDetail
+import dev.rajesh.mobile_banking.home.domain.model.QuickServiceDetail
 import dev.rajesh.mobile_banking.home.domain.usecase.FetchBankingServiceUseCase
 import dev.rajesh.mobile_banking.home.domain.usecase.FetchQuickServicesUseCase
 import dev.rajesh.mobile_banking.logger.AppLogger
@@ -10,10 +12,12 @@ import dev.rajesh.mobile_banking.networkhelper.onError
 import dev.rajesh.mobile_banking.networkhelper.onSuccess
 import dev.rajesh.mobile_banking.user.domain.usecase.FetchUserDetailUseCase
 import dev.rajesh.mobile_banking.utils.DateUtils
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -41,6 +45,9 @@ class HomeScreenViewModel(
             started = SharingStarted.WhileSubscribed(5000),
             initialValue = HomeScreenState()
         )
+
+    private val _actions = Channel<HomeScreenActions>(Channel.BUFFERED)
+    val actions = _actions.receiveAsFlow()
 
     private fun updateGreeting() {
         val greetings = DateUtils.getGreetingForCurrentTime()
@@ -97,11 +104,49 @@ class HomeScreenViewModel(
     }
 
     private fun fetchQuickServices() = viewModelScope.launch {
+        _state.update {
+            it.copy(
+                isQuickServiceLoading = true
+            )
+        }
         fetchQuickServicesUseCase().onSuccess { data ->
             AppLogger.i(TAG, "Fetch Quick Services response: $data")
+            _state.update {
+                it.copy(
+                    isQuickServiceLoading = false,
+                    quickServicesList = data
+                )
+            }
         }.onError { error ->
+            _state.update {
+                it.copy(
+                    isQuickServiceLoading = false
+                )
+            }
             AppLogger.i(TAG, "Fetch Quick Services Error: ${error.toErrorMessage()}")
 
+        }
+    }
+
+    fun onBankingServiceClicked(service: BankingServiceDetail) {
+        viewModelScope.launch {
+            _actions.send(HomeScreenActions.OnBankingServiceClicked(service))
+        }
+    }
+
+    fun onQuickServiceClicked(service: QuickServiceDetail) {
+        when (service.uniqueIdentifier) {
+            "bank_transfer" -> {
+
+            }
+
+            "fund_transfer" -> {
+
+            }
+
+            else -> {
+
+            }
         }
     }
 

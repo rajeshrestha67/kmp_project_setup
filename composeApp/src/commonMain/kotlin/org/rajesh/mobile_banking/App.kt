@@ -33,6 +33,5 @@ fun AppScreen() {
     ) {
         loginScreenBuilder(navController)
         dashboardScreenBuilder(navController)
-
     }
 }

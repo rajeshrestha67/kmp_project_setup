@@ -67,6 +67,7 @@ kotlin {
             implementation(projects.feature.banking)
             implementation(projects.feature.transactionHistory)
             implementation(projects.feature.menu)
+            implementation(projects.feature.bankTransfer)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)

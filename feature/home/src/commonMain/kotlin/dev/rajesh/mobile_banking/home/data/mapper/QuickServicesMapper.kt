@@ -5,6 +5,7 @@ import dev.rajesh.mobile_banking.home.data.remote.dto.QuickServicesResponseDTO
 import dev.rajesh.mobile_banking.home.data.remote.dto.ServiceDTO
 import dev.rajesh.mobile_banking.home.domain.model.QuickServiceDetail
 import dev.rajesh.mobile_banking.home.domain.model.Service
+import dev.rajesh.mobile_banking.networkhelper.Constants
 
 
 //fun QuickServicesResponseDTO.toQuickServiceList(): QuickServices {
@@ -17,7 +18,7 @@ fun QuickServiceDetailDTO.toQuickServiceDetail(): QuickServiceDetail {
     return QuickServiceDetail(
         id = id,
         name = name,
-        imageUrl = imageUrl,
+        imageUrl = "${Constants.baseUrl}/${imageUrl}",
         uniqueIdentifier = uniqueIdentifier,
         isNew = isNew,
         appOrder = appOrder,

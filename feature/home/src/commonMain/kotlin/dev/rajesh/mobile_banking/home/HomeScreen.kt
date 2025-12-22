@@ -3,8 +3,9 @@ package dev.rajesh.mobile_banking.home
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
@@ -16,13 +17,15 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.PlusOne
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ElevatedCard
@@ -37,24 +40,29 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.key
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.times
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.NavController
 import coil3.compose.AsyncImage
+import dev.rajesh.mobile_banking.banktransfer.navigation.BankTransferRoute
+import dev.rajesh.mobile_banking.components.PlatformMessage
 import dev.rajesh.mobile_banking.components.ProfilePicture
 import dev.rajesh.mobile_banking.components.appColors
 import dev.rajesh.mobile_banking.components.dimens
 import dev.rajesh.mobile_banking.components.shimmer.ShimmerView
 import dev.rajesh.mobile_banking.home.domain.model.BankingServiceDetail
+import dev.rajesh.mobile_banking.home.domain.model.QuickServiceDetail
+import dev.rajesh.mobile_banking.home.presentation.HomeScreenActions
 import dev.rajesh.mobile_banking.home.presentation.HomeScreenState
 import dev.rajesh.mobile_banking.home.presentation.HomeScreenViewModel
 import dev.rajesh.mobile_banking.logger.AppLogger
@@ -63,14 +71,40 @@ import dev.rajesh.mobile_banking.utils.extractInitials
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
+import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen() {
+fun HomeScreen(navController: NavController) {
 
     val viewModel: HomeScreenViewModel = koinViewModel()
     val state by viewModel.state.collectAsStateWithLifecycle()
+
+    val platformMessage: PlatformMessage = koinInject()
+
+    LaunchedEffect(Unit) {
+        viewModel.actions.collect { action ->
+            platformMessage.showToast("item clicked")
+            when (action) {
+                is HomeScreenActions.OnBankingServiceClicked -> {
+                    navigateToBankingFeature(
+                        navController = navController,
+                        service = action.service
+                    )
+                }
+
+                is HomeScreenActions.OnQuickServiceClicked -> {
+//                    navigateToQuickService(
+//                        navController = navController,
+//                        service = action.service
+//                    )
+                }
+
+                else -> Unit
+            }
+        }
+    }
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -154,7 +188,7 @@ fun HomeScreen() {
 
             },
             content = {
-                HomeScreenContent(state = state)
+                HomeScreenContent(state = state, viewModel = viewModel)
             }
 
         )
@@ -163,7 +197,10 @@ fun HomeScreen() {
 }
 
 @Composable
-fun HomeScreenContent(state: HomeScreenState) {
+fun HomeScreenContent(
+    state: HomeScreenState,
+    viewModel: HomeScreenViewModel
+) {
     val mainListState = rememberLazyListState()
     val isScrolling by remember {
         derivedStateOf {
@@ -200,7 +237,12 @@ fun HomeScreenContent(state: HomeScreenState) {
         userDetailCard(state = state)
         bankingServiceList(
             isBankingServiceLoading = state.isBankingServiceLoading,
-            bankingServicesList = state.bankingServicesList
+            bankingServicesList = state.bankingServicesList,
+            viewModel = viewModel
+        )
+        quickServices(
+            isQuickServicesLoading = state.isQuickServiceLoading,
+            servicesList = state.quickServicesList
         )
     }
 }
@@ -337,7 +379,8 @@ fun AddMoneyView() {
 
 fun LazyListScope.bankingServiceList(
     isBankingServiceLoading: Boolean,
-    bankingServicesList: List<BankingServiceDetail>
+    bankingServicesList: List<BankingServiceDetail>,
+    viewModel: HomeScreenViewModel
 ) {
     item {
         when {
@@ -368,6 +411,7 @@ fun LazyListScope.bankingServiceList(
                             service,
                             onClick = { item ->
                                 AppLogger.i("HomeScreen", "Clicked: ${item.name}")
+                                viewModel.onBankingServiceClicked(item)
                             })
                     }
                 }
@@ -419,3 +463,86 @@ fun BankServiceCard(
     }
 
 }
+
+fun LazyListScope.quickServices(
+    isQuickServicesLoading: Boolean,
+    servicesList: List<QuickServiceDetail>
+) {
+    item {
+        Text(
+            "Quick Services",
+            modifier = Modifier.fillMaxWidth()
+                .padding(horizontal = MaterialTheme.dimens.small3),
+            textAlign = TextAlign.Left
+        )
+    }
+    item {
+        BoxWithConstraints(modifier = Modifier.padding(MaterialTheme.dimens.small3)) {
+            val columnCount = 4
+            val rows = (servicesList.size + 3) / columnCount
+            val itemHeight = 80.dp
+            val space = MaterialTheme.dimens.small2
+            val gridHeight = rows * (itemHeight + space)
+            LazyVerticalGrid(
+                columns = GridCells.Fixed(columnCount),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(gridHeight),
+                horizontalArrangement = Arrangement.spacedBy(space),
+                verticalArrangement = Arrangement.spacedBy(space),
+                userScrollEnabled = false,
+            ) {
+                items(servicesList) { serviceItem ->
+                    QuickServiceItem(serviceItem, onClick = { serviceItem ->
+                        AppLogger.i("HomeScreen", "quick service Clicked: ${serviceItem.name}")
+                    })
+                }
+            }
+        }
+
+    }
+}
+
+@Composable
+fun QuickServiceItem(
+    service: QuickServiceDetail,
+    onClick: (QuickServiceDetail) -> Unit
+) {
+    Box(
+        modifier = Modifier
+            .size(height = 80.dp, width = 60.dp)
+            .clickable {
+                onClick(service)
+            }
+    ) {
+        Column(
+            modifier = Modifier.fillMaxSize().padding(MaterialTheme.dimens.small1),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.SpaceBetween
+        ) {
+            AsyncImage(
+                modifier = Modifier.size(height = 25.dp, width = 25.dp),
+                model = service.imageUrl,
+                contentDescription = "serviceImage",
+                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.primary)
+            )
+            Text(
+                minLines = 2,
+                text = service.name,
+                style = MaterialTheme.typography.bodySmall.copy(
+                    fontSize = MaterialTheme.dimens.smallFontSize,
+                    color = MaterialTheme.appColors.primaryTextColor
+                ),
+                textAlign = TextAlign.Center
+            )
+        }
+    }
+}
+
+fun navigateToBankingFeature(navController: NavController, service: BankingServiceDetail) {
+    when (service.uniqueIdentifier) {
+        "bank_transfer" -> navController.navigate(BankTransferRoute.root)
+    }
+}
+
+

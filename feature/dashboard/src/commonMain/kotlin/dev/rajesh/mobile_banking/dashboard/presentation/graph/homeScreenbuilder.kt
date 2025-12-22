@@ -10,6 +10,6 @@ fun NavGraphBuilder.homeScreenBuilder(
     navController: NavController
 ) {
     composable<DashboardRoute.HomeRoute> {
-        HomeScreen()
+        HomeScreen(navController)
     }
 }

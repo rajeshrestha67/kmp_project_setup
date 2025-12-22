@@ -22,18 +22,22 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.NavDestination.Companion.hasRoute
+import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import dev.rajesh.mobile_banking.components.AnimatedNavHost
 import dev.rajesh.mobile_banking.components.navigationBar.NavigationBar
-import dev.rajesh.mobile_banking.dashboard.presentation.graph.bankingScreenBuilder
-import dev.rajesh.mobile_banking.dashboard.presentation.graph.homeScreenBuilder
-import dev.rajesh.mobile_banking.dashboard.presentation.graph.menuScreenBuilder
-import dev.rajesh.mobile_banking.dashboard.presentation.graph.transactionHistoryScreenBuilder
 import dev.rajesh.mobile_banking.dashboard.presentation.DashboardScreenAction
 import dev.rajesh.mobile_banking.dashboard.presentation.DashboardScreenState
 import dev.rajesh.mobile_banking.dashboard.presentation.DashboardViewModel
+import dev.rajesh.mobile_banking.dashboard.presentation.graph.bankingScreenBuilder
+import dev.rajesh.mobile_banking.dashboard.presentation.graph.menuScreenBuilder
+import dev.rajesh.mobile_banking.dashboard.presentation.graph.transactionHistoryScreenBuilder
 import dev.rajesh.mobile_banking.dashboard.presentation.route.DashboardRoute
+import dev.rajesh.mobile_banking.home.HomeScreen
+import dev.rajesh.mobile_banking.home.navigation.homeNavGraph
+import dev.rajesh.mobile_banking.logger.AppLogger
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -56,8 +60,11 @@ fun DashboardScreenContent(
     var bottomBarState by remember { mutableStateOf(true) }
     val dashboardNavController = rememberNavController()
 
+
+
     LaunchedEffect(dashboardNavController) {
         dashboardNavController.addOnDestinationChangedListener { _, destination, _ ->
+            AppLogger.i("Dashboard", "destination qualifiedName: ${destination.route}")
             bottomBarState = when (destination.route?.substringBefore('?')) {
                 DashboardRoute.HomeRoute::class.qualifiedName,
                 DashboardRoute.BankingRoute::class.qualifiedName,
@@ -72,10 +79,33 @@ fun DashboardScreenContent(
             }
 
         }
+//
+//        val topLevelRoutes = listOf(
+//            DashboardRoute.HomeRoute.route,
+//            DashboardRoute.BankingRoute.route,
+//            DashboardRoute.TransactionHistoryRoute.route,
+//            DashboardRoute.MenuRoute.route
+//        )
+//
+//        dashboardNavController.addOnDestinationChangedListener { _, destination, _ ->
+//            bottomBarState = topLevelRoutes.contains(destination.route)
+//        }
     }
 
     val navBackStackEntry by dashboardNavController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
+    val currentDestination = navBackStackEntry?.destination
+
+    val shouldShowBottomBar = currentDestination?.route?.let { route ->
+        listOf(
+            DashboardRoute.HomeRoute.route,
+            DashboardRoute.BankingRoute.route,
+            DashboardRoute.TransactionHistoryRoute.route,
+            DashboardRoute.MenuRoute.route
+        ).any { it == route }
+    } ?: false
+
+    AppLogger.i("Dashboard", "shouldShowBottomBar +${shouldShowBottomBar}")
 
     LaunchedEffect(currentRoute) {
         if (currentRoute != null) {
@@ -118,7 +148,7 @@ fun DashboardScreenContent(
                         animationSpec = tween(durationMillis = 200)
                     )
                 }) { visible ->
-                if (visible) {
+                if (shouldShowBottomBar) {
                     NavigationBar( //can also use material3/navigationBar, code is almost same
                         modifier = Modifier.fillMaxWidth()
                     ) {
@@ -131,7 +161,9 @@ fun DashboardScreenContent(
                                         DashboardScreenAction.OnChangeScreen(item.route)
                                     )
                                     dashboardNavController.navigate(item.route) {
-                                        popUpTo(DashboardRoute.HomeRoute) { inclusive = true }
+                                        popUpTo(DashboardRoute.HomeRoute.route) {
+                                            inclusive = false
+                                        }
                                         launchSingleTop = true
                                         restoreState = true
                                     }
@@ -162,19 +194,19 @@ fun DashboardScreenContent(
                 navController = dashboardNavController,
                 startDestination = DashboardRoute.HomeRoute,
             ) {
-                homeScreenBuilder(
-                    navController = dashboardNavController
-                )
-                bankingScreenBuilder(
-                    navController = dashboardNavController
-                )
-                transactionHistoryScreenBuilder(
-                    navController = dashboardNavController
-                )
-                menuScreenBuilder(
-                    navController = dashboardNavController
-                )
+//                homeNavGraph(
+//                    navController = dashboardNavController,
+//                )
 
+                composable(route = DashboardRoute.HomeRoute.route){
+                    HomeScreen(navController = dashboardNavController)
+                }
+
+                bankingScreenBuilder(navController = dashboardNavController)
+
+                transactionHistoryScreenBuilder(navController = dashboardNavController)
+
+                menuScreenBuilder(navController = dashboardNavController)
             }
         }
 
