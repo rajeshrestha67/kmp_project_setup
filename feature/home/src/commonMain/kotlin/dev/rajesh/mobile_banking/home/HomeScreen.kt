@@ -65,6 +65,7 @@ import dev.rajesh.mobile_banking.home.domain.model.QuickServiceDetail
 import dev.rajesh.mobile_banking.home.presentation.HomeScreenActions
 import dev.rajesh.mobile_banking.home.presentation.HomeScreenState
 import dev.rajesh.mobile_banking.home.presentation.HomeScreenViewModel
+import dev.rajesh.mobile_banking.loadwallet.presentation.navigation.LoadWalletRoute
 import dev.rajesh.mobile_banking.logger.AppLogger
 import dev.rajesh.mobile_banking.res.SharedRes
 import dev.rajesh.mobile_banking.utils.extractInitials
@@ -542,6 +543,7 @@ fun QuickServiceItem(
 fun navigateToBankingFeature(navController: NavController, service: BankingServiceDetail) {
     when (service.uniqueIdentifier) {
         "bank_transfer" -> navController.navigate(BankTransferRoute.root)
+        "load_wallet"->navController.navigate(LoadWalletRoute.ROOT)
     }
 }
 

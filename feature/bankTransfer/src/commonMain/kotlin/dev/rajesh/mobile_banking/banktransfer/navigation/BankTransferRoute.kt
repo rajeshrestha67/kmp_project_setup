@@ -6,10 +6,4 @@ object BankTransferRoute {
     const val sameBank = "same_bank"
     const val otherBank = "other_bank"
     const val favouriteAccounts = "favourite_accounts"
-
-    fun getFullRoute(route: String): String = "$root/$route"
 }
-
-// Example usage:
-// BankTransferRoutes.getFullRoute(BankTransferRoutes.SAME_BANK)
-// Result: "bank_transfer/same_bank"

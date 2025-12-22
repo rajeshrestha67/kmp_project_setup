@@ -8,6 +8,8 @@ import dev.rajesh.mobile_banking.banktransfer.navigation.BankTransferRoute
 import dev.rajesh.mobile_banking.banktransfer.navigation.bankTransferNavGraph
 import dev.rajesh.mobile_banking.dashboard.presentation.route.DashboardRoute
 import dev.rajesh.mobile_banking.home.HomeScreen
+import dev.rajesh.mobile_banking.loadwallet.presentation.navigation.LoadWalletRoute
+import dev.rajesh.mobile_banking.loadwallet.presentation.navigation.loadWalletNavGraph
 
 fun NavGraphBuilder.homeScreenNavGraph(navController: NavController) {
 
@@ -24,7 +26,12 @@ fun NavGraphBuilder.homeScreenNavGraph(navController: NavController) {
     }
 
     //LoadWallet navGraph
-
+    navigation(
+        startDestination = LoadWalletRoute.ROOT,
+        route = "home/load_wallet"
+    ) {
+        loadWalletNavGraph(navController)
+    }
 }
 
 
