@@ -92,6 +92,7 @@ kotlin {
                 implementation(projects.feature.transactionHistory)
                 implementation(projects.feature.menu)
                 implementation(projects.core.utils)
+                implementation(projects.feature.bankTransfer)
 
 
             }

@@ -22,12 +22,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.navigation.NavDestination.Companion.hasRoute
-import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import dev.rajesh.mobile_banking.components.AnimatedNavHost
 import dev.rajesh.mobile_banking.components.navigationBar.NavigationBar
+import dev.rajesh.mobile_banking.dashboard.navigation.homeNavGraph
 import dev.rajesh.mobile_banking.dashboard.presentation.DashboardScreenAction
 import dev.rajesh.mobile_banking.dashboard.presentation.DashboardScreenState
 import dev.rajesh.mobile_banking.dashboard.presentation.DashboardViewModel
@@ -35,8 +34,6 @@ import dev.rajesh.mobile_banking.dashboard.presentation.graph.bankingScreenBuild
 import dev.rajesh.mobile_banking.dashboard.presentation.graph.menuScreenBuilder
 import dev.rajesh.mobile_banking.dashboard.presentation.graph.transactionHistoryScreenBuilder
 import dev.rajesh.mobile_banking.dashboard.presentation.route.DashboardRoute
-import dev.rajesh.mobile_banking.home.HomeScreen
-import dev.rajesh.mobile_banking.home.navigation.homeNavGraph
 import dev.rajesh.mobile_banking.logger.AppLogger
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
@@ -194,13 +191,7 @@ fun DashboardScreenContent(
                 navController = dashboardNavController,
                 startDestination = DashboardRoute.HomeRoute,
             ) {
-//                homeNavGraph(
-//                    navController = dashboardNavController,
-//                )
-
-                composable(route = DashboardRoute.HomeRoute.route){
-                    HomeScreen(navController = dashboardNavController)
-                }
+                homeNavGraph(navController = dashboardNavController)
 
                 bankingScreenBuilder(navController = dashboardNavController)
 
