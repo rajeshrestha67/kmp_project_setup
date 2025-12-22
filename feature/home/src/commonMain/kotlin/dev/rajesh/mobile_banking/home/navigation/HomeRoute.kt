@@ -13,6 +13,8 @@ sealed interface HomeRoute {
 object HomeRoutes {
     // Home screen is already Dashboard.HOME = "home"
 
+    const val ROOT = "HOME"
+
     // Feature entry points from home
     const val BANK_TRANSFER = "home/bank_transfer"
     const val LOAD_WALLET = "home/load_wallet"

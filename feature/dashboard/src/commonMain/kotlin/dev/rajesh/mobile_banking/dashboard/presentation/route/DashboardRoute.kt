@@ -30,3 +30,10 @@ sealed interface DashboardRoute {
     }
 
 }
+
+object DashboardRoutes{
+    const val HOME_TAB = "HOME_TAB"
+    const val BANKING_TAB = "BANKING_TAB"
+    const val TRANSACTION_HISTORY_TAB = "TRANSACTION_HISTORY_TAB"
+    const val MENU_TAB = "MENU_TAB"
+}

@@ -26,13 +26,13 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import dev.rajesh.mobile_banking.components.AnimatedNavHost
 import dev.rajesh.mobile_banking.components.navigationBar.NavigationBar
-import dev.rajesh.mobile_banking.dashboard.navigation.homeNavGraph
 import dev.rajesh.mobile_banking.dashboard.presentation.DashboardScreenAction
 import dev.rajesh.mobile_banking.dashboard.presentation.DashboardScreenState
 import dev.rajesh.mobile_banking.dashboard.presentation.DashboardViewModel
-import dev.rajesh.mobile_banking.dashboard.presentation.graph.bankingScreenBuilder
-import dev.rajesh.mobile_banking.dashboard.presentation.graph.menuScreenBuilder
-import dev.rajesh.mobile_banking.dashboard.presentation.graph.transactionHistoryScreenBuilder
+import dev.rajesh.mobile_banking.dashboard.navigation.bankingScreenNavGraph
+import dev.rajesh.mobile_banking.dashboard.navigation.homeScreenNavGraph
+import dev.rajesh.mobile_banking.dashboard.navigation.menuScreennavGraph
+import dev.rajesh.mobile_banking.dashboard.navigation.transactionHistoryNavGraph
 import dev.rajesh.mobile_banking.dashboard.presentation.route.DashboardRoute
 import dev.rajesh.mobile_banking.logger.AppLogger
 import org.jetbrains.compose.resources.stringResource
@@ -191,13 +191,10 @@ fun DashboardScreenContent(
                 navController = dashboardNavController,
                 startDestination = DashboardRoute.HomeRoute,
             ) {
-                homeNavGraph(navController = dashboardNavController)
-
-                bankingScreenBuilder(navController = dashboardNavController)
-
-                transactionHistoryScreenBuilder(navController = dashboardNavController)
-
-                menuScreenBuilder(navController = dashboardNavController)
+                homeScreenNavGraph(navController = dashboardNavController)
+                bankingScreenNavGraph(navController = dashboardNavController)
+                transactionHistoryNavGraph(navController = dashboardNavController)
+                menuScreennavGraph(navController = dashboardNavController)
             }
         }
 

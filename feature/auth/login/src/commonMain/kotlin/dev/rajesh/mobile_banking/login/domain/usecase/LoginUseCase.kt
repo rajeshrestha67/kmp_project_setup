@@ -42,8 +42,8 @@ class LoginUseCase(
             )
 
 
-        }.onError {
+        }/*.onError {
 
-        }
+        }*/
     }
 }

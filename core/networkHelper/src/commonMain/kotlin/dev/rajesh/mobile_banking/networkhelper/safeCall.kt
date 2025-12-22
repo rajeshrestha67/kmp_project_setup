@@ -9,6 +9,7 @@ import io.ktor.serialization.JsonConvertException
 import io.ktor.util.network.UnresolvedAddressException
 import kotlinx.coroutines.ensureActive
 import kotlinx.serialization.SerializationException
+import kotlin.coroutines.cancellation.CancellationException
 import kotlin.coroutines.coroutineContext
 
 
@@ -23,6 +24,8 @@ suspend inline fun <reified T> safeCall(
         return ApiResult.Error(DataError.NetworkError.NoInternet)
     } catch (e: SerializationException) {
         return ApiResult.Error(DataError.NetworkError.Serialization)
+    }catch (e: CancellationException) {
+        return ApiResult.Error(DataError.NetworkError.RequestTimeout)
     } catch (e: Throwable) {
         return ApiResult.Error(e.toNetworkError())
     } catch (e: Exception) {

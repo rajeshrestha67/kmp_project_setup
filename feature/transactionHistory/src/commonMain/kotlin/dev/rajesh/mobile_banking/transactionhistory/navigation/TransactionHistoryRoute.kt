@@ -9,3 +9,7 @@ sealed interface TransactionHistoryRoute {
     @Serializable
     data object Root : TransactionHistoryRoute
 }
+
+object TransactionHistoryRoutes {
+    const val ROOT = "transaction_history"
+}
