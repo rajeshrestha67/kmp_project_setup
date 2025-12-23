@@ -29,7 +29,10 @@ import dev.rajesh.mobile_banking.banktransfer.sameBankTransfer.presentation.comp
 import dev.rajesh.mobile_banking.banktransfer.sameBankTransfer.presentation.state.TransferTab
 import dev.rajesh.mobile_banking.banktransfer.sameBankTransfer.presentation.viewmodel.SameBankTransferViewModel
 import dev.rajesh.mobile_banking.components.appColors
+import dev.rajesh.mobile_banking.components.button.AppButton
 import dev.rajesh.mobile_banking.components.dimens
+import dev.rajesh.mobile_banking.res.SharedRes
+import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -95,6 +98,17 @@ fun SameBankTransferScreen(
                 TransferTab.ACCOUNT -> TransferWithAccountForm(state, viewModel)
                 TransferTab.MOBILE -> TransferWithMobileNumberForm(state, viewModel)
             }
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            AppButton(
+                modifier = Modifier.fillMaxWidth(),
+                onClick = {
+                    //onAction(LoginScreenAction.LoginClicked)
+                },
+                isLoading = state.isLoading,
+                text = "Proceed"
+            )
         }
 
     }

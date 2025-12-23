@@ -492,3 +492,49 @@ fun PasswordTextField(
     )
 
 }
+
+
+@Composable
+fun AmountTextField(
+    modifier: Modifier = Modifier,
+    label: String = "Amount",
+    hint: String = "Amount",
+    onValueChange: (String) -> Unit,
+    value: String,
+    visualTransformation: VisualTransformation = VisualTransformation.None,
+    keyboardOptions: KeyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+    imeAction: ImeAction,
+    keyboardActions: KeyboardActions = KeyboardActions.Default,
+    readOnly: Boolean = false,
+    error: StringResource? = null,
+    onErrorStateChange: (StringResource?) -> Unit,
+    maxLength: Int = 320,
+    rules: List<Rule>,
+    enabled: Boolean = true,
+    showErrorMessage: Boolean = true,
+    singleLine: Boolean = false,
+    maxLines: Int = if (singleLine) 1 else Int.MAX_VALUE,
+    height: Dp? = null
+) {
+    AppTextField(
+        modifier = modifier,
+        text = value,
+        label = label,
+        hint = hint,
+        onValueChange = onValueChange,
+        visualTransformation = visualTransformation,
+        imeAction = imeAction,
+        keyboardOptions = keyboardOptions,
+        keyboardActions = keyboardActions,
+        readOnly = readOnly,
+        error = error,
+        maxLength = maxLength,
+        rules = rules,
+        onErrorStateChange = onErrorStateChange,
+        enabled = enabled,
+        showErrorMessage = showErrorMessage,
+        singleLine = singleLine,
+        maxLines = maxLines,
+        height = height
+    )
+}
