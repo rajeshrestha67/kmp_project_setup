@@ -1,4 +1,4 @@
-package dev.rajesh.mobile_banking.banktransfer.ui.component
+package dev.rajesh.mobile_banking.banktransfer.presentation.component
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -10,7 +10,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import dev.rajesh.mobile_banking.banktransfer.ui.model.BankTransferOption
+import dev.rajesh.mobile_banking.banktransfer.presentation.model.BankTransferOption
 import dev.rajesh.mobile_banking.components.appColors
 import dev.rajesh.mobile_banking.components.dimens
 

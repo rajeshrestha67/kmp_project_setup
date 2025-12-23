@@ -1,6 +1,6 @@
-package dev.rajesh.mobile_banking.banktransfer.presentation
+package dev.rajesh.mobile_banking.banktransfer.presentation.state
 
-import dev.rajesh.mobile_banking.banktransfer.ui.model.BankTransferOption
+import dev.rajesh.mobile_banking.banktransfer.presentation.model.BankTransferOption
 
 class BankTransferScreenState {
 

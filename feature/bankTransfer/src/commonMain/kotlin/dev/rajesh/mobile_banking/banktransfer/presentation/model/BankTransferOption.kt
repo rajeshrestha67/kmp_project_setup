@@ -1,4 +1,4 @@
-package dev.rajesh.mobile_banking.banktransfer.ui.model
+package dev.rajesh.mobile_banking.banktransfer.presentation.model
 
 import kotlinx.serialization.Serializable
 

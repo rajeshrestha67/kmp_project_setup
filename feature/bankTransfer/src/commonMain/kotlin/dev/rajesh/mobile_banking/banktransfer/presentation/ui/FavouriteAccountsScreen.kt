@@ -1,4 +1,4 @@
-package dev.rajesh.mobile_banking.banktransfer.ui
+package dev.rajesh.mobile_banking.banktransfer.presentation.ui
 
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
@@ -19,7 +19,7 @@ import dev.rajesh.mobile_banking.components.appColors
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun OtherBankTransferScreen(
+fun FavouriteAccountsScreen(
     onBackClicked: () -> Unit
 ) {
 
@@ -35,7 +35,7 @@ fun OtherBankTransferScreen(
                 ),
                 title = {
                     Text(
-                        text = "Other Bank Transfer",
+                        text = "Favourite Accounts",
                         style = MaterialTheme.typography.titleLarge.copy(
                             color = MaterialTheme.appColors.primaryTextColor
                         )

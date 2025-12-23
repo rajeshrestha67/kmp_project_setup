@@ -3,11 +3,10 @@ package dev.rajesh.mobile_banking.banktransfer.navigation
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
-import dev.rajesh.mobile_banking.banktransfer.ui.BankTransferScreen
-import dev.rajesh.mobile_banking.banktransfer.ui.OtherBankTransferScreen
-import dev.rajesh.mobile_banking.banktransfer.ui.FavouriteAccountsScreen
-import dev.rajesh.mobile_banking.banktransfer.ui.SameBankTransferScreen
-import dev.rajesh.mobile_banking.banktransfer.ui.model.BankTransferOption
+import dev.rajesh.mobile_banking.banktransfer.presentation.ui.BankTransferScreen
+import dev.rajesh.mobile_banking.banktransfer.presentation.ui.OtherBankTransferScreen
+import dev.rajesh.mobile_banking.banktransfer.presentation.ui.FavouriteAccountsScreen
+import dev.rajesh.mobile_banking.banktransfer.sameBankTransfer.presentation.ui.SameBankTransferScreen
 
 fun NavGraphBuilder.bankTransferNavGraph(navController: NavController) {
     composable(BankTransferRoute.root) {
