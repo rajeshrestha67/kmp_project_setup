@@ -3,19 +3,20 @@ package dev.rajesh.mobile_banking.banktransfer.navigation
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
-import dev.rajesh.mobile_banking.banktransfer.BankTransferScreen
-import dev.rajesh.mobile_banking.banktransfer.ExternalBankTransferScreen
-import dev.rajesh.mobile_banking.banktransfer.FavouriteAccountsScreen
-import dev.rajesh.mobile_banking.banktransfer.InternalBankTransferScreen
+import dev.rajesh.mobile_banking.banktransfer.ui.BankTransferScreen
+import dev.rajesh.mobile_banking.banktransfer.ui.OtherBankTransferScreen
+import dev.rajesh.mobile_banking.banktransfer.ui.FavouriteAccountsScreen
+import dev.rajesh.mobile_banking.banktransfer.ui.SameBankTransferScreen
+import dev.rajesh.mobile_banking.banktransfer.ui.model.BankTransferOption
 
 fun NavGraphBuilder.bankTransferNavGraph(navController: NavController) {
     composable(BankTransferRoute.root) {
         BankTransferScreen(
             onOptionSelected = { option ->
-                when (option) {
-                    BankTransferOption.SAME_BANK -> navController.navigate(BankTransferRoute.sameBank)
-                    BankTransferOption.OTHER_BANK -> navController.navigate(BankTransferRoute.otherBank)
-                    BankTransferOption.FAVOURITE_ACCOUNTS -> navController.navigate(
+                when (option.id) {
+                    1 -> navController.navigate(BankTransferRoute.sameBank)
+                    2 -> navController.navigate(BankTransferRoute.otherBank)
+                    3 -> navController.navigate(
                         BankTransferRoute.favouriteAccounts
                     )
                 }
@@ -27,11 +28,11 @@ fun NavGraphBuilder.bankTransferNavGraph(navController: NavController) {
     }
 
     composable(BankTransferRoute.sameBank) {
-        InternalBankTransferScreen()
+        SameBankTransferScreen()
     }
 
     composable(BankTransferRoute.otherBank) {
-        ExternalBankTransferScreen()
+        OtherBankTransferScreen()
     }
 
     composable(BankTransferRoute.favouriteAccounts) {

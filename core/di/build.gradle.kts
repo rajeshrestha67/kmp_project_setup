@@ -89,6 +89,7 @@ kotlin {
                 implementation(projects.feature.home)
                 implementation(projects.feature.user)
                 implementation(projects.feature.menu)
+                implementation(projects.feature.bankTransfer)
 
 
             }

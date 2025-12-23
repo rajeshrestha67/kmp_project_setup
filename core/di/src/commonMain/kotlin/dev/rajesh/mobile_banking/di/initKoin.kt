@@ -18,7 +18,8 @@ fun initKoin(config: KoinAppDeclaration? = null) {
             DashboardModule().module,
             UserModule().module,
             HomeScreenModule().module,
-            MenuScreenModule().module
+            MenuScreenModule().module,
+            BankTransferModule().module
         )
     }
 }
