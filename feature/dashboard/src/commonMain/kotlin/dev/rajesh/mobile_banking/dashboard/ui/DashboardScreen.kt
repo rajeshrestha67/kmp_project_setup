@@ -76,17 +76,6 @@ fun DashboardScreenContent(
             }
 
         }
-//
-//        val topLevelRoutes = listOf(
-//            DashboardRoute.HomeRoute.route,
-//            DashboardRoute.BankingRoute.route,
-//            DashboardRoute.TransactionHistoryRoute.route,
-//            DashboardRoute.MenuRoute.route
-//        )
-//
-//        dashboardNavController.addOnDestinationChangedListener { _, destination, _ ->
-//            bottomBarState = topLevelRoutes.contains(destination.route)
-//        }
     }
 
     val navBackStackEntry by dashboardNavController.currentBackStackEntryAsState()

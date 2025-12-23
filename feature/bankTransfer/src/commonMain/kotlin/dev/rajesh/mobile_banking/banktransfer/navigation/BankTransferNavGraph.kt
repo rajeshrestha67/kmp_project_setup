@@ -19,6 +19,9 @@ fun NavGraphBuilder.bankTransferNavGraph(navController: NavController) {
                         BankTransferRoute.favouriteAccounts
                     )
                 }
+            },
+            onBackClicked = {
+                navController.popBackStack()
             }
         )
     }
