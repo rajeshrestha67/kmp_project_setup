@@ -28,15 +28,21 @@ fun NavGraphBuilder.bankTransferNavGraph(navController: NavController) {
     }
 
     composable(BankTransferRoute.sameBank) {
-        SameBankTransferScreen()
+        SameBankTransferScreen(onBackClicked = {
+            navController.popBackStack()
+        })
     }
 
     composable(BankTransferRoute.otherBank) {
-        OtherBankTransferScreen()
+        OtherBankTransferScreen(onBackClicked = {
+            navController.popBackStack()
+        })
     }
 
     composable(BankTransferRoute.favouriteAccounts) {
-        FavouriteAccountsScreen()
+        FavouriteAccountsScreen(onBackClicked = {
+            navController.popBackStack()
+        })
     }
 
 }
