@@ -63,6 +63,21 @@ object SharedRes {
         val actualBalance = Res.string.actualBalance
         val availableBalance = Res.string.availableBalance
         val currencyType = Res.string.currencyType
+        val sameBankTransfer = Res.string.sameBankTransfer
+        val otherBankTransfer  = Res.string.otherBankTransfer
+        val bankTransfer = Res.string.bankTransfer
+        val favouriteAccounts = Res.string.favouriteAccounts
+        val sameBankTransferDesc = Res.string.sameBankTransferDesc
+        val otherBankTransferDesc = Res.string.otherBankTransferDesc
+        val favouriteAccountDesc = Res.string.favouriteAccountDesc
+        val fullName = Res.string.fullName
+        val accountNumber = Res.string.account_number
+        val branch = Res.string.branch
+        val amount = Res.string.amount
+        val remarks = Res.string.remarks
+        val proceed = Res.string.proceed
+
+
 
     }
 }

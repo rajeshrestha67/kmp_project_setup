@@ -42,6 +42,7 @@ fun SameBankTransferScreen(
 ) {
     val viewModel: SameBankTransferViewModel = koinViewModel()
     val state by viewModel.state.collectAsStateWithLifecycle()
+    val action = viewModel::onAction
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -95,7 +96,8 @@ fun SameBankTransferScreen(
             Spacer(modifier = Modifier.height(16.dp))
 
             when (state.selectedTab) {
-                TransferTab.ACCOUNT -> TransferWithAccountForm(state, viewModel)
+                TransferTab.ACCOUNT -> TransferWithAccountForm(state, viewModel::onAction)
+
                 TransferTab.MOBILE -> TransferWithMobileNumberForm(state)
             }
 

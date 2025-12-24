@@ -42,4 +42,18 @@
     <string name="availableBalance">Available Balance</string>
     <string name="actualBalance">Actual Balance</string>
     <string name="currencyType">NPR.</string>
+
+    <string name="sameBankTransfer">Same Bank Transfer</string>
+    <string name="otherBankTransfer">Other Bank Transfer</string>
+    <string name="bankTransfer">Bank Transfer</string>
+    <string name="favouriteAccounts">Favourite Accounts</string>
+    <string name="sameBankTransferDesc">Transfer fund to other accounts within same bank</string>
+    <string name="otherBankTransferDesc">Transfer fund to other accounts in other bank</string>
+    <string name="favouriteAccountDesc">Transfer fund to your favourite accounts</string>
+    <string name="fullName">Full Name</string>
+    <string name="account_number">Account Number</string>
+    <string name="branch">Branch</string>
+    <string name="amount">Amount</string>
+    <string name="remarks">Remarks</string>
+    <string name="proceed">Proceed</string>
 </resources>
