@@ -96,7 +96,7 @@ fun SameBankTransferScreen(
 
             when (state.selectedTab) {
                 TransferTab.ACCOUNT -> TransferWithAccountForm(state, viewModel)
-                TransferTab.MOBILE -> TransferWithMobileNumberForm(state, viewModel)
+                TransferTab.MOBILE -> TransferWithMobileNumberForm(state)
             }
 
             Spacer(modifier = Modifier.height(16.dp))

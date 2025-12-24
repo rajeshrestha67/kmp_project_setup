@@ -419,7 +419,8 @@ fun MobileTextField(
     showErrorMessage: Boolean = true,
     singleLine: Boolean = false,
     maxLines: Int = if (singleLine) 1 else Int.MAX_VALUE,
-    height: Dp? = null
+    height: Dp? = null,
+    trailingIcon: @Composable (() -> Unit)? = null,
 ) {
     AppTextField(
         modifier = modifier,
@@ -440,7 +441,8 @@ fun MobileTextField(
         showErrorMessage = showErrorMessage,
         singleLine = singleLine,
         maxLines = maxLines,
-        height = height
+        height = height,
+        trailingIcon = trailingIcon
     )
 }
 

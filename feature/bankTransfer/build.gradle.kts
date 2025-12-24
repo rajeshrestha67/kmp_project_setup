@@ -96,6 +96,7 @@ kotlin {
                 implementation(projects.core.logger)
                 implementation(projects.feature.user)
                 implementation(projects.core.utils)
+                //implementation(projects.core.ui)
             }
         }
 
