@@ -70,6 +70,7 @@ kotlin {
                 implementation(libs.jetbrians.material3)
                 implementation(compose.components.resources)
                 implementation(projects.core.ui.res)
+                implementation(libs.kotlinx.serialization.json)
 
             }
         }

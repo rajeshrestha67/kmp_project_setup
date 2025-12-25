@@ -1,5 +1,6 @@
 package dev.rajesh.mobile_banking.banktransfer.sameBankTransfer.presentation.components
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -23,7 +24,8 @@ import org.jetbrains.compose.resources.stringResource
 @Composable
 fun TransferWithAccountForm(
     state: SameBankTransferState,
-    onAction: (SameBankTransferAction) -> Unit
+    onAction: (SameBankTransferAction) -> Unit,
+    selectCoopBranchClicked: () -> Unit
 ) {
     val focusManager = LocalFocusManager.current
 
@@ -78,24 +80,27 @@ fun TransferWithAccountForm(
         Spacer(modifier = Modifier.height(8.dp))
 
         AppTextField(
-            text = state.branch,
+            text = state.branch?.name.orEmpty(),
             label = stringResource(SharedRes.Strings.branch),
             hint = "",
             onValueChange = {
-                onAction(SameBankTransferAction.OnBranchChanged(it))
+                //onAction(SameBankTransferAction.OnBranchChanged(it))
             },
             error = state.branchError,
             onErrorStateChange = {
                 onAction(SameBankTransferAction.OnBranchError(it))
             },
             rules = FormValidate.requiredValidationRules,
-            enabled = true,
+            enabled = false,
             showErrorMessage = true,
             keyboardActions = KeyboardActions(
                 onNext = {
                     focusManager.moveFocus(FocusDirection.Down)
                 }
-            )
+            ),
+            modifier = Modifier.fillMaxWidth().clickable {
+                selectCoopBranchClicked()
+            }
         )
 
         Spacer(modifier = Modifier.height(8.dp))

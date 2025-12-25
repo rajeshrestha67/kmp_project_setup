@@ -20,7 +20,8 @@ fun initKoin(config: KoinAppDeclaration? = null) {
             HomeScreenModule().module,
             MenuScreenModule().module,
             BankTransferModule().module,
-            SameBankTransferModule().module
+            SameBankTransferModule().module,
+            CoopBranchModule().module
         )
     }
 }

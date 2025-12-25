@@ -20,29 +20,78 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.NavController
+import dev.rajesh.mobile_banking.banktransfer.navigation.BankTransferResult
+import dev.rajesh.mobile_banking.banktransfer.sameBankTransfer.domain.model.CoopBranchDetail
 import dev.rajesh.mobile_banking.banktransfer.sameBankTransfer.presentation.components.TransferWithAccountForm
 import dev.rajesh.mobile_banking.banktransfer.sameBankTransfer.presentation.components.TransferWithMobileNumberForm
+import dev.rajesh.mobile_banking.banktransfer.sameBankTransfer.presentation.state.SameBankTransferAction
 import dev.rajesh.mobile_banking.banktransfer.sameBankTransfer.presentation.state.TransferTab
 import dev.rajesh.mobile_banking.banktransfer.sameBankTransfer.presentation.viewmodel.SameBankTransferViewModel
+import dev.rajesh.mobile_banking.components.PlatformMessage
 import dev.rajesh.mobile_banking.components.appColors
 import dev.rajesh.mobile_banking.components.button.AppButton
 import dev.rajesh.mobile_banking.components.dimens
 import dev.rajesh.mobile_banking.res.SharedRes
 import org.jetbrains.compose.resources.stringResource
+import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SameBankTransferScreen(
-    onBackClicked: () -> Unit
+    onSelectCoopBranchClicked: () -> Unit,
+    onBackClicked: () -> Unit,
+    navController: NavController
 ) {
     val viewModel: SameBankTransferViewModel = koinViewModel()
     val state by viewModel.state.collectAsStateWithLifecycle()
-    val action = viewModel::onAction
+    val platformMessage: PlatformMessage = koinInject()
+
+    val selectedBranchFlow = navController
+        .currentBackStackEntry
+        ?.savedStateHandle
+        ?.getStateFlow<String?>(
+            BankTransferResult.SELECTED_COOP_BRANCH,
+            null
+        )
+
+    val selectedBranch by selectedBranchFlow?.collectAsStateWithLifecycle()
+        ?: remember { mutableStateOf(null) }
+
+    LaunchedEffect(selectedBranch) {
+        selectedBranch?.let {
+            viewModel.onAction(
+                SameBankTransferAction.OnBranchSelected(it)
+            )
+
+            navController.currentBackStackEntry
+                ?.savedStateHandle
+                ?.remove<String>(BankTransferResult.SELECTED_COOP_BRANCH)
+        }
+    }
+
+    LaunchedEffect(Unit) {
+        viewModel.successChannel.collect {
+            if (it) {
+                platformMessage.showToast("Validated: ${it}")
+            }
+        }
+    }
+
+    LaunchedEffect(Unit) {
+        viewModel.errorChannel.collect {
+            platformMessage.showToast(it)
+        }
+    }
+
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -96,7 +145,11 @@ fun SameBankTransferScreen(
             Spacer(modifier = Modifier.height(16.dp))
 
             when (state.selectedTab) {
-                TransferTab.ACCOUNT -> TransferWithAccountForm(state, viewModel::onAction)
+                TransferTab.ACCOUNT -> TransferWithAccountForm(
+                    state,
+                    viewModel::onAction,
+                    onSelectCoopBranchClicked
+                )
 
                 TransferTab.MOBILE -> TransferWithMobileNumberForm(state)
             }
@@ -106,7 +159,7 @@ fun SameBankTransferScreen(
             AppButton(
                 modifier = Modifier.fillMaxWidth(),
                 onClick = {
-                    //onAction(LoginScreenAction.LoginClicked)
+                    viewModel.onAction(SameBankTransferAction.OnProceedClicked)
                 },
                 isLoading = state.isLoading,
                 text = "Proceed"

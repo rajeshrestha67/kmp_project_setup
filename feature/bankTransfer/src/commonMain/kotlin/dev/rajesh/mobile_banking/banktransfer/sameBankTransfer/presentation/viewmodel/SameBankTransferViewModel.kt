@@ -2,16 +2,35 @@ package dev.rajesh.mobile_banking.banktransfer.sameBankTransfer.presentation.vie
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dev.rajesh.mobile_banking.banktransfer.sameBankTransfer.domain.model.CoopBranchDetail
+import dev.rajesh.mobile_banking.banktransfer.sameBankTransfer.domain.model.request.AccountValidationRequest
+import dev.rajesh.mobile_banking.banktransfer.sameBankTransfer.domain.usecases.AccountValidationUseCase
 import dev.rajesh.mobile_banking.banktransfer.sameBankTransfer.presentation.state.SameBankTransferAction
 import dev.rajesh.mobile_banking.banktransfer.sameBankTransfer.presentation.state.SameBankTransferState
 import dev.rajesh.mobile_banking.banktransfer.sameBankTransfer.presentation.state.TransferTab
+import dev.rajesh.mobile_banking.domain.form.RequiredValidationUseCase
+import dev.rajesh.mobile_banking.logger.AppLogger
+import dev.rajesh.mobile_banking.model.network.toErrorMessage
+import dev.rajesh.mobile_banking.networkhelper.onError
+import dev.rajesh.mobile_banking.networkhelper.onSuccess
+import dev.rajesh.mobile_banking.res.SharedRes
+import dev.rajesh.mobile_banking.utils.serialization.AppJson
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-class SameBankTransferViewModel : ViewModel() {
+class SameBankTransferViewModel(
+    private val requiredValidationUseCase: RequiredValidationUseCase,
+    private val accountValidationUseCase: AccountValidationUseCase
+) : ViewModel() {
+
+    companion object {
+        const val TAG = "SameBankTransferViewModel"
+    }
 
     private val _state = MutableStateFlow(SameBankTransferState())
     val state = _state.stateIn(
@@ -24,6 +43,12 @@ class SameBankTransferViewModel : ViewModel() {
         _state.update { it.copy(selectedTab = tab) }
     }
 
+    private val _successChannel = Channel<Boolean>()
+    val successChannel = _successChannel.receiveAsFlow()
+
+    private val _errorChannel = Channel<String>()
+    val errorChannel = _errorChannel.receiveAsFlow()
+
     fun onAction(action: SameBankTransferAction) {
         when (action) {
             is SameBankTransferAction.OnFullNameChanged -> {
@@ -35,12 +60,6 @@ class SameBankTransferViewModel : ViewModel() {
             is SameBankTransferAction.OnAccountNumberChanged -> {
                 _state.update {
                     it.copy(accountNumber = action.accountNumber)
-                }
-            }
-
-            is SameBankTransferAction.OnBranchChanged -> {
-                _state.update {
-                    it.copy(branch = action.branch)
                 }
             }
 
@@ -99,10 +118,155 @@ class SameBankTransferViewModel : ViewModel() {
                     it.copy(remarksError = action.remarksError)
                 }
             }
+
+            is SameBankTransferAction.OnBranchSelected -> {
+                val branch = action.branchJson?.let { json ->
+                    AppJson.decodeFromString<CoopBranchDetail>(json)
+                }
+                _state.update {
+                    it.copy(
+                        branch = branch
+                    )
+
+                }
+
+            }
         }
     }
 
     private fun proceedForValidation() = viewModelScope.launch {
+        val fullNameError = requiredValidationUseCase(state.value.fullName)
+        val accountNumberError = requiredValidationUseCase(state.value.accountNumber)
+        val mobileNumberError = requiredValidationUseCase(state.value.mobileNumber)
+        val amountError = requiredValidationUseCase(state.value.amount)
+        val remarksError = requiredValidationUseCase(state.value.remarks)
+        val isBranchError = state.value.branch == null
+
+        if (state.value.selectedTab == TransferTab.ACCOUNT) { // Account Number
+            when {
+                fullNameError != null -> {
+                    _state.update {
+                        it.copy(
+                            fullNameError = fullNameError
+                        )
+                    }
+
+                }
+
+                accountNumberError != null -> {
+                    _state.update {
+                        it.copy(
+                            accountNumberError = accountNumberError
+                        )
+                    }
+                }
+
+                isBranchError -> {
+                    _state.update {
+                        it.copy(
+                            branchError = SharedRes.Strings.branch
+                        )
+                    }
+                }
+
+                amountError != null -> {
+                    _state.update {
+                        it.copy(
+                            amountError = amountError
+                        )
+                    }
+                }
+
+                remarksError != null -> {
+                    _state.update {
+                        it.copy(
+                            remarksError = remarksError
+                        )
+                    }
+                }
+
+                else -> {
+                    proceedValidationWithAccountNumber()
+                }
+
+            }
+        } else { // Mobile Number
+            when {
+                mobileNumberError != null -> {
+                    _state.update {
+                        it.copy(
+                            mobileNumberError = mobileNumberError
+                        )
+                    }
+                }
+
+                amountError != null -> {
+                    _state.update {
+                        it.copy(
+                            amountError = amountError
+                        )
+                    }
+                }
+
+                remarksError != null -> {
+                    _state.update {
+                        it.copy(
+                            remarksError = remarksError
+                        )
+                    }
+                }
+
+                else -> {
+                    proceedValidationWithMobileNumber()
+                }
+            }
+        }
+
+    }
+
+    fun proceedValidationWithAccountNumber() = viewModelScope.launch {
+        AppLogger.i("SBTViewModel", "proceedValidationWithAccountNumber")
+        _state.update {
+            it.copy(
+                validatingAccount = true
+            )
+        }
+
+        val accountValidationRequest = AccountValidationRequest(
+            destinationAccountNumber = state.value.accountNumber,
+            destinationAccountName = state.value.fullName,
+            destinationBranchId = state.value.branch?.branchCode,
+            mobileNumber = state.value.mobileNumber
+        )
+
+        accountValidationUseCase.invoke(accountValidationRequest).onSuccess { data ->
+            try {
+                if (data.matchPercentage.toInt() >= 100) {
+                    _state.update {
+                        it.copy(validatingAccount = false)
+                    }
+                    _successChannel.send(true)
+
+                } else {
+                    _state.update {
+                        it.copy(validatingAccount = false)
+                    }
+                    _errorChannel.send("Account Validation Failed")
+                }
+            } catch (e: Exception) {
+                AppLogger.e(TAG, "Error on validation : ${e.message}")
+                _errorChannel.send("Account Validation Failed")
+            }
+
+
+        }.onError { error ->
+            AppLogger.e(tag = TAG, "Fetching coop branches failed: ${error.toErrorMessage()}")
+
+        }
+    }
+
+    fun proceedValidationWithMobileNumber() = viewModelScope.launch {
+        AppLogger.i("SBTViewModel", "proceedValidationWithMobileNumber")
 
     }
 }

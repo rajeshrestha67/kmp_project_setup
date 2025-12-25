@@ -1,11 +1,12 @@
 package dev.rajesh.mobile_banking.banktransfer.sameBankTransfer.presentation.state
 
+import dev.rajesh.mobile_banking.banktransfer.sameBankTransfer.domain.model.CoopBranchDetail
 import org.jetbrains.compose.resources.StringResource
 
 sealed interface SameBankTransferAction {
     data class OnFullNameChanged(val fullName: String): SameBankTransferAction
     data class OnAccountNumberChanged(val accountNumber: String): SameBankTransferAction
-    data class OnBranchChanged(val branch: String): SameBankTransferAction
+    //data class OnBranchChanged(val branch: String): SameBankTransferAction
     data class OnMobileNumberChanged(val mobileNumber: String): SameBankTransferAction
     data class OnAmountChanged(val amount: String): SameBankTransferAction
     data class OnRemarksChanged(val remarks: String): SameBankTransferAction
@@ -19,6 +20,8 @@ sealed interface SameBankTransferAction {
     data class OnAmountError(val amountError: StringResource?): SameBankTransferAction
     data class OnRemarksError(val remarksError: StringResource?): SameBankTransferAction
 
+
+    data class OnBranchSelected(val branchJson: String?): SameBankTransferAction
 
 
 }

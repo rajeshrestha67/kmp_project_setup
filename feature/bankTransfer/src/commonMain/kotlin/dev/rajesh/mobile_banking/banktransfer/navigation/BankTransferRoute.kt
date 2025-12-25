@@ -6,4 +6,6 @@ object BankTransferRoute {
     const val sameBank = "same_bank"
     const val otherBank = "other_bank"
     const val favouriteAccounts = "favourite_accounts"
+
+    const val coopBranch = "coopBranch"
 }

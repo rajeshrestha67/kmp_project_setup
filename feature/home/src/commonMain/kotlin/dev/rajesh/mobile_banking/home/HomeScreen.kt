@@ -86,7 +86,6 @@ fun HomeScreen(navController: NavController) {
 
     LaunchedEffect(Unit) {
         viewModel.actions.collect { action ->
-            platformMessage.showToast("item clicked")
             when (action) {
                 is HomeScreenActions.OnBankingServiceClicked -> {
                     navigateToBankingFeature(
