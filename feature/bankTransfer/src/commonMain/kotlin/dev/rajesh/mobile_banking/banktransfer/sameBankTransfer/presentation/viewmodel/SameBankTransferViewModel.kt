@@ -236,37 +236,62 @@ class SameBankTransferViewModel(
             destinationAccountNumber = state.value.accountNumber,
             destinationAccountName = state.value.fullName,
             destinationBranchId = state.value.branch?.branchCode,
-            mobileNumber = state.value.mobileNumber
         )
 
         accountValidationUseCase.invoke(accountValidationRequest).onSuccess { data ->
+            _state.update {
+                it.copy(validatingAccount = false)
+            }
             try {
                 if (data.matchPercentage.toInt() >= 100) {
-                    _state.update {
-                        it.copy(validatingAccount = false)
-                    }
                     _successChannel.send(true)
-
                 } else {
-                    _state.update {
-                        it.copy(validatingAccount = false)
-                    }
                     _errorChannel.send("Account Validation Failed")
                 }
             } catch (e: Exception) {
                 AppLogger.e(TAG, "Error on validation : ${e.message}")
                 _errorChannel.send("Account Validation Failed")
             }
-
-
         }.onError { error ->
             AppLogger.e(tag = TAG, "Fetching coop branches failed: ${error.toErrorMessage()}")
-
+            _state.update {
+                it.copy(validatingAccount = false)
+            }
         }
     }
 
     fun proceedValidationWithMobileNumber() = viewModelScope.launch {
         AppLogger.i("SBTViewModel", "proceedValidationWithMobileNumber")
+        _state.update {
+            it.copy(
+                validatingAccount = true
+            )
+        }
 
+        val accountValidationRequest = AccountValidationRequest(
+            destinationMobileNumber = state.value.mobileNumber
+        )
+
+        accountValidationUseCase.invoke(accountValidationRequest).onSuccess { data ->
+            _state.update {
+                it.copy(validatingAccount = false)
+            }
+            try {
+                if (data.matchPercentage.toInt() >= 100) {
+                    _successChannel.send(true)
+                } else {
+                    _errorChannel.send("Account Validation Failed")
+                }
+            } catch (e: Exception) {
+                AppLogger.e(TAG, "Error on validation : ${e.message}")
+                _errorChannel.send("Account Validation Failed")
+            }
+        }.onError { error ->
+            _state.update {
+                it.copy(validatingAccount = false)
+            }
+            AppLogger.e(tag = TAG, "Fetching coop branches failed: ${error.toErrorMessage()}")
+
+        }
     }
 }

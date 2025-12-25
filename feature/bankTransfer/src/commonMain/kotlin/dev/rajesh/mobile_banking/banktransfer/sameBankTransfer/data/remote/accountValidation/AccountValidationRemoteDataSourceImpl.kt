@@ -1,6 +1,5 @@
 package dev.rajesh.mobile_banking.banktransfer.sameBankTransfer.data.remote.accountValidation
 
-import dev.rajesh.mobile_banking.banktransfer.sameBankTransfer.data.remote.dto.AccountValidationDetailDTO
 import dev.rajesh.mobile_banking.banktransfer.sameBankTransfer.data.remote.dto.AccountValidationResponseDTO
 import dev.rajesh.mobile_banking.banktransfer.sameBankTransfer.domain.model.request.AccountValidationRequest
 import dev.rajesh.mobile_banking.model.network.DataError
@@ -23,12 +22,18 @@ class AccountValidationRemoteDataSourceImpl(
                 baseUrl = BaseUrl.Url,
                 endPoint = EndPoint.VALIDATE_ACCOUNT
             ) {
-                if(accountValidationRequest.destinationAccountNumber!= null){
-                    parameter("destinationAccountNumber", accountValidationRequest.destinationAccountNumber)
-                    parameter("destinationAccountName", accountValidationRequest.destinationAccountName)
+                if (accountValidationRequest.destinationAccountNumber != null) {
+                    parameter(
+                        "destinationAccountNumber",
+                        accountValidationRequest.destinationAccountNumber
+                    )
+                    parameter(
+                        "destinationAccountName",
+                        accountValidationRequest.destinationAccountName
+                    )
                     parameter("destinationBranchId", accountValidationRequest.destinationBranchId)
-                }else if(accountValidationRequest.mobileNumber != null){
-                    parameter("mobileNumber", accountValidationRequest.mobileNumber)
+                } else if (accountValidationRequest.destinationMobileNumber != null) {
+                    parameter("destinationMobileNumber", accountValidationRequest.destinationMobileNumber)
                 }
 
             }

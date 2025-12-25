@@ -5,6 +5,10 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Contacts
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
@@ -15,6 +19,7 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
+import dev.rajesh.mobile_banking.banktransfer.sameBankTransfer.presentation.state.SameBankTransferAction
 import dev.rajesh.mobile_banking.banktransfer.sameBankTransfer.presentation.state.SameBankTransferState
 import dev.rajesh.mobile_banking.banktransfer.sameBankTransfer.presentation.viewmodel.SameBankTransferViewModel
 import dev.rajesh.mobile_banking.components.contactPicker.rememberContactPicker
@@ -23,14 +28,18 @@ import dev.rajesh.mobile_banking.components.permissions.rememberRequestPermissio
 import dev.rajesh.mobile_banking.components.textField.AmountTextField
 import dev.rajesh.mobile_banking.components.textField.AppTextField
 import dev.rajesh.mobile_banking.components.textField.FormValidate
+import dev.rajesh.mobile_banking.components.textField.MobileTextField
 import dev.rajesh.mobile_banking.logger.AppLogger
+import dev.rajesh.mobile_banking.res.SharedRes
+import org.jetbrains.compose.resources.stringResource
 
 
 private const val TAG = "TransferWithMobileNumberForm"
 
 @Composable
 fun TransferWithMobileNumberForm(
-    state: SameBankTransferState
+    state: SameBankTransferState,
+    onAction: (SameBankTransferAction) -> Unit
 ) {
     val focusRequester: FocusRequester = remember { FocusRequester() }
     val focusManager = LocalFocusManager.current
@@ -76,23 +85,39 @@ fun TransferWithMobileNumberForm(
             )
         }
     )
-//
-//    LaunchedEffect(Unit) {
-//        onPermission()
-//    }
 
     LaunchedEffect(Unit) {
         focusRequester.requestFocus()
     }
 
     Column {
-        MobileNumberField(
+
+        MobileTextField(
+            modifier = Modifier.fillMaxWidth(),
+            label = stringResource(SharedRes.Strings.mobileNumber),
+            hint = "",
             value = state.mobileNumber,
-            onValueChanged = {
-                //viewModel.onMobileNumberChanged(it)
+            onValueChange = {
+                onAction(SameBankTransferAction.OnMobileNumberChanged(it))
             },
-            onPickContactClicked = {
-                onPermission()
+            error = state.mobileNumberError,
+            onErrorStateChange = {
+                onAction(SameBankTransferAction.OnMobileNumberError(it))
+            },
+            rules = FormValidate.mobileNumberValidationRules,
+            imeAction = ImeAction.Next,
+            keyboardActions = KeyboardActions(
+                onNext = {
+                    focusManager.moveFocus(FocusDirection.Down)
+                }
+            ),
+            trailingIcon = {
+                IconButton(onClick = { onPermission() }) {
+                    Icon(
+                        imageVector = Icons.Default.Contacts,
+                        contentDescription = "Pick Contact"
+                    )
+                }
             }
         )
 
@@ -100,11 +125,16 @@ fun TransferWithMobileNumberForm(
 
         AmountTextField(
             modifier = Modifier.fillMaxWidth(),
-            label = "Amount",
+            label = stringResource(SharedRes.Strings.amount),
             hint = "",
-            value = "",
-            onValueChange = {},
-            onErrorStateChange = {},
+            value = state.amount,
+            onValueChange = {
+                onAction(SameBankTransferAction.OnAmountChanged(it))
+            },
+            error = state.amountError,
+            onErrorStateChange = {
+                onAction(SameBankTransferAction.OnAmountError(it))
+            },
             rules = FormValidate.requiredValidationRules,
             imeAction = ImeAction.Next,
             keyboardActions = KeyboardActions(
@@ -117,15 +147,24 @@ fun TransferWithMobileNumberForm(
         Spacer(modifier = Modifier.height(8.dp))
 
         AppTextField(
-            text = "",
-            label = "Remarks",
+            text = state.remarks,
+            label = stringResource(SharedRes.Strings.remarks),
             hint = "",
             onValueChange = {
+                onAction(SameBankTransferAction.OnRemarksChanged(it))
             },
             rules = FormValidate.requiredValidationRules,
-            onErrorStateChange = {},
+            error = state.remarksError,
+            onErrorStateChange = {
+                onAction(SameBankTransferAction.OnRemarksError(it))
+            },
             enabled = true,
-            showErrorMessage = true
+            showErrorMessage = true,
+            keyboardActions = KeyboardActions(
+                onNext = {
+                    focusManager.moveFocus(FocusDirection.Enter)
+                }
+            )
         )
 
 

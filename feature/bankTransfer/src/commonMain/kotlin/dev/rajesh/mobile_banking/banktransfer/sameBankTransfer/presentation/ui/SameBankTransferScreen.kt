@@ -151,7 +151,10 @@ fun SameBankTransferScreen(
                     onSelectCoopBranchClicked
                 )
 
-                TransferTab.MOBILE -> TransferWithMobileNumberForm(state)
+                TransferTab.MOBILE -> TransferWithMobileNumberForm(
+                    state,
+                    viewModel::onAction
+                )
             }
 
             Spacer(modifier = Modifier.height(16.dp))
