@@ -24,7 +24,7 @@ sealed interface BankTransferRoutes {
     data object SelectCoopBranch : BankTransferRoutes
 
     @Serializable
-    data object Confirmation : BankTransferRoutes
+    data class Confirmation (val json: String): BankTransferRoutes
 
 
 }

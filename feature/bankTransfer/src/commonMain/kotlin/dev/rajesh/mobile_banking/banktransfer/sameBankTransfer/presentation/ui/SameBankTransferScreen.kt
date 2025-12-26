@@ -33,14 +33,14 @@ import dev.rajesh.mobile_banking.banktransfer.navigation.BankTransferResult
 import dev.rajesh.mobile_banking.banktransfer.sameBankTransfer.presentation.components.TransferWithAccountForm
 import dev.rajesh.mobile_banking.banktransfer.sameBankTransfer.presentation.components.TransferWithMobileNumberForm
 import dev.rajesh.mobile_banking.banktransfer.sameBankTransfer.presentation.state.SameBankTransferAction
+import dev.rajesh.mobile_banking.banktransfer.sameBankTransfer.presentation.state.SameBankTransferEffect
 import dev.rajesh.mobile_banking.banktransfer.sameBankTransfer.presentation.state.TransferTab
 import dev.rajesh.mobile_banking.banktransfer.sameBankTransfer.presentation.viewmodel.SameBankTransferViewModel
-import dev.rajesh.mobile_banking.components.PlatformMessage
 import dev.rajesh.mobile_banking.components.appColors
 import dev.rajesh.mobile_banking.components.button.AppButton
 import dev.rajesh.mobile_banking.components.dimens
+import dev.rajesh.mobile_banking.components.loadingScreen.LoadingScreen
 import dev.rajesh.mobile_banking.confirmation.model.ConfirmationData
-import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -53,7 +53,6 @@ fun SameBankTransferScreen(
 ) {
     val viewModel: SameBankTransferViewModel = koinViewModel()
     val state by viewModel.state.collectAsStateWithLifecycle()
-    val platformMessage: PlatformMessage = koinInject()
 
     val selectedBranchFlow = navController
         .currentBackStackEntry
@@ -78,8 +77,14 @@ fun SameBankTransferScreen(
         }
     }
 
-    state.confirmationData?.let {confirmationData ->
-        showConfirmation(confirmationData)
+    LaunchedEffect(Unit) {
+        viewModel.effect.collect {
+            when (it) {
+                is SameBankTransferEffect.NavigateToConfirmation -> {
+                    showConfirmation(it.confirmationData)
+                }
+            }
+        }
     }
 
     state.accountValidationError?.let { error ->
@@ -91,7 +96,6 @@ fun SameBankTransferScreen(
             }
         )
     }
-
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -126,11 +130,14 @@ fun SameBankTransferScreen(
             )
         }
     ) { contentPadding ->
+
+        if (state.validatingAccount) {
+            LoadingScreen()
+        }
         Column(
             modifier = Modifier.padding(contentPadding)
                 .padding(horizontal = MaterialTheme.dimens.small3)
         ) {
-            // Tab Selector
             TabRow(
                 selectedTabIndex = state.selectedTab.ordinal
             ) {

@@ -1,5 +1,6 @@
 package dev.rajesh.mobile_banking.confirmation.presentation
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -28,7 +29,6 @@ import dev.rajesh.mobile_banking.components.dimens
 import dev.rajesh.mobile_banking.confirmation.model.ConfirmationData
 import dev.rajesh.mobile_banking.confirmation.model.ConfirmationItem
 import dev.rajesh.mobile_banking.logger.AppLogger
-import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -71,64 +71,59 @@ fun ConfirmationScreen(
             )
         }
     ) { contentPadding ->
-        Column (modifier = Modifier.padding(contentPadding)){
-            Text("hello")
-            Text("hello")
-            Text("hello")
-            Text("hello")
-            Text("hello")
-            Text("hello")
-            Text("hello")
-        }
-        /*
-        Column(modifier = Modifier.padding(contentPadding)) {
-            Text(
-                modifier = Modifier.fillMaxWidth(),
-                textAlign = TextAlign.Center,
-                text = data.title,
-                style = MaterialTheme.typography.titleLarge.copy(
-                    color = MaterialTheme.appColors.primaryTextColor
+        Box(modifier = Modifier.padding(contentPadding)) {
+            Column(modifier = Modifier.padding(horizontal = MaterialTheme.dimens.small3)) {
+                /*Text(
+                    modifier = Modifier.fillMaxWidth(),
+                    textAlign = TextAlign.Center,
+                    text = data.title,
+                    style = MaterialTheme.typography.titleLarge.copy(
+                        color = MaterialTheme.appColors.primaryTextColor
+                    )
+                )*/
+                Text(
+                    modifier = Modifier.fillMaxWidth(),
+                    textAlign = TextAlign.Center,
+                    text = data.message,
+                    style = MaterialTheme.typography.bodyLarge.copy(
+                        color = MaterialTheme.appColors.primaryTextColor
+                    )
                 )
-            )
-            Text(
-                modifier = Modifier.fillMaxWidth(),
-                textAlign = TextAlign.Center,
-                text = data.message,
-                style = MaterialTheme.typography.bodyMedium.copy(
-                    color = MaterialTheme.appColors.primaryTextColor
+                Spacer(
+                    modifier = Modifier
+                        .height(32.dp)
                 )
-            )
-            data.items.forEach {
-                ConfirmationRow(it)
-            }
 
-            Spacer(
-                modifier = Modifier
-                    .height(32.dp)
-            )
+                data.items.forEach {
+                    ConfirmationRow(it)
+                }
 
-            Button(
-                modifier = Modifier.fillMaxWidth(),
-                onClick = onConfirm
-            ) {
-                Text("Confirm")
-            }
+                Spacer(
+                    modifier = Modifier
+                        .height(32.dp)
+                )
 
+                Button(
+                    modifier = Modifier.fillMaxWidth(),
+                    onClick = onConfirm
+                ) {
+                    Text("Confirm")
+                }
 
-            Spacer(
-                modifier = Modifier
-                    .height(32.dp)
-            )
-            Button(
-                modifier = Modifier.fillMaxWidth(),
-                onClick = onBackClicked
-            ) {
-                Text("Cancel")
+                Spacer(
+                    modifier = Modifier
+                        .height(16.dp)
+                )
+
+                Button(
+                    modifier = Modifier.fillMaxWidth(),
+                    onClick = onBackClicked
+                ) {
+                    Text("Cancel")
+                }
             }
         }
-*/
-
-            }
+    }
 }
 
 @Composable
@@ -150,3 +145,5 @@ fun ConfirmationRow(it: ConfirmationItem) {
         )
     }
 }
+
+

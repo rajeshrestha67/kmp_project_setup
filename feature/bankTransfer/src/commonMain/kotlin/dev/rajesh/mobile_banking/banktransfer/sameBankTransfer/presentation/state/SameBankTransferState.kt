@@ -9,7 +9,7 @@ data class SameBankTransferState(
     val fullName: String = "",
     val accountNumber: String = "",
     val branch: CoopBranchDetail? = null,
-    val mobileNumber: String = "",
+    val mobileNumber: String = "9802304437",
     val amount: String = "",
     val remarks: String = "",
     val isLoading: Boolean = false,
@@ -25,9 +25,6 @@ data class SameBankTransferState(
 
     val validatingAccount: Boolean = false,
     val accountValidationError: AccountValidationError? = null,
-
-    val confirmationData: ConfirmationData? = null
-
 
     )
 

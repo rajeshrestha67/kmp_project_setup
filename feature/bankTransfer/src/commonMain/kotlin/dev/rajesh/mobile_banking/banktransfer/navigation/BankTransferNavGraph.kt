@@ -1,15 +1,19 @@
 package dev.rajesh.mobile_banking.banktransfer.navigation
 
+import androidx.compose.runtime.remember
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
+import androidx.navigation.toRoute
 import dev.rajesh.mobile_banking.banktransfer.presentation.ui.BankTransferScreen
 import dev.rajesh.mobile_banking.banktransfer.presentation.ui.FavouriteAccountsScreen
 import dev.rajesh.mobile_banking.banktransfer.presentation.ui.OtherBankTransferScreen
 import dev.rajesh.mobile_banking.banktransfer.sameBankTransfer.domain.model.CoopBranchDetail
 import dev.rajesh.mobile_banking.banktransfer.sameBankTransfer.presentation.ui.SameBankTransferScreen
 import dev.rajesh.mobile_banking.banktransfer.sameBankTransfer.presentation.ui.SelectBranchScreen
+import dev.rajesh.mobile_banking.confirmation.ConfirmationConstant
 import dev.rajesh.mobile_banking.confirmation.model.ConfirmationData
+import dev.rajesh.mobile_banking.confirmation.presentation.ConfirmationScreen
 import dev.rajesh.mobile_banking.utils.serialization.AppJson
 
 
@@ -40,13 +44,19 @@ fun NavGraphBuilder.bankTransferNavGraph(navController: NavController) {
                 navController.navigate(BankTransferRoutes.SelectCoopBranch)
             },
             showConfirmation = { confirmationData ->
-                val confirmationDataJson =
-                    AppJson.encodeToString(
-                        ConfirmationData.serializer(), confirmationData
+                val json = AppJson.encodeToString(
+                    ConfirmationData.serializer(),
+                    confirmationData
+                )
+
+                navController.currentBackStackEntry
+                    ?.savedStateHandle
+                    ?.set(
+                        ConfirmationConstant.CONFIRMATION_DATA,
+                        json
                     )
 
-                //navController.navigate(BankTransferRoute.confirmationRoute(confirmationDataJson))
-                navController.navigate(confirmationData)
+                navController.navigate(BankTransferRoutes.Confirmation(json))
             },
             navController = navController
         )
@@ -80,6 +90,27 @@ fun NavGraphBuilder.bankTransferNavGraph(navController: NavController) {
                 navController.popBackStack()
             }
         )
+    }
+
+    composable<BankTransferRoutes.Confirmation> {
+        val confirmationDataJson: String? = it.toRoute<BankTransferRoutes.Confirmation>().json
+
+        confirmationDataJson?.let { jsonData ->
+            val confirmationData = AppJson.decodeFromString<ConfirmationData>(jsonData)
+            it?.savedStateHandle
+                ?.remove<String>(ConfirmationConstant.CONFIRMATION_DATA)
+            ConfirmationScreen(
+                data = confirmationData,
+                onConfirm = {
+                    // handle confirm
+                    //navigate to mPIn authentication view
+                },
+                onBackClicked = {
+                    navController.popBackStack()
+                }
+            )
+        }
+
     }
 
 }

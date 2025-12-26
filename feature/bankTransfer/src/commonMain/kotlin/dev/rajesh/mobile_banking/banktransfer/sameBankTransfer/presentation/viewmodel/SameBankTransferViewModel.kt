@@ -8,6 +8,7 @@ import dev.rajesh.mobile_banking.banktransfer.sameBankTransfer.domain.model.requ
 import dev.rajesh.mobile_banking.banktransfer.sameBankTransfer.domain.usecases.AccountValidationUseCase
 import dev.rajesh.mobile_banking.banktransfer.sameBankTransfer.presentation.state.AccountValidationError
 import dev.rajesh.mobile_banking.banktransfer.sameBankTransfer.presentation.state.SameBankTransferAction
+import dev.rajesh.mobile_banking.banktransfer.sameBankTransfer.presentation.state.SameBankTransferEffect
 import dev.rajesh.mobile_banking.banktransfer.sameBankTransfer.presentation.state.SameBankTransferState
 import dev.rajesh.mobile_banking.banktransfer.sameBankTransfer.presentation.state.TransferTab
 import dev.rajesh.mobile_banking.confirmation.model.ConfirmationData
@@ -20,8 +21,11 @@ import dev.rajesh.mobile_banking.networkhelper.onSuccess
 import dev.rajesh.mobile_banking.res.SharedRes
 import dev.rajesh.mobile_banking.utils.serialization.AppJson
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
@@ -49,6 +53,11 @@ class SameBankTransferViewModel(
 
 //    private val _successChannel = Channel<Boolean>()
 //    val successChannel = _successChannel.receiveAsFlow()
+
+    private val _effect =
+        MutableSharedFlow<SameBankTransferEffect>(replay = 0, extraBufferCapacity = 1)
+    val effect: SharedFlow<SameBankTransferEffect> = _effect.asSharedFlow()
+
 
     fun onAction(action: SameBankTransferAction) {
         when (action) {
@@ -281,7 +290,6 @@ class SameBankTransferViewModel(
                 }
                 try {
                     if (data.matchPercentage.toInt() >= 100) {
-                        //_successChannel.send(true)
                         showConfirmationData(data)
                     } else {
                         showValidationError("Account Validation Failed")
@@ -311,12 +319,14 @@ class SameBankTransferViewModel(
         dataList.add(ConfirmationItem("Amount", _state.value.amount))
         dataList.add(ConfirmationItem("Remarks", _state.value.remarks))
 
-        _state.update {
-            it.copy(
-                confirmationData = ConfirmationData(
-                    title = "Confirmation",
-                    message = data.message,
-                    items = dataList
+        viewModelScope.launch {
+            _effect.emit(
+                SameBankTransferEffect.NavigateToConfirmation(
+                    ConfirmationData(
+                        title = "Confirmation",
+                        message = data.message,
+                        items = dataList
+                    )
                 )
             )
         }
