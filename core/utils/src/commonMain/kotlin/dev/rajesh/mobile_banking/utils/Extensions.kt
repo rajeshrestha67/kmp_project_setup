@@ -1,5 +1,9 @@
 package dev.rajesh.mobile_banking.utils
 
+import io.ktor.http.encodeURLQueryComponent
+import okio.ByteString.Companion.decodeBase64
+import okio.ByteString.Companion.encodeUtf8
+
 fun String?.extractInitials(): String {
     if (this.isNullOrBlank()) return ""
 
@@ -15,3 +19,15 @@ fun String?.extractInitials(): String {
         }
     }
 }
+
+fun String.encodeUrl(): String{
+    return this.encodeURLQueryComponent()
+}
+
+
+fun String.toBase64(): String =
+    encodeUtf8().base64()
+
+fun String.fromBase64(): String =
+    decodeBase64()?.utf8()
+        ?: error("Invalid Base64 string")

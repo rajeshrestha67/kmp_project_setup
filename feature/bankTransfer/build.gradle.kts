@@ -94,9 +94,11 @@ kotlin {
                 implementation(projects.core.ui.res)
                 implementation(projects.core.ui.components)
                 implementation(projects.core.logger)
-                implementation(projects.feature.user)
                 implementation(projects.core.utils)
                 //implementation(projects.core.ui)
+
+                implementation(projects.feature.user)
+                implementation(projects.feature.confirmation)
             }
         }
 

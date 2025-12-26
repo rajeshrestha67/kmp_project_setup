@@ -2,12 +2,16 @@ package dev.rajesh.mobile_banking.banktransfer.sameBankTransfer.presentation.vie
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dev.rajesh.mobile_banking.banktransfer.sameBankTransfer.domain.model.AccountValidationDetail
 import dev.rajesh.mobile_banking.banktransfer.sameBankTransfer.domain.model.CoopBranchDetail
 import dev.rajesh.mobile_banking.banktransfer.sameBankTransfer.domain.model.request.AccountValidationRequest
 import dev.rajesh.mobile_banking.banktransfer.sameBankTransfer.domain.usecases.AccountValidationUseCase
+import dev.rajesh.mobile_banking.banktransfer.sameBankTransfer.presentation.state.AccountValidationError
 import dev.rajesh.mobile_banking.banktransfer.sameBankTransfer.presentation.state.SameBankTransferAction
 import dev.rajesh.mobile_banking.banktransfer.sameBankTransfer.presentation.state.SameBankTransferState
 import dev.rajesh.mobile_banking.banktransfer.sameBankTransfer.presentation.state.TransferTab
+import dev.rajesh.mobile_banking.confirmation.model.ConfirmationData
+import dev.rajesh.mobile_banking.confirmation.model.ConfirmationItem
 import dev.rajesh.mobile_banking.domain.form.RequiredValidationUseCase
 import dev.rajesh.mobile_banking.logger.AppLogger
 import dev.rajesh.mobile_banking.model.network.toErrorMessage
@@ -43,11 +47,8 @@ class SameBankTransferViewModel(
         _state.update { it.copy(selectedTab = tab) }
     }
 
-    private val _successChannel = Channel<Boolean>()
-    val successChannel = _successChannel.receiveAsFlow()
-
-    private val _errorChannel = Channel<String>()
-    val errorChannel = _errorChannel.receiveAsFlow()
+//    private val _successChannel = Channel<Boolean>()
+//    val successChannel = _successChannel.receiveAsFlow()
 
     fun onAction(action: SameBankTransferAction) {
         when (action) {
@@ -244,13 +245,14 @@ class SameBankTransferViewModel(
             }
             try {
                 if (data.matchPercentage.toInt() >= 100) {
-                    _successChannel.send(true)
+                    //_successChannel.send(true)
+                    showConfirmationData(data)
                 } else {
-                    _errorChannel.send("Account Validation Failed")
+                    showValidationError("Account Validation Failed")
                 }
             } catch (e: Exception) {
                 AppLogger.e(TAG, "Error on validation : ${e.message}")
-                _errorChannel.send("Account Validation Failed")
+                showValidationError("Account Validation Failed")
             }
         }.onError { error ->
             AppLogger.e(tag = TAG, "Fetching coop branches failed: ${error.toErrorMessage()}")
@@ -272,26 +274,66 @@ class SameBankTransferViewModel(
             destinationMobileNumber = state.value.mobileNumber
         )
 
-        accountValidationUseCase.invoke(accountValidationRequest).onSuccess { data ->
-            _state.update {
-                it.copy(validatingAccount = false)
-            }
-            try {
-                if (data.matchPercentage.toInt() >= 100) {
-                    _successChannel.send(true)
-                } else {
-                    _errorChannel.send("Account Validation Failed")
+        accountValidationUseCase.invoke(accountValidationRequest)
+            .onSuccess { data ->
+                _state.update {
+                    it.copy(validatingAccount = false)
                 }
-            } catch (e: Exception) {
-                AppLogger.e(TAG, "Error on validation : ${e.message}")
-                _errorChannel.send("Account Validation Failed")
+                try {
+                    if (data.matchPercentage.toInt() >= 100) {
+                        //_successChannel.send(true)
+                        showConfirmationData(data)
+                    } else {
+                        showValidationError("Account Validation Failed")
+                    }
+                } catch (e: Exception) {
+                    AppLogger.e(TAG, "Error on validation : ${e.message}")
+                    showValidationError("Account Validation Failed")
+                }
+            }.onError { error ->
+                _state.update {
+                    it.copy(validatingAccount = false)
+                }
+                AppLogger.e(tag = TAG, "Fetching coop branches failed: ${error.toErrorMessage()}")
+                showValidationError(error.toErrorMessage())
             }
-        }.onError { error ->
-            _state.update {
-                it.copy(validatingAccount = false)
-            }
-            AppLogger.e(tag = TAG, "Fetching coop branches failed: ${error.toErrorMessage()}")
+    }
 
+
+    private fun showConfirmationData(data: AccountValidationDetail) {
+        val dataList: MutableList<ConfirmationItem> = mutableListOf()
+        if (_state.value.selectedTab == TransferTab.ACCOUNT) {
+            dataList.add(ConfirmationItem("Account Number", _state.value.accountNumber))
+        } else {
+            dataList.add(ConfirmationItem("Mobile Number", _state.value.mobileNumber))
         }
+        dataList.add(ConfirmationItem("Receiver's Name", data.destinationAccountName))
+        dataList.add(ConfirmationItem("Amount", _state.value.amount))
+        dataList.add(ConfirmationItem("Remarks", _state.value.remarks))
+
+        _state.update {
+            it.copy(
+                confirmationData = ConfirmationData(
+                    title = "Confirmation",
+                    message = data.message,
+                    items = dataList
+                )
+            )
+        }
+    }
+
+    private fun showValidationError(message: String) {
+        _state.update {
+            it.copy(
+                accountValidationError = AccountValidationError(
+                    title = "Error",
+                    message = message
+                )
+            )
+        }
+    }
+
+    fun dismissValidationError() {
+        _state.update { it.copy(accountValidationError = null) }
     }
 }

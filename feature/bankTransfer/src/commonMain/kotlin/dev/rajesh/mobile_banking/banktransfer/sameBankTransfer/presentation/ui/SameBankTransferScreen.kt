@@ -1,5 +1,6 @@
 package dev.rajesh.mobile_banking.banktransfer.sameBankTransfer.presentation.ui
 
+import ErrorDialog
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
@@ -29,7 +30,6 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import dev.rajesh.mobile_banking.banktransfer.navigation.BankTransferResult
-import dev.rajesh.mobile_banking.banktransfer.sameBankTransfer.domain.model.CoopBranchDetail
 import dev.rajesh.mobile_banking.banktransfer.sameBankTransfer.presentation.components.TransferWithAccountForm
 import dev.rajesh.mobile_banking.banktransfer.sameBankTransfer.presentation.components.TransferWithMobileNumberForm
 import dev.rajesh.mobile_banking.banktransfer.sameBankTransfer.presentation.state.SameBankTransferAction
@@ -39,17 +39,17 @@ import dev.rajesh.mobile_banking.components.PlatformMessage
 import dev.rajesh.mobile_banking.components.appColors
 import dev.rajesh.mobile_banking.components.button.AppButton
 import dev.rajesh.mobile_banking.components.dimens
-import dev.rajesh.mobile_banking.res.SharedRes
-import org.jetbrains.compose.resources.stringResource
+import dev.rajesh.mobile_banking.confirmation.model.ConfirmationData
 import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SameBankTransferScreen(
-    onSelectCoopBranchClicked: () -> Unit,
+    navController: NavController,
     onBackClicked: () -> Unit,
-    navController: NavController
+    onSelectCoopBranchClicked: () -> Unit,
+    showConfirmation: (ConfirmationData) -> Unit
 ) {
     val viewModel: SameBankTransferViewModel = koinViewModel()
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -78,18 +78,18 @@ fun SameBankTransferScreen(
         }
     }
 
-    LaunchedEffect(Unit) {
-        viewModel.successChannel.collect {
-            if (it) {
-                platformMessage.showToast("Validated: ${it}")
-            }
-        }
+    state.confirmationData?.let {confirmationData ->
+        showConfirmation(confirmationData)
     }
 
-    LaunchedEffect(Unit) {
-        viewModel.errorChannel.collect {
-            platformMessage.showToast(it)
-        }
+    state.accountValidationError?.let { error ->
+        ErrorDialog(
+            title = error.title,
+            msg = error.message,
+            onDismiss = {
+                viewModel.dismissValidationError()
+            }
+        )
     }
 
 
