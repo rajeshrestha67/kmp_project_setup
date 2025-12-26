@@ -542,7 +542,7 @@ fun QuickServiceItem(
 fun navigateToBankingFeature(navController: NavController, service: BankingServiceDetail) {
     when (service.uniqueIdentifier) {
         "bank_transfer" -> navController.navigate(BankTransferRoute.root)
-        "load_wallet"->navController.navigate(LoadWalletRoute.ROOT)
+        "load_wallet"->navController.navigate(LoadWalletRoute.root)
     }
 }
 

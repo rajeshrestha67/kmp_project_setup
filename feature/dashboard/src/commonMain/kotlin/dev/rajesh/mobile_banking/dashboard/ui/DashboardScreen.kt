@@ -135,7 +135,7 @@ fun DashboardScreenContent(
                                         DashboardScreenAction.OnChangeScreen(item.route)
                                     )
                                     dashboardNavController.navigate(item.route) {
-                                        popUpTo(DashboardRoute.HomeRoute.route) {
+                                        popUpTo(DashboardRoute.HomeRoute) {
                                             inclusive = false
                                         }
                                         launchSingleTop = true

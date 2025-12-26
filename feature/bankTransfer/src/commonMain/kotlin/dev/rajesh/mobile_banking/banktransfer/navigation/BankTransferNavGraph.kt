@@ -18,10 +18,10 @@ fun NavGraphBuilder.bankTransferNavGraph(navController: NavController) {
         BankTransferScreen(
             onOptionSelected = { option ->
                 when (option.id) {
-                    1 -> navController.navigate(BankTransferRoute.sameBank)
-                    2 -> navController.navigate(BankTransferRoute.otherBank)
+                    1 -> navController.navigate(BankTransferRoutes.SameBankTransfer)
+                    2 -> navController.navigate(BankTransferRoutes.OtherBankTransfer)
                     3 -> navController.navigate(
-                        BankTransferRoute.favouriteAccounts
+                        BankTransferRoutes.FavouriteAccounts
                     )
                 }
             },
@@ -31,13 +31,13 @@ fun NavGraphBuilder.bankTransferNavGraph(navController: NavController) {
         )
     }
 
-    composable(BankTransferRoute.sameBank) {
+    composable<BankTransferRoutes.SameBankTransfer> {
         SameBankTransferScreen(
             onBackClicked = {
                 navController.popBackStack()
             },
             onSelectCoopBranchClicked = {
-                navController.navigate(BankTransferRoute.coopBranch)
+                navController.navigate(BankTransferRoutes.SelectCoopBranch)
             },
             showConfirmation = { confirmationData ->
                 val confirmationDataJson =
@@ -52,19 +52,19 @@ fun NavGraphBuilder.bankTransferNavGraph(navController: NavController) {
         )
     }
 
-    composable(BankTransferRoute.otherBank) {
+    composable<BankTransferRoutes.OtherBankTransfer> {
         OtherBankTransferScreen(onBackClicked = {
             navController.popBackStack()
         })
     }
 
-    composable(BankTransferRoute.favouriteAccounts) {
+    composable<BankTransferRoutes.FavouriteAccounts> {
         FavouriteAccountsScreen(onBackClicked = {
             navController.popBackStack()
         })
     }
 
-    composable(BankTransferRoute.coopBranch) {
+    composable<BankTransferRoutes.SelectCoopBranch> {
         SelectBranchScreen(
             onBackClicked = {
                 navController.popBackStack()
