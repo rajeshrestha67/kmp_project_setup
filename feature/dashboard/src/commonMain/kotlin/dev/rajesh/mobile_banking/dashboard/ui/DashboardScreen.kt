@@ -6,6 +6,7 @@ import androidx.compose.animation.core.tween
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.animation.togetherWith
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -13,6 +14,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.NavigationBarItemColors
+import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -21,10 +24,12 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import dev.rajesh.mobile_banking.components.AnimatedNavHost
+import dev.rajesh.mobile_banking.components.appColors
 import dev.rajesh.mobile_banking.components.navigationBar.NavigationBar
 import dev.rajesh.mobile_banking.dashboard.presentation.DashboardScreenAction
 import dev.rajesh.mobile_banking.dashboard.presentation.DashboardScreenState
@@ -110,7 +115,7 @@ fun DashboardScreenContent(
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
-        containerColor = MaterialTheme.colorScheme.background,
+        containerColor = MaterialTheme.appColors.backgroundColor,
         bottomBar = {
             AnimatedContent(
                 targetState = bottomBarState, transitionSpec = {
@@ -124,7 +129,9 @@ fun DashboardScreenContent(
                 }) { visible ->
                 if (visible) {
                     NavigationBar(
-                        modifier = Modifier.fillMaxWidth()
+                        modifier = Modifier.fillMaxWidth(),
+                        contentColor = MaterialTheme.appColors.backgroundColor,
+                        containerColor = MaterialTheme.appColors.navigationBarBackgroundColor
                     ) {
                         state.screens.forEach { item ->
                             NavigationBarItem(
@@ -148,7 +155,14 @@ fun DashboardScreenContent(
                                         contentDescription = stringResource(item.name),
                                         tint = MaterialTheme.colorScheme.primary
                                     )
-                                }
+                                },
+                                colors = NavigationBarItemDefaults.colors(
+                                    selectedIconColor = MaterialTheme.appColors.primaryColor,
+                                    selectedTextColor = MaterialTheme.appColors.primaryColor,
+                                    indicatorColor = MaterialTheme.appColors.primaryContainerColor,
+                                    unselectedIconColor = Color.Gray,
+                                    unselectedTextColor = Color.Gray
+                                )
                             )
                         }
                     }

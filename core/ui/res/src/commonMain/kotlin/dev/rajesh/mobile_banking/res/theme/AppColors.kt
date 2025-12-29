@@ -11,6 +11,9 @@ data class AppColorPalette(
     val surfaceColor: Color = Color.Unspecified,
     val primaryContainerColor: Color = Color.Unspecified,
     val onPrimary: Color = Color.Unspecified,
+    val navigationBarBackgroundColor: Color = Color.Unspecified,
+    val navigationBarSelectedColor: Color = Color.Unspecified,
+    val navigationBarUnSelectedColor: Color = Color.Unspecified,
 
     val imageBackgroundColor: Color = Color.Unspecified,
     val lightGreenColor: Color = Color.Unspecified,
@@ -49,6 +52,10 @@ val lightPalette = AppColorPalette(
     surfaceColor = surfaceLight,
     primaryContainerColor = primaryContainerLight,
     onPrimary = onPrimaryLight,
+    navigationBarBackgroundColor = backgroundLight,
+    navigationBarSelectedColor = primaryLight,
+    navigationBarUnSelectedColor = Color(0xFFB0B0B0),
+
 
     imageBackgroundColor = Color(0xFFF5F5F5),
     lightGreenColor = Color(0xFF4CAF50),
@@ -88,6 +95,8 @@ val darkPalette = AppColorPalette(
     surfaceColor = surfaceDark,
     primaryContainerColor = primaryContainerDark,
     onPrimary = onPrimaryDark,
+    navigationBarBackgroundColor = backgroundDark,
+    navigationBarSelectedColor = primaryDark,
 
     imageBackgroundColor = Color(0xFF212121),
     lightGreenColor = Color(0xFF90EE90),

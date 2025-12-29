@@ -19,14 +19,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import dev.rajesh.mobile_banking.components.appColors
 import dev.rajesh.mobile_banking.components.dimens
 
 
 @Composable
 fun NavigationBar(
     modifier: Modifier = Modifier,
-    containerColor: Color = NavigationBarDefaults.containerColor,
-    contentColor: Color = MaterialTheme.colorScheme.contentColorFor(containerColor),
+    containerColor: Color ,
+    contentColor: Color,
     tonalElevation: Dp = NavigationBarDefaults.Elevation,
     windowInsets: WindowInsets = NavigationBarDefaults.windowInsets,
     content: @Composable RowScope.() -> Unit
