@@ -51,7 +51,6 @@ class PaymentAuthViewModel : ViewModel() {
                             mPin = it.mPin + action.digit
                         )
                     }
-                    AppLogger.i(TAG, "mPin entered digits: ${state.value.mPin}")
                 }
             }
 
@@ -102,7 +101,6 @@ class PaymentAuthViewModel : ViewModel() {
         viewModelScope.launch {
             val tokenRepository: TokenRepository = getKoin().get()
             tokenRepository.token.firstOrNull()?.mPin?.let { pin ->
-                AppLogger.i(TAG, "mPin from datastore: $pin")
                 _state.update {
                     it.copy(
                         mPinFromDS = pin
@@ -113,6 +111,6 @@ class PaymentAuthViewModel : ViewModel() {
     }
 
     companion object {
-        const val TAG = "PaymentViewModel"
+        const val TAG = "PaymentAuthViewModel"
     }
 }

@@ -6,11 +6,12 @@ import dev.rajesh.mobile_banking.useraccounts.presentation.state.SelectedAccount
 import org.koin.android.annotation.KoinViewModel
 import org.koin.core.annotation.Factory
 import org.koin.core.annotation.Module
+import org.koin.core.annotation.Single
 
 @Module
 class AccountSelectionViewModule {
 
-    @Factory
+    @Single
     fun provideSelectedAccountStore(): SelectedAccountStore {
         return SelectedAccountStore()
     }

@@ -21,11 +21,14 @@ import dev.rajesh.mobile_banking.model.network.toErrorMessage
 import dev.rajesh.mobile_banking.networkhelper.onError
 import dev.rajesh.mobile_banking.networkhelper.onSuccess
 import dev.rajesh.mobile_banking.res.SharedRes
+import dev.rajesh.mobile_banking.user.domain.model.AccountDetail
+import dev.rajesh.mobile_banking.useraccounts.presentation.state.SelectedAccountStore
 import dev.rajesh.mobile_banking.utils.serialization.AppJson
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
@@ -34,7 +37,8 @@ import kotlinx.coroutines.launch
 class SameBankTransferViewModel(
     private val requiredValidationUseCase: RequiredValidationUseCase,
     private val accountValidationUseCase: AccountValidationUseCase,
-    private val fundTransferUseCase: FundTransferUseCase
+    private val fundTransferUseCase: FundTransferUseCase,
+    private val selectedAccountStore: SelectedAccountStore
 ) : ViewModel() {
 
     companion object {
@@ -58,6 +62,9 @@ class SameBankTransferViewModel(
     private val _effect =
         MutableSharedFlow<SameBankTransferEffect>(replay = 0, extraBufferCapacity = 1)
     val effect: SharedFlow<SameBankTransferEffect> = _effect.asSharedFlow()
+
+    val selectedAccount: StateFlow<AccountDetail?> =
+        selectedAccountStore.selectedAccount
 
 
     fun onAction(action: SameBankTransferAction) {
@@ -236,7 +243,6 @@ class SameBankTransferViewModel(
     }
 
     fun proceedValidationWithAccountNumber() = viewModelScope.launch {
-        AppLogger.i("SBTViewModel", "proceedValidationWithAccountNumber")
         _state.update {
             it.copy(
                 validatingAccount = true
@@ -273,7 +279,6 @@ class SameBankTransferViewModel(
     }
 
     fun proceedValidationWithMobileNumber() = viewModelScope.launch {
-        AppLogger.i("SBTViewModel", "proceedValidationWithMobileNumber")
         _state.update {
             it.copy(
                 validatingAccount = true
@@ -349,14 +354,14 @@ class SameBankTransferViewModel(
     }
 
     fun onMPinVerified(mPin: String) {
-        AppLogger.i(TAG, "onMpinVerified: $mPin")
-        fundTransfer(mPin)
+        val account = selectedAccount.value ?: return
+        fundTransfer(mPin, accountDetail = account)
     }
 
 
-    fun fundTransfer(mPin: String) = viewModelScope.launch {
+    fun fundTransfer(mPin: String, accountDetail: AccountDetail) = viewModelScope.launch {
         val fundTransferRequest = FundTransferRequest(
-            fromAccountNumber = "",
+            fromAccountNumber = accountDetail.accountNumber,
             toAccountNumber = if (_state.value.selectedTab == TransferTab.ACCOUNT) _state.value.accountNumber else null,
             toAccountName = if (_state.value.selectedTab == TransferTab.ACCOUNT) _state.value.fullName else null,
             bankBranchId = if (_state.value.selectedTab == TransferTab.ACCOUNT && _state.value.branch != null) _state.value.branch?.branchCode else null,
@@ -365,6 +370,7 @@ class SameBankTransferViewModel(
             remarks = _state.value.remarks,
             mPin = mPin,
         )
+
         fundTransferUseCase(fundTransferRequest)
             .onSuccess { result ->
                 AppLogger.i(TAG, "fund Transfer Success: ${result.message}")

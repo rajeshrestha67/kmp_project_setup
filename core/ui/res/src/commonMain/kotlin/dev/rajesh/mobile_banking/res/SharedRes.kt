@@ -64,7 +64,7 @@ object SharedRes {
         val availableBalance = Res.string.availableBalance
         val currencyType = Res.string.currencyType
         val sameBankTransfer = Res.string.sameBankTransfer
-        val otherBankTransfer  = Res.string.otherBankTransfer
+        val otherBankTransfer = Res.string.otherBankTransfer
         val bankTransfer = Res.string.bankTransfer
         val favouriteAccounts = Res.string.favouriteAccounts
         val sameBankTransferDesc = Res.string.sameBankTransferDesc
@@ -78,8 +78,8 @@ object SharedRes {
         val proceed = Res.string.proceed
         val chooseAccount = Res.string.chooseAccount
         val primary = Res.string.primary
-
-
+        val usingReceiversAccountNumber = Res.string.usingReceiversAccountNumber
+        val usingReceiversMobileNumber = Res.string.usingReceiversMobileNumber
 
 
     }

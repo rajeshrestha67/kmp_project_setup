@@ -20,135 +20,134 @@ import dev.rajesh.mobile_banking.components.textField.FormValidate
 import dev.rajesh.mobile_banking.res.SharedRes
 import mobilebanking.feature.banktransfer.generated.resources.Res
 import org.jetbrains.compose.resources.stringResource
-
-@Composable
-fun TransferWithAccountForm(
-    state: SameBankTransferState,
-    onAction: (SameBankTransferAction) -> Unit,
-    selectCoopBranchClicked: () -> Unit
-) {
-    val focusManager = LocalFocusManager.current
-
-    Column()
-    {
-        AppTextField(
-            modifier = Modifier.fillMaxWidth(),
-            label = stringResource(SharedRes.Strings.fullName),
-            hint = "",
-            text = state.fullName,
-            onValueChange = {
-                onAction(SameBankTransferAction.OnFullNameChanged(it))
-            },
-            error = state.fullNameError,
-            onErrorStateChange = {
-                onAction(SameBankTransferAction.OnFullNameError(it))
-            },
-            rules = FormValidate.requiredValidationRules,
-            imeAction = ImeAction.Next,
-            enabled = true,
-            showErrorMessage = true,
-            keyboardActions = KeyboardActions(
-                onNext = {
-                    focusManager.moveFocus(FocusDirection.Down)
-                }
-            )
-        )
-
-        Spacer(modifier = Modifier.height(8.dp))
-
-        AppTextField(
-            text = state.accountNumber,
-            label = stringResource(SharedRes.Strings.accountNumber),
-            hint = "",
-            onValueChange = {
-                onAction(SameBankTransferAction.OnAccountNumberChanged(it))
-            },
-            error = state.accountNumberError,
-            onErrorStateChange = {
-                onAction(SameBankTransferAction.OnAccountNumberError(it))
-            },
-            rules = FormValidate.requiredValidationRules,
-            enabled = true,
-            showErrorMessage = true,
-            keyboardActions = KeyboardActions(
-                onNext = {
-                    focusManager.moveFocus(FocusDirection.Down)
-                }
-            )
-        )
-
-        Spacer(modifier = Modifier.height(8.dp))
-
-        AppTextField(
-            text = state.branch?.name.orEmpty(),
-            label = stringResource(SharedRes.Strings.branch),
-            hint = "",
-            onValueChange = {
-                //onAction(SameBankTransferAction.OnBranchChanged(it))
-            },
-            error = state.branchError,
-            onErrorStateChange = {
-                onAction(SameBankTransferAction.OnBranchError(it))
-            },
-            rules = FormValidate.requiredValidationRules,
-            enabled = false,
-            showErrorMessage = true,
-            keyboardActions = KeyboardActions(
-                onNext = {
-                    focusManager.moveFocus(FocusDirection.Down)
-                }
-            ),
-            modifier = Modifier.fillMaxWidth().clickable {
-                selectCoopBranchClicked()
-            }
-        )
-
-        Spacer(modifier = Modifier.height(8.dp))
-
-        AmountTextField(
-            modifier = Modifier.fillMaxWidth(),
-            label = stringResource(SharedRes.Strings.amount),
-            hint = "",
-            value = state.amount,
-            onValueChange = {
-                onAction(SameBankTransferAction.OnAmountChanged(it))
-            },
-            error = state.amountError,
-            onErrorStateChange = {
-                onAction(SameBankTransferAction.OnAmountError(it))
-            },
-            rules = FormValidate.requiredValidationRules,
-            imeAction = ImeAction.Next,
-            keyboardActions = KeyboardActions(
-                onNext = {
-                    focusManager.moveFocus(FocusDirection.Down)
-                }
-            )
-        )
-
-        Spacer(modifier = Modifier.height(8.dp))
-
-        AppTextField(
-            text = state.remarks,
-            label = stringResource(SharedRes.Strings.remarks),
-            hint = "",
-            onValueChange = {
-                onAction(SameBankTransferAction.OnRemarksChanged(it))
-
-            },
-            error = state.remarksError,
-            rules = FormValidate.requiredValidationRules,
-            onErrorStateChange = {
-                onAction(SameBankTransferAction.OnRemarksError(it))
-
-            },
-            enabled = true,
-            showErrorMessage = true,
-            keyboardActions = KeyboardActions(
-                onNext = {
-                    focusManager.moveFocus(FocusDirection.Down)
-                }
-            )
-        )
-    }
-}
+//
+//@Composable
+//fun TransferWithAccountForm(
+//    state: SameBankTransferState,
+//    onAction: (SameBankTransferAction) -> Unit,
+//    selectCoopBranchClicked: () -> Unit
+//) {
+//    val focusManager = LocalFocusManager.current
+//
+//    Column {
+//        AppTextField(
+//            modifier = Modifier.fillMaxWidth(),
+//            label = stringResource(SharedRes.Strings.fullName),
+//            hint = "",
+//            text = state.fullName,
+//            onValueChange = {
+//                onAction(SameBankTransferAction.OnFullNameChanged(it))
+//            },
+//            error = state.fullNameError,
+//            onErrorStateChange = {
+//                onAction(SameBankTransferAction.OnFullNameError(it))
+//            },
+//            rules = FormValidate.requiredValidationRules,
+//            imeAction = ImeAction.Next,
+//            enabled = true,
+//            showErrorMessage = true,
+//            keyboardActions = KeyboardActions(
+//                onNext = {
+//                    focusManager.moveFocus(FocusDirection.Down)
+//                }
+//            )
+//        )
+//
+//        Spacer(modifier = Modifier.height(8.dp))
+//
+//        AppTextField(
+//            text = state.accountNumber,
+//            label = stringResource(SharedRes.Strings.accountNumber),
+//            hint = "",
+//            onValueChange = {
+//                onAction(SameBankTransferAction.OnAccountNumberChanged(it))
+//            },
+//            error = state.accountNumberError,
+//            onErrorStateChange = {
+//                onAction(SameBankTransferAction.OnAccountNumberError(it))
+//            },
+//            rules = FormValidate.requiredValidationRules,
+//            enabled = true,
+//            showErrorMessage = true,
+//            keyboardActions = KeyboardActions(
+//                onNext = {
+//                    focusManager.moveFocus(FocusDirection.Down)
+//                }
+//            )
+//        )
+//
+//        Spacer(modifier = Modifier.height(8.dp))
+//
+//        AppTextField(
+//            text = state.branch?.name.orEmpty(),
+//            label = stringResource(SharedRes.Strings.branch),
+//            hint = "",
+//            onValueChange = {
+//                //onAction(SameBankTransferAction.OnBranchChanged(it))
+//            },
+//            error = state.branchError,
+//            onErrorStateChange = {
+//                onAction(SameBankTransferAction.OnBranchError(it))
+//            },
+//            rules = FormValidate.requiredValidationRules,
+//            enabled = false,
+//            showErrorMessage = true,
+//            keyboardActions = KeyboardActions(
+//                onNext = {
+//                    focusManager.moveFocus(FocusDirection.Down)
+//                }
+//            ),
+//            modifier = Modifier.fillMaxWidth().clickable {
+//                selectCoopBranchClicked()
+//            }
+//        )
+//
+//        Spacer(modifier = Modifier.height(8.dp))
+//
+//        AmountTextField(
+//            modifier = Modifier.fillMaxWidth(),
+//            label = stringResource(SharedRes.Strings.amount),
+//            hint = "",
+//            value = state.amount,
+//            onValueChange = {
+//                onAction(SameBankTransferAction.OnAmountChanged(it))
+//            },
+//            error = state.amountError,
+//            onErrorStateChange = {
+//                onAction(SameBankTransferAction.OnAmountError(it))
+//            },
+//            rules = FormValidate.requiredValidationRules,
+//            imeAction = ImeAction.Next,
+//            keyboardActions = KeyboardActions(
+//                onNext = {
+//                    focusManager.moveFocus(FocusDirection.Down)
+//                }
+//            )
+//        )
+//
+//        Spacer(modifier = Modifier.height(8.dp))
+//
+//        AppTextField(
+//            text = state.remarks,
+//            label = stringResource(SharedRes.Strings.remarks),
+//            hint = "",
+//            onValueChange = {
+//                onAction(SameBankTransferAction.OnRemarksChanged(it))
+//
+//            },
+//            error = state.remarksError,
+//            rules = FormValidate.requiredValidationRules,
+//            onErrorStateChange = {
+//                onAction(SameBankTransferAction.OnRemarksError(it))
+//
+//            },
+//            enabled = true,
+//            showErrorMessage = true,
+//            keyboardActions = KeyboardActions(
+//                onNext = {
+//                    focusManager.moveFocus(FocusDirection.Down)
+//                }
+//            )
+//        )
+//    }
+//}

@@ -12,6 +12,7 @@ import dev.rajesh.mobile_banking.banktransfer.sameBankTransfer.domain.usecases.A
 import dev.rajesh.mobile_banking.banktransfer.sameBankTransfer.domain.usecases.FundTransferUseCase
 import dev.rajesh.mobile_banking.banktransfer.sameBankTransfer.presentation.viewmodel.SameBankTransferViewModel
 import dev.rajesh.mobile_banking.domain.form.RequiredValidationUseCase
+import dev.rajesh.mobile_banking.useraccounts.presentation.state.SelectedAccountStore
 import io.ktor.client.HttpClient
 import org.koin.android.annotation.KoinViewModel
 import org.koin.core.annotation.Factory
@@ -42,11 +43,13 @@ class SameBankTransferModule {
     fun sameBankTransferViewModel(
         requiredValidationUseCase: RequiredValidationUseCase,
         accountValidationUseCase: AccountValidationUseCase,
-        fundTransferUseCase: FundTransferUseCase
+        fundTransferUseCase: FundTransferUseCase,
+        selectedAccountStore: SelectedAccountStore
     ) = SameBankTransferViewModel(
         requiredValidationUseCase = requiredValidationUseCase,
         accountValidationUseCase = accountValidationUseCase,
-        fundTransferUseCase = fundTransferUseCase
+        fundTransferUseCase = fundTransferUseCase,
+        selectedAccountStore = selectedAccountStore
     )
 
 
