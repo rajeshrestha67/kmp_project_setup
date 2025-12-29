@@ -99,6 +99,7 @@ kotlin {
 
                 implementation(projects.feature.user)
                 implementation(projects.feature.confirmation)
+                implementation(projects.feature.paymentAuthentication)
             }
         }
 

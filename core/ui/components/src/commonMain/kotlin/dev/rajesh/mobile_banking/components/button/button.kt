@@ -11,6 +11,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -20,6 +21,7 @@ import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
+import dev.rajesh.mobile_banking.components.appColors
 
 @Composable
 fun AppButton(
@@ -84,5 +86,38 @@ fun AppButton(
                 }
             }
         }
+    }
+}
+@Composable
+fun OutlinedAppButton(
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit,
+    text: String,
+    backgroundColor: Color = Color.White,
+    textColor: Color = MaterialTheme.appColors.primaryTextColor,
+    shape: Shape = MaterialTheme.shapes.medium,
+    enabled: Boolean = true,
+    disableBackgroundColor: Color = Color.Gray,
+    disableTextColor: Color = MaterialTheme.colorScheme.onBackground,
+    border: BorderStroke = BorderStroke(1.dp, Color.Black),
+    textStyle: TextStyle = MaterialTheme.typography.bodyMedium
+) {
+    OutlinedButton(
+        enabled = enabled,
+        modifier = modifier.height(48.dp),
+        onClick = onClick,
+        colors = ButtonDefaults.buttonColors().copy(
+            containerColor = backgroundColor,
+            contentColor = textColor,
+            disabledContainerColor = disableBackgroundColor,
+            disabledContentColor = disableTextColor
+        ),
+        shape = shape,
+        border = border
+    ) {
+        Text(
+            text = text,
+            style = textStyle
+        )
     }
 }

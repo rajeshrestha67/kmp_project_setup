@@ -1,6 +1,5 @@
 package dev.rajesh.mobile_banking.banktransfer.navigation
 
-import androidx.compose.runtime.remember
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
@@ -14,6 +13,8 @@ import dev.rajesh.mobile_banking.banktransfer.sameBankTransfer.presentation.ui.S
 import dev.rajesh.mobile_banking.confirmation.ConfirmationConstant
 import dev.rajesh.mobile_banking.confirmation.model.ConfirmationData
 import dev.rajesh.mobile_banking.confirmation.presentation.ConfirmationScreen
+import dev.rajesh.mobile_banking.paymentAuthentication.PaymentAuthResult
+import dev.rajesh.mobile_banking.paymentAuthentication.presentation.PaymentAuthenticationScreen
 import dev.rajesh.mobile_banking.utils.serialization.AppJson
 
 
@@ -97,13 +98,13 @@ fun NavGraphBuilder.bankTransferNavGraph(navController: NavController) {
 
         confirmationDataJson?.let { jsonData ->
             val confirmationData = AppJson.decodeFromString<ConfirmationData>(jsonData)
-            it?.savedStateHandle
-                ?.remove<String>(ConfirmationConstant.CONFIRMATION_DATA)
+            it.savedStateHandle.remove<String>(ConfirmationConstant.CONFIRMATION_DATA)
             ConfirmationScreen(
                 data = confirmationData,
                 onConfirm = {
                     // handle confirm
                     //navigate to mPIn authentication view
+                    navController.navigate(BankTransferRoutes.PaymentAuthentication)
                 },
                 onBackClicked = {
                     navController.popBackStack()
@@ -111,6 +112,25 @@ fun NavGraphBuilder.bankTransferNavGraph(navController: NavController) {
             )
         }
 
+    }
+
+    composable<BankTransferRoutes.PaymentAuthentication> {
+        PaymentAuthenticationScreen(
+            onMPinVerified = { mPin ->
+                navController.getBackStackEntry<BankTransferRoutes.SameBankTransfer>()
+                    .savedStateHandle
+                    .set(PaymentAuthResult.mPin, mPin)
+
+                //clear auth and confirmation screen
+                navController.popBackStack(
+                    route = BankTransferRoutes.SameBankTransfer,
+                    inclusive = false
+                )
+            },
+
+            onBackClicked = {
+                navController.popBackStack()
+            })
     }
 
 }

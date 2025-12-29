@@ -7,5 +7,6 @@ data class Token(
     val jwtToken: String? = null,
     val biometricToken: String? = null,
     val isBiometricEnable: Boolean = false,
-    val fcmToken: String? = null
+    val fcmToken: String? = null,
+    val mPin: String? = null,
 )

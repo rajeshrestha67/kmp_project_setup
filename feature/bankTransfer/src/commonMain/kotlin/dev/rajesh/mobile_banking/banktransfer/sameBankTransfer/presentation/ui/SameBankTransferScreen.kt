@@ -41,6 +41,7 @@ import dev.rajesh.mobile_banking.components.button.AppButton
 import dev.rajesh.mobile_banking.components.dimens
 import dev.rajesh.mobile_banking.components.loadingScreen.LoadingScreen
 import dev.rajesh.mobile_banking.confirmation.model.ConfirmationData
+import dev.rajesh.mobile_banking.paymentAuthentication.PaymentAuthResult
 import org.koin.compose.viewmodel.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -54,13 +55,12 @@ fun SameBankTransferScreen(
     val viewModel: SameBankTransferViewModel = koinViewModel()
     val state by viewModel.state.collectAsStateWithLifecycle()
 
-    val selectedBranchFlow = navController
-        .currentBackStackEntry
-        ?.savedStateHandle
-        ?.getStateFlow<String?>(
-            BankTransferResult.SELECTED_COOP_BRANCH,
-            null
-        )
+    val savedStateHandle = navController.currentBackStackEntry?.savedStateHandle
+
+    val selectedBranchFlow = savedStateHandle?.getStateFlow<String?>(
+        BankTransferResult.SELECTED_COOP_BRANCH,
+        null
+    )
 
     val selectedBranch by selectedBranchFlow?.collectAsStateWithLifecycle()
         ?: remember { mutableStateOf(null) }
@@ -70,11 +70,20 @@ fun SameBankTransferScreen(
             viewModel.onAction(
                 SameBankTransferAction.OnBranchSelected(it)
             )
-
-            navController.currentBackStackEntry
-                ?.savedStateHandle
-                ?.remove<String>(BankTransferResult.SELECTED_COOP_BRANCH)
+            savedStateHandle?.remove<String>(BankTransferResult.SELECTED_COOP_BRANCH)
         }
+    }
+
+
+
+    LaunchedEffect(Unit) {
+        savedStateHandle?.getStateFlow<String?>(PaymentAuthResult.mPin, null)
+            ?.collect { mPin ->
+                mPin?.let {
+                    viewModel.onMPinReceived(it)
+                    savedStateHandle.remove<String>(PaymentAuthResult.mPin)
+                }
+            }
     }
 
     LaunchedEffect(Unit) {

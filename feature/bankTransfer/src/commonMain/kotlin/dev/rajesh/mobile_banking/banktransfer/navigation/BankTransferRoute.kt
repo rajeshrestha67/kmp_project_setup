@@ -27,5 +27,9 @@ sealed interface BankTransferRoutes {
     data class Confirmation (val json: String): BankTransferRoutes
 
 
+    @Serializable
+    data object PaymentAuthentication: BankTransferRoutes
+
+
 }
 

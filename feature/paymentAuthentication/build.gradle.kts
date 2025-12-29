@@ -1,6 +1,9 @@
+import com.android.build.gradle.LibraryExtension
+
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidKotlinMultiplatformLibrary)
+    alias(libs.plugins.android.lint)
     alias(libs.plugins.composeCompiler)
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.jetbrains.kotlin.serialization)
@@ -12,7 +15,7 @@ kotlin {
     // which platforms this KMP module supports.
     // See: https://kotlinlang.org/docs/multiplatform-discover-project.html#targets
     androidLibrary {
-        namespace = "dev.rajesh.mobile_banking.home"
+        namespace = "dev.rajesh.mobile_banking.paymentAuthentication"
         compileSdk = 36
         minSdk = 24
 
@@ -24,6 +27,7 @@ kotlin {
         }.configure {
             instrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         }
+
     }
 
     // For iOS targets, this is also where you should
@@ -33,7 +37,7 @@ kotlin {
     // A step-by-step guide on how to include this library in an XCode
     // project can be found here:
     // https://developer.android.com/kotlin/multiplatform/migrate
-    val xcfName = "feature:homeKit"
+    val xcfName = "feature:paymentAuthenticationKit"
 
     iosX64 {
         binaries.framework {
@@ -82,21 +86,14 @@ kotlin {
                 implementation(libs.kotlinx.serialization.json)
                 implementation(libs.koin.compose.viewmodel)
                 implementation(compose.components.resources)
-
-                implementation(projects.core.domain)
-                implementation(projects.core.model)
-                implementation(projects.core.persistance.datastore)
-                //                implementation(projects.core.persistance.room_database)
-
-                implementation(projects.core.networkHelper)
                 implementation(projects.core.logger)
                 implementation(projects.core.ui.res)
                 implementation(projects.core.ui.components)
                 implementation(projects.core.utils)
 
-                implementation(projects.feature.user)
-                implementation(projects.feature.bankTransfer)
-                implementation(projects.feature.loadWallet)
+                implementation(projects.core.networkHelper)
+                implementation(projects.core.persistance.datastore)
+
             }
         }
 
@@ -111,6 +108,8 @@ kotlin {
                 // Add Android-specific dependencies here. Note that this source set depends on
                 // commonMain by default and will correctly pull the Android artifacts of any KMP
                 // dependencies declared in commonMain.
+                implementation(compose.components.uiToolingPreview)
+
             }
         }
 
@@ -134,3 +133,5 @@ kotlin {
     }
 
 }
+
+

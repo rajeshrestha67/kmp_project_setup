@@ -37,7 +37,8 @@ class LoginUseCase(
             val token = tokenRepository.token.firstOrNull() ?: Token()
             tokenRepository.saveToken(
                 token.copy(
-                    jwtToken = data.access_token
+                    jwtToken = data.access_token,
+                    mPin = password
                 )
             )
 

@@ -346,4 +346,8 @@ class SameBankTransferViewModel(
     fun dismissValidationError() {
         _state.update { it.copy(accountValidationError = null) }
     }
+
+    fun onMPinReceived(mPin: String) {
+        AppLogger.i(TAG, "onMPinReceived: $mPin")
+    }
 }

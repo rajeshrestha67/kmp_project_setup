@@ -1,5 +1,6 @@
 package dev.rajesh.mobile_banking.confirmation.presentation
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -12,23 +13,31 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import dev.rajesh.mobile_banking.components.appColors
+import dev.rajesh.mobile_banking.components.button.AppButton
+import dev.rajesh.mobile_banking.components.button.OutlinedAppButton
 import dev.rajesh.mobile_banking.components.dimens
 import dev.rajesh.mobile_banking.confirmation.model.ConfirmationData
 import dev.rajesh.mobile_banking.confirmation.model.ConfirmationItem
 import dev.rajesh.mobile_banking.logger.AppLogger
+import dev.rajesh.mobile_banking.res.SharedRes
+import org.jetbrains.compose.resources.stringResource
+import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -103,24 +112,25 @@ fun ConfirmationScreen(
                         .height(32.dp)
                 )
 
-                Button(
+                AppButton(
                     modifier = Modifier.fillMaxWidth(),
-                    onClick = onConfirm
-                ) {
-                    Text("Confirm")
-                }
+                    onClick = onConfirm,
+//                    text = stringResource(SharedRes.Strings.confirm)
+                    text = "Confirm"
+                )
 
                 Spacer(
                     modifier = Modifier
                         .height(16.dp)
                 )
 
-                Button(
+                OutlinedAppButton(
+                    text = "Cancel",
                     modifier = Modifier.fillMaxWidth(),
-                    onClick = onBackClicked
-                ) {
-                    Text("Cancel")
-                }
+                    onClick = onBackClicked,
+                    textColor = Color.Red,
+                    border = BorderStroke(1.dp, Color.Red),
+                )
             }
         }
     }
@@ -134,16 +144,39 @@ fun ConfirmationRow(it: ConfirmationItem) {
                 .padding(horizontal = MaterialTheme.dimens.small3)
                 .fillMaxWidth()
                 .weight(1f),
-            text = it.label
+            text = it.label,
+            style = MaterialTheme.typography.labelMedium.copy(
+                color = MaterialTheme.appColors.secondaryTextColor
+            )
         )
         Text(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = MaterialTheme.dimens.small3)
                 .weight(1f),
-            text = it.value
+            text = it.value,
+            style = MaterialTheme.typography.labelMedium.copy(
+                color = MaterialTheme.appColors.primaryTextColor
+            )
         )
     }
 }
+
+@Preview
+@Composable
+fun ButtonPreview() {
+
+
+    MaterialTheme{
+        Button(
+            modifier = Modifier.fillMaxWidth(),
+            onClick = {}
+        ) {
+            Text("hello")
+        }
+    }
+
+}
+
 
 
