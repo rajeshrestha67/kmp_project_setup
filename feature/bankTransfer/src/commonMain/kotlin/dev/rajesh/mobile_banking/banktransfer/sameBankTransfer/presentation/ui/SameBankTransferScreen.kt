@@ -42,6 +42,11 @@ import dev.rajesh.mobile_banking.components.dimens
 import dev.rajesh.mobile_banking.components.loadingScreen.LoadingScreen
 import dev.rajesh.mobile_banking.confirmation.model.ConfirmationData
 import dev.rajesh.mobile_banking.paymentAuthentication.PaymentAuthResult
+import dev.rajesh.mobile_banking.res.SharedRes
+import dev.rajesh.mobile_banking.useraccounts.presentation.AccountDetailView
+import dev.rajesh.mobile_banking.useraccounts.presentation.state.AccountSelectionAction
+import dev.rajesh.mobile_banking.useraccounts.presentation.viewmodel.AccountSelectionViewModel
+import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -54,6 +59,9 @@ fun SameBankTransferScreen(
 ) {
     val viewModel: SameBankTransferViewModel = koinViewModel()
     val state by viewModel.state.collectAsStateWithLifecycle()
+
+    val accountSelectionViewModel: AccountSelectionViewModel = koinViewModel()
+    val accountState by accountSelectionViewModel.state.collectAsStateWithLifecycle()
 
     val savedStateHandle = navController.currentBackStackEntry?.savedStateHandle
 
@@ -118,7 +126,7 @@ fun SameBankTransferScreen(
                 ),
                 title = {
                     Text(
-                        text = "Same Bank Transfer",
+                        text = stringResource(SharedRes.Strings.sameBankTransfer),
                         style = MaterialTheme.typography.titleLarge.copy(
                             color = MaterialTheme.appColors.primaryTextColor
                         )
@@ -147,6 +155,15 @@ fun SameBankTransferScreen(
             modifier = Modifier.padding(contentPadding)
                 .padding(horizontal = MaterialTheme.dimens.small3)
         ) {
+            AccountDetailView(
+                state = accountState,
+                onSelectAccount = {
+                    accountSelectionViewModel.onAction(
+                        AccountSelectionAction.SelectAccount(it)
+                    )
+                }
+            )
+
             TabRow(
                 selectedTabIndex = state.selectedTab.ordinal
             ) {
@@ -181,7 +198,7 @@ fun SameBankTransferScreen(
                     viewModel.onAction(SameBankTransferAction.OnProceedClicked)
                 },
                 isLoading = state.isLoading,
-                text = "Proceed"
+                text = stringResource(SharedRes.Strings.proceed)
             )
         }
 

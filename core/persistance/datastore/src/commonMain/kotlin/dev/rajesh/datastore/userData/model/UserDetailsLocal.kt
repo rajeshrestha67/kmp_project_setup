@@ -41,15 +41,23 @@ data class UserDetailsLocal(
 )
 @Serializable
 data class AccountDetailLocal(
-    val accountNumber: String = "",
+    val interestRate: String = "",
     val accountType: String = "",
-    val branchCode: String = "",
     val branchName: String = "",
-    val id: String = "",
+    val accruedInterest: String = "",
+    val accountNumber: String = "",
+    val accountHolderName: String = "",
+    val availableBalance: String = "",
+    val branchCode: String = "",
     val mainCode: String = "",
+    val minimumBalance: String = "",
+    val clientCode: String = "",
+    val actualBalance: String = "",
     val mobileBanking: String = "",
-    val primary: String = "",
-    val sms: String = ""
+    val sms: String = "",
+    val currency: String = "",
+    val id: String = "",
+    val primary: String = ""
 )
 @Serializable
 data class QrLocal(

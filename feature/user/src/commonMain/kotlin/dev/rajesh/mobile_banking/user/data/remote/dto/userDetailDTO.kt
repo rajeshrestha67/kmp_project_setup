@@ -50,15 +50,23 @@ data class UserDetailsDTO(
 
 @Serializable
 data class AccountDetailDTO(
-    val accountNumber: String? = null,
+    val interestRate: String? = null,
     val accountType: String? = null,
-    val branchCode: String? = null,
     val branchName: String? = null,
-    val id: String? = null,
+    val accruedInterest: String? = null,
+    val accountNumber: String? = null,
+    val accountHolderName: String? = null,
+    val availableBalance: String? = null,
+    val branchCode: String? = null,
     val mainCode: String? = null,
+    val minimumBalance: String? = null,
+    val clientCode: String? = null,
+    val actualBalance: String? = null,
     val mobileBanking: String? = null,
-    val primary: String? = null,
-    val sms: String? = null
+    val sms: String? = null,
+    val currency: String? = null,
+    val id: String? = null,
+    val primary: String? = null
 )
 
 @Serializable

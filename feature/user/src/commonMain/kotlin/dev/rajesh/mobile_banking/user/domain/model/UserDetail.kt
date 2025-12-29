@@ -47,18 +47,28 @@ data class UserDetails(
     val state: String = "",
     val unseenNotificationCount: Int = 0
 )
+
 @Serializable
 data class AccountDetail(
-    val accountNumber: String = "",
+    val interestRate: String = "",
     val accountType: String = "",
-    val branchCode: String = "",
     val branchName: String = "",
-    val id: String = "",
+    val accruedInterest: String = "",
+    val accountNumber: String = "",
+    val accountHolderName: String = "",
+    val availableBalance: String = "350000",
+    val branchCode: String = "",
     val mainCode: String = "",
+    val minimumBalance: String = "",
+    val clientCode: String = "",
+    val actualBalance: String = "",
     val mobileBanking: String = "",
-    val primary: String = "",
-    val sms: String = ""
+    val sms: String = "",
+    val currency: String = "",
+    val id: String = "",
+    val primary: String = ""
 )
+
 @Serializable
 data class Qr(
     val active: String = "",

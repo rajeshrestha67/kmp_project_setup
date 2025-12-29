@@ -56,4 +56,6 @@
     <string name="amount">Amount</string>
     <string name="remarks">Remarks</string>
     <string name="proceed">Proceed</string>
+    <string name="chooseAccount">Choose Account</string>
+    <string name="primary">Primary</string>
 </resources>

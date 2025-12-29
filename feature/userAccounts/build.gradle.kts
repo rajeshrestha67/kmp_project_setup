@@ -13,7 +13,7 @@ kotlin {
     // which platforms this KMP module supports.
     // See: https://kotlinlang.org/docs/multiplatform-discover-project.html#targets
     androidLibrary {
-        namespace = "dev.rajesh.mobile_banking.banktransfer"
+        namespace = "dev.rajesh.mobile_banking.useraccounts"
         compileSdk = 36
         minSdk = 24
 
@@ -34,7 +34,7 @@ kotlin {
     // A step-by-step guide on how to include this library in an XCode
     // project can be found here:
     // https://developer.android.com/kotlin/multiplatform/migrate
-    val xcfName = "feature:bankTransferKit"
+    val xcfName = "feature:userAccountsKit"
 
     iosX64 {
         binaries.framework {
@@ -81,26 +81,19 @@ kotlin {
                 implementation(libs.coil.mp)
                 implementation(libs.coil.network.ktor3)
                 implementation(libs.kotlinx.serialization.json)
-                implementation(libs.koin.compose.viewmodel)
-                implementation(compose.components.resources)
 
                 implementation(projects.core.domain)
                 implementation(projects.core.model)
                 implementation(projects.core.persistance.datastore)
-                //                implementation(projects.core.persistance.room_database)
-
                 implementation(projects.core.networkHelper)
 
                 implementation(projects.core.ui.res)
                 implementation(projects.core.ui.components)
                 implementation(projects.core.logger)
-                implementation(projects.core.utils)
-                //implementation(projects.core.ui)
-
+                implementation(libs.koin.compose.viewmodel)
+                implementation(compose.components.resources)
                 implementation(projects.feature.user)
-                implementation(projects.feature.confirmation)
-                implementation(projects.feature.paymentAuthentication)
-                implementation(projects.feature.userAccounts)
+
             }
         }
 

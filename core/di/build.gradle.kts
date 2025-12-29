@@ -91,6 +91,7 @@ kotlin {
                 implementation(projects.feature.menu)
                 implementation(projects.feature.bankTransfer)
                 implementation(projects.feature.paymentAuthentication)
+                implementation(projects.feature.userAccounts)
 
 
             }

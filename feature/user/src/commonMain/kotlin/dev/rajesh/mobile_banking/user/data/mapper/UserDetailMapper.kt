@@ -58,15 +58,23 @@ fun UserDetailsDTO.toUserDetails(): UserDetails {
 
 fun AccountDetailDTO.toAccountDetails(): AccountDetail {
     return AccountDetail(
-        accountNumber = accountNumber.orEmpty(),
+        interestRate = interestRate.orEmpty(),
         accountType = accountType.orEmpty(),
-        branchCode = branchCode.orEmpty(),
         branchName = branchName.orEmpty(),
-        id = id.orEmpty(),
+        accruedInterest = accruedInterest.orEmpty(),
+        accountNumber = accountNumber.orEmpty(),
+        accountHolderName = accountHolderName.orEmpty(),
+        availableBalance = availableBalance.orEmpty(),
+        branchCode = branchCode.orEmpty(),
         mainCode = mainCode.orEmpty(),
+        minimumBalance = minimumBalance.orEmpty(),
+        clientCode = clientCode.orEmpty(),
+        actualBalance = actualBalance.orEmpty(),
         mobileBanking = mobileBanking.orEmpty(),
-        primary = primary.orEmpty(),
-        sms = sms.orEmpty()
+        sms = sms.orEmpty(),
+        currency = currency.orEmpty(),
+        id = id.orEmpty(),
+        primary = primary.orEmpty()
     )
 }
 

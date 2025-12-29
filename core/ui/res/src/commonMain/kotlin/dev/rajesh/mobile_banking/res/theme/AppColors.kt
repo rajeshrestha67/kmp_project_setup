@@ -52,7 +52,7 @@ val lightPalette = AppColorPalette(
 
     imageBackgroundColor = Color(0xFFF5F5F5),
     lightGreenColor = Color(0xFF4CAF50),
-    primaryTextColor = Color(0xFF646884),
+    primaryTextColor = Color(0xFF4c4c4c),
     secondaryTextColor = Color(0xFF757575),
     onBoardingIndicatorSelectedColor = Color(0xFFBA1A1A),
     onBoardingIndicatorUnSelectedColor = Color(0xFFB0B0B0),

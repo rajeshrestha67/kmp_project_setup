@@ -76,6 +76,9 @@ object SharedRes {
         val amount = Res.string.amount
         val remarks = Res.string.remarks
         val proceed = Res.string.proceed
+        val chooseAccount = Res.string.chooseAccount
+        val primary = Res.string.primary
+
 
 
 
