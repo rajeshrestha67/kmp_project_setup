@@ -80,7 +80,7 @@ fun SameBankTransferScreen(
         savedStateHandle?.getStateFlow<String?>(PaymentAuthResult.mPin, null)
             ?.collect { mPin ->
                 mPin?.let {
-                    viewModel.onMPinReceived(it)
+                    viewModel.onMPinVerified(it)
                     savedStateHandle.remove<String>(PaymentAuthResult.mPin)
                 }
             }

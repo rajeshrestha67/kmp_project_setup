@@ -5,7 +5,9 @@ import androidx.lifecycle.viewModelScope
 import dev.rajesh.mobile_banking.banktransfer.sameBankTransfer.domain.model.AccountValidationDetail
 import dev.rajesh.mobile_banking.banktransfer.sameBankTransfer.domain.model.CoopBranchDetail
 import dev.rajesh.mobile_banking.banktransfer.sameBankTransfer.domain.model.request.AccountValidationRequest
+import dev.rajesh.mobile_banking.banktransfer.sameBankTransfer.domain.model.request.FundTransferRequest
 import dev.rajesh.mobile_banking.banktransfer.sameBankTransfer.domain.usecases.AccountValidationUseCase
+import dev.rajesh.mobile_banking.banktransfer.sameBankTransfer.domain.usecases.FundTransferUseCase
 import dev.rajesh.mobile_banking.banktransfer.sameBankTransfer.presentation.state.AccountValidationError
 import dev.rajesh.mobile_banking.banktransfer.sameBankTransfer.presentation.state.SameBankTransferAction
 import dev.rajesh.mobile_banking.banktransfer.sameBankTransfer.presentation.state.SameBankTransferEffect
@@ -20,20 +22,19 @@ import dev.rajesh.mobile_banking.networkhelper.onError
 import dev.rajesh.mobile_banking.networkhelper.onSuccess
 import dev.rajesh.mobile_banking.res.SharedRes
 import dev.rajesh.mobile_banking.utils.serialization.AppJson
-import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asSharedFlow
-import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class SameBankTransferViewModel(
     private val requiredValidationUseCase: RequiredValidationUseCase,
-    private val accountValidationUseCase: AccountValidationUseCase
+    private val accountValidationUseCase: AccountValidationUseCase,
+    private val fundTransferUseCase: FundTransferUseCase
 ) : ViewModel() {
 
     companion object {
@@ -347,7 +348,29 @@ class SameBankTransferViewModel(
         _state.update { it.copy(accountValidationError = null) }
     }
 
-    fun onMPinReceived(mPin: String) {
-        AppLogger.i(TAG, "onMPinReceived: $mPin")
+    fun onMPinVerified(mPin: String) {
+        AppLogger.i(TAG, "onMpinVerified: $mPin")
+        fundTransfer(mPin)
     }
+
+
+    fun fundTransfer(mPin: String) = viewModelScope.launch {
+        val fundTransferRequest = FundTransferRequest(
+            fromAccountNumber = "",
+            toAccountNumber = if (_state.value.selectedTab == TransferTab.ACCOUNT) _state.value.accountNumber else null,
+            toAccountName = if (_state.value.selectedTab == TransferTab.ACCOUNT) _state.value.fullName else null,
+            bankBranchId = if (_state.value.selectedTab == TransferTab.ACCOUNT && _state.value.branch != null) _state.value.branch?.branchCode else null,
+            toMobileNumber = if (_state.value.selectedTab == TransferTab.MOBILE) _state.value.mobileNumber else null,
+            amount = _state.value.amount,
+            remarks = _state.value.remarks,
+            mPin = mPin,
+        )
+        fundTransferUseCase(fundTransferRequest)
+            .onSuccess { result ->
+                AppLogger.i(TAG, "fund Transfer Success: ${result.message}")
+            }.onError { error ->
+                AppLogger.i(TAG, "fund Transfer Success: ${error.toErrorMessage()}")
+            }
+    }
+
 }

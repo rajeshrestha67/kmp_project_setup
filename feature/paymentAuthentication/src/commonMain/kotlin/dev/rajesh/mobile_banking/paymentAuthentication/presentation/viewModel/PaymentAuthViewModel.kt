@@ -15,6 +15,7 @@ import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
@@ -22,8 +23,12 @@ import kotlinx.coroutines.launch
 import org.koin.mp.KoinPlatform.getKoin
 
 class PaymentAuthViewModel : ViewModel() {
+
     private val _state = MutableStateFlow(PaymentAuthState())
     val state = _state
+        .onStart {
+            getMPin()
+        }
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5000),
@@ -36,22 +41,24 @@ class PaymentAuthViewModel : ViewModel() {
     private val _errorChannel = Channel<String>()
     val errorChannel = _errorChannel.receiveAsFlow()
 
+
     fun onAction(action: PaymentAuthAction) {
         when (action) {
             is PaymentAuthAction.OnDigitClick -> {
-                if (state.value.mPin.length < 6) {
+                if (state.value.mPin.length < _state.value.mPinFromDS.length) {
                     _state.update {
                         it.copy(
                             mPin = it.mPin + action.digit
                         )
                     }
+                    AppLogger.i(TAG, "mPin entered digits: ${state.value.mPin}")
                 }
             }
 
             PaymentAuthAction.OnConfirm -> {
                 AppLogger.i(TAG, "mPin: ${state.value.mPin}")
                 if (state.value.mPin.length in 4..6) {
-                    if (state.value.mPin == getMPin()) {
+                    if (state.value.mPin == _state.value.mPinFromDS) {
                         viewModelScope.launch {
                             _paymentAuthEffect.emit(
                                 mPinAuthenticated(mPin = state.value.mPin)
@@ -91,16 +98,18 @@ class PaymentAuthViewModel : ViewModel() {
     }
 
 
-    fun getMPin(): String {
-        var mPin = ""
+    fun getMPin() {
         viewModelScope.launch {
             val tokenRepository: TokenRepository = getKoin().get()
             tokenRepository.token.firstOrNull()?.mPin?.let { pin ->
                 AppLogger.i(TAG, "mPin from datastore: $pin")
-                mPin = pin
+                _state.update {
+                    it.copy(
+                        mPinFromDS = pin
+                    )
+                }
             }
         }
-        return mPin
     }
 
     companion object {

@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -12,8 +13,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.Chat
-import androidx.compose.material.icons.filled.Fingerprint
-import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -30,17 +29,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.navigation.NavController
 import dev.rajesh.mobile_banking.components.PlatformMessage
 import dev.rajesh.mobile_banking.components.appColors
 import dev.rajesh.mobile_banking.components.dimens
-import dev.rajesh.mobile_banking.paymentAuthentication.presentation.components.MPinIndicator
 import dev.rajesh.mobile_banking.paymentAuthentication.presentation.components.MPinOutlinedField
 import dev.rajesh.mobile_banking.paymentAuthentication.presentation.components.NumericKeyPad
 import dev.rajesh.mobile_banking.paymentAuthentication.presentation.state.PaymentAuthAction
 import dev.rajesh.mobile_banking.paymentAuthentication.presentation.state.PaymentAuthEffect
 import dev.rajesh.mobile_banking.paymentAuthentication.presentation.viewModel.PaymentAuthViewModel
-import dev.rajesh.mobile_banking.res.platform
 import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -79,6 +75,7 @@ fun PaymentAuthenticationScreen(
         topBar = {
             TopAppBar(
                 modifier = Modifier.fillMaxWidth(),
+                windowInsets = WindowInsets(),
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = MaterialTheme.appColors.backgroundColor
                 ),
@@ -91,9 +88,7 @@ fun PaymentAuthenticationScreen(
                 },
                 navigationIcon = {
                     IconButton(
-                        onClick = {
-                            onBackClicked()
-                        },
+                        onClick = onBackClicked,
                         content = {
                             Icon(
                                 imageVector = Icons.AutoMirrored.Filled.ArrowBack,
@@ -106,11 +101,11 @@ fun PaymentAuthenticationScreen(
         }
     ) { contentPadding ->
         Box(
-            modifier = Modifier.fillMaxSize()
-                .padding(contentPadding)
+            modifier = Modifier.padding(contentPadding)
         ) {
             Column(
-                modifier = Modifier.fillMaxSize()
+                modifier = Modifier
+                    .fillMaxSize()
                     .padding(MaterialTheme.dimens.small3),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
@@ -125,7 +120,7 @@ fun PaymentAuthenticationScreen(
                 //MPinIndicator(mPinLength = state.mPin.length)
                 MPinOutlinedField(
                     state.mPin,
-                    4,
+                    state.mPinFromDS.length,
                     state.isMpinVisible,
                     onToggleVisibility = {
                         viewModel.onAction(PaymentAuthAction.ToggleVisibility)
