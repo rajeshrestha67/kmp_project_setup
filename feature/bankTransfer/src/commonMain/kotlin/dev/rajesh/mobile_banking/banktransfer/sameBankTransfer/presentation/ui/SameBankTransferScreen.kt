@@ -96,12 +96,12 @@ fun SameBankTransferScreen(
 
     val focusRequester: FocusRequester = remember { FocusRequester() }
     val focusManager = LocalFocusManager.current
-    val keyboardController = LocalSoftwareKeyboardController.current
 
     val pickContact = rememberContactPicker(
         onContactPicked = { phoneNumber ->
-            //viewModel.onMobileNumberChanged(phoneNumber)
             AppLogger.i(TAG, "Contact picked: $phoneNumber")
+            viewModel.onAction(SameBankTransferAction.OnMobileNumberChanged(phoneNumber))
+
         },
         onError = { error ->
             AppLogger.e(TAG, "Error picking contact: ${error.message}")

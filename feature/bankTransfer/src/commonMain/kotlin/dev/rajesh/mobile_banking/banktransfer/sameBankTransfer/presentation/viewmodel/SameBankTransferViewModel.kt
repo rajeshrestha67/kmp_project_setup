@@ -54,6 +54,7 @@ class SameBankTransferViewModel(
 
     fun onTabSelected(tab: TransferTab) {
         _state.update { it.copy(selectedTab = tab) }
+        clearFields()
     }
 
 //    private val _successChannel = Channel<Boolean>()
@@ -151,6 +152,27 @@ class SameBankTransferViewModel(
             }
         }
     }
+
+    fun clearFields() {
+        _state.update {
+            it.copy(
+                accountNumber = "",
+                fullName = "",
+                branch = null,
+                mobileNumber = "",
+                amount = "",
+                remarks = "",
+                accountNumberError = null,
+                fullNameError = null,
+                branchError = null,
+                mobileNumberError = null,
+                amountError = null,
+                remarksError = null,
+                accountValidationError = null,
+            )
+        }
+    }
+
 
     private fun proceedForValidation() = viewModelScope.launch {
         val fullNameError = requiredValidationUseCase(state.value.fullName)

@@ -43,7 +43,8 @@ object FormValidate {
     val mobileNumberRule = Rule { text ->
         val nepaliMobilePattern = Regex("^(98|97)\\d{8}$")
         if (!text.matches(nepaliMobilePattern)) {
-            SharedRes.Strings.invalidUsername
+            //SharedRes.Strings.invalidUsername
+            SharedRes.Strings.invalidMobileNumber
         } else {
             null
         }
