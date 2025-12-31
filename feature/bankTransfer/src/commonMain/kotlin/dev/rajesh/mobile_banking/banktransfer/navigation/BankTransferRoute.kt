@@ -24,11 +24,14 @@ sealed interface BankTransferRoutes {
     data object SelectCoopBranch : BankTransferRoutes
 
     @Serializable
-    data class Confirmation (val json: String): BankTransferRoutes
+    data class Confirmation(val json: String) : BankTransferRoutes
 
 
     @Serializable
-    data object PaymentAuthentication: BankTransferRoutes
+    data object PaymentAuthentication : BankTransferRoutes
+
+    @Serializable
+    data class TransactionSuccessful(val json: String) : BankTransferRoutes
 
 
 }

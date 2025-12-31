@@ -13,7 +13,7 @@ kotlin {
     // which platforms this KMP module supports.
     // See: https://kotlinlang.org/docs/multiplatform-discover-project.html#targets
     androidLibrary {
-        namespace = "dev.rajesh.mobile_banking.banktransfer"
+        namespace = "dev.rajesh.mobile_banking.transactionsuccess"
         compileSdk = 36
         minSdk = 24
 
@@ -34,7 +34,7 @@ kotlin {
     // A step-by-step guide on how to include this library in an XCode
     // project can be found here:
     // https://developer.android.com/kotlin/multiplatform/migrate
-    val xcfName = "feature:bankTransferKit"
+    val xcfName = "feature:transactionSuccessKit"
 
     iosX64 {
         binaries.framework {
@@ -83,25 +83,11 @@ kotlin {
                 implementation(libs.kotlinx.serialization.json)
                 implementation(libs.koin.compose.viewmodel)
                 implementation(compose.components.resources)
-
-                implementation(projects.core.domain)
-                implementation(projects.core.model)
-                implementation(projects.core.persistance.datastore)
-                //                implementation(projects.core.persistance.room_database)
-
-                implementation(projects.core.networkHelper)
-
+                implementation(projects.core.logger)
                 implementation(projects.core.ui.res)
                 implementation(projects.core.ui.components)
-                implementation(projects.core.logger)
                 implementation(projects.core.utils)
-                //implementation(projects.core.ui)
 
-                implementation(projects.feature.user)
-                implementation(projects.feature.confirmation)
-                implementation(projects.feature.paymentAuthentication)
-                implementation(projects.feature.userAccounts)
-                implementation(projects.feature.transactionSuccess)
             }
         }
 
@@ -116,6 +102,7 @@ kotlin {
                 // Add Android-specific dependencies here. Note that this source set depends on
                 // commonMain by default and will correctly pull the Android artifacts of any KMP
                 // dependencies declared in commonMain.
+
             }
         }
 

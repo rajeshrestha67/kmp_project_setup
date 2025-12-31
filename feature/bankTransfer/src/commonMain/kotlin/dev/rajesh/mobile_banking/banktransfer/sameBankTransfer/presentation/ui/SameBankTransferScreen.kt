@@ -64,6 +64,7 @@ import dev.rajesh.mobile_banking.confirmation.model.ConfirmationData
 import dev.rajesh.mobile_banking.logger.AppLogger
 import dev.rajesh.mobile_banking.paymentAuthentication.PaymentAuthResult
 import dev.rajesh.mobile_banking.res.SharedRes
+import dev.rajesh.mobile_banking.transactionsuccess.model.TransactionData
 import dev.rajesh.mobile_banking.useraccounts.presentation.AccountDetailView
 import dev.rajesh.mobile_banking.useraccounts.presentation.state.AccountSelectionAction
 import dev.rajesh.mobile_banking.useraccounts.presentation.viewmodel.AccountSelectionViewModel
@@ -79,7 +80,8 @@ fun SameBankTransferScreen(
     navController: NavController,
     onBackClicked: () -> Unit,
     onSelectCoopBranchClicked: () -> Unit,
-    showConfirmation: (ConfirmationData) -> Unit
+    showConfirmation: (ConfirmationData) -> Unit,
+    onTransactionSuccessful: (TransactionData) -> Unit
 ) {
     val viewModel: SameBankTransferViewModel = koinViewModel()
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -170,6 +172,10 @@ fun SameBankTransferScreen(
             when (it) {
                 is SameBankTransferEffect.NavigateToConfirmation -> {
                     showConfirmation(it.confirmationData)
+                }
+
+                is SameBankTransferEffect.TransactionSuccessful -> {
+                    onTransactionSuccessful(it.transactionData)
                 }
             }
         }

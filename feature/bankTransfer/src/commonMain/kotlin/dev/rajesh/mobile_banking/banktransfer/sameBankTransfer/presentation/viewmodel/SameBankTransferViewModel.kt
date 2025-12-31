@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dev.rajesh.mobile_banking.banktransfer.sameBankTransfer.domain.model.AccountValidationDetail
 import dev.rajesh.mobile_banking.banktransfer.sameBankTransfer.domain.model.CoopBranchDetail
+import dev.rajesh.mobile_banking.banktransfer.sameBankTransfer.domain.model.FundTransferDetail
 import dev.rajesh.mobile_banking.banktransfer.sameBankTransfer.domain.model.request.AccountValidationRequest
 import dev.rajesh.mobile_banking.banktransfer.sameBankTransfer.domain.model.request.FundTransferRequest
 import dev.rajesh.mobile_banking.banktransfer.sameBankTransfer.domain.usecases.AccountValidationUseCase
@@ -21,6 +22,8 @@ import dev.rajesh.mobile_banking.model.network.toErrorMessage
 import dev.rajesh.mobile_banking.networkhelper.onError
 import dev.rajesh.mobile_banking.networkhelper.onSuccess
 import dev.rajesh.mobile_banking.res.SharedRes
+import dev.rajesh.mobile_banking.transactionsuccess.model.TransactionData
+import dev.rajesh.mobile_banking.transactionsuccess.model.TransactionDataItem
 import dev.rajesh.mobile_banking.user.domain.model.AccountDetail
 import dev.rajesh.mobile_banking.useraccounts.presentation.state.SelectedAccountStore
 import dev.rajesh.mobile_banking.utils.serialization.AppJson
@@ -338,10 +341,20 @@ class SameBankTransferViewModel(
 
     private fun showConfirmationData(data: AccountValidationDetail) {
         val dataList: MutableList<ConfirmationItem> = mutableListOf()
+        val accountDetail = selectedAccount.value ?: return
+
+        dataList.add(ConfirmationItem("Sender's Account Number", accountDetail.accountNumber))
+        dataList.add(ConfirmationItem("Sender's Name", accountDetail.accountHolderName))
+
         if (_state.value.selectedTab == TransferTab.ACCOUNT) {
-            dataList.add(ConfirmationItem("Account Number", _state.value.accountNumber))
+            dataList.add(ConfirmationItem("Receiver's Account Number", _state.value.accountNumber))
         } else {
-            dataList.add(ConfirmationItem("Mobile Number", _state.value.mobileNumber))
+            dataList.add(ConfirmationItem("Receiver's Mobile Number", _state.value.mobileNumber))
+        }
+        _state.update {
+            it.copy(
+                fullName = data.destinationAccountName
+            )
         }
         dataList.add(ConfirmationItem("Receiver's Name", data.destinationAccountName))
         dataList.add(ConfirmationItem("Amount", _state.value.amount))
@@ -396,9 +409,50 @@ class SameBankTransferViewModel(
         fundTransferUseCase(fundTransferRequest)
             .onSuccess { result ->
                 AppLogger.i(TAG, "fund Transfer Success: ${result.message}")
+                navigateToTransactionSuccessScreen(result, accountDetail)
             }.onError { error ->
                 AppLogger.i(TAG, "fund Transfer Success: ${error.toErrorMessage()}")
             }
     }
+
+    private fun navigateToTransactionSuccessScreen(
+        fundTransferDetail: FundTransferDetail,
+        accountDetail: AccountDetail
+    ) {
+        val dataList: MutableList<TransactionDataItem> = mutableListOf()
+
+        dataList.add(TransactionDataItem("Status", fundTransferDetail.message))
+        dataList.add(TransactionDataItem("TransactionId", fundTransferDetail.transactionIdentifier))
+
+        dataList.add(TransactionDataItem("Sender's Account Number", accountDetail.accountNumber))
+        dataList.add(TransactionDataItem("Sender's Name", accountDetail.accountHolderName))
+
+        if (_state.value.selectedTab == TransferTab.ACCOUNT) {
+            dataList.add(
+                TransactionDataItem(
+                    "Receiver's Account Number",
+                    _state.value.accountNumber
+                )
+            )
+        } else {
+            dataList.add(TransactionDataItem("Receiver's Mobile Number", _state.value.mobileNumber))
+        }
+        dataList.add(TransactionDataItem("Receiver's Name", _state.value.fullName))
+        dataList.add(TransactionDataItem("Amount", _state.value.amount))
+        dataList.add(TransactionDataItem("Remarks", _state.value.remarks))
+
+        viewModelScope.launch {
+            _effect.emit(
+                SameBankTransferEffect.TransactionSuccessful(
+                    TransactionData(
+                        title = "Transaction Successful",
+                        message = fundTransferDetail.message,
+                        items = dataList
+                    )
+                )
+            )
+        }
+    }
+
 
 }

@@ -15,6 +15,9 @@ import dev.rajesh.mobile_banking.confirmation.model.ConfirmationData
 import dev.rajesh.mobile_banking.confirmation.presentation.ConfirmationScreen
 import dev.rajesh.mobile_banking.paymentAuthentication.PaymentAuthResult
 import dev.rajesh.mobile_banking.paymentAuthentication.presentation.PaymentAuthenticationScreen
+import dev.rajesh.mobile_banking.transactionsuccess.TransactionSuccessFulScreen
+import dev.rajesh.mobile_banking.transactionsuccess.constants.TransactionSuccessfulConstant
+import dev.rajesh.mobile_banking.transactionsuccess.model.TransactionData
 import dev.rajesh.mobile_banking.utils.serialization.AppJson
 
 
@@ -38,6 +41,7 @@ fun NavGraphBuilder.bankTransferNavGraph(navController: NavController) {
 
     composable<BankTransferRoutes.SameBankTransfer> {
         SameBankTransferScreen(
+            navController = navController,
             onBackClicked = {
                 navController.popBackStack()
             },
@@ -59,7 +63,17 @@ fun NavGraphBuilder.bankTransferNavGraph(navController: NavController) {
 
                 navController.navigate(BankTransferRoutes.Confirmation(json))
             },
-            navController = navController
+            onTransactionSuccessful = { transactionData ->
+                val transactionDataJson = AppJson.encodeToString(
+                    TransactionData.serializer(),
+                    transactionData
+                )
+                navController.currentBackStackEntry
+                    ?.savedStateHandle
+                    ?.set(TransactionSuccessfulConstant.TRANSACTION_DATA, transactionDataJson)
+                navController.navigate(BankTransferRoutes.TransactionSuccessful(transactionDataJson))
+            }
+
         )
     }
 
@@ -132,6 +146,23 @@ fun NavGraphBuilder.bankTransferNavGraph(navController: NavController) {
                 navController.popBackStack()
             })
     }
+
+    composable<BankTransferRoutes.TransactionSuccessful> {
+        val transactionDataJson: String? = it.toRoute<BankTransferRoutes.TransactionSuccessful>().json
+
+        transactionDataJson?.let{jsnData->
+            val transactionData = AppJson.decodeFromString<TransactionData>(jsnData)
+            it.savedStateHandle.remove<String>(TransactionSuccessfulConstant.TRANSACTION_DATA)
+            TransactionSuccessFulScreen(
+                data = transactionData,
+                goToDashboardClicked={
+
+                }
+            )
+
+        }
+    }
+
 
 }
 
