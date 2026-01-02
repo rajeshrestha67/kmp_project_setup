@@ -36,3 +36,20 @@ sealed interface BankTransferRoutes {
 
 }
 
+
+@Serializable
+sealed interface InterBankTransferRoutes {
+
+    @Serializable
+    data object SelectBankRoute : InterBankTransferRoutes
+
+    @Serializable
+    data class ConfirmationRoute(val json: String) : InterBankTransferRoutes
+
+    @Serializable
+    data object PaymentAuthenticationRoute : InterBankTransferRoutes
+
+    @Serializable
+    data class TransactionSuccessfulRoute(val json: String) : InterBankTransferRoutes
+}
+
