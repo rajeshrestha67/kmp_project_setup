@@ -10,5 +10,9 @@ object EndPoint {
     const val FUND_TRANSFER = "/api/fundtransfer"
     const val BANK_LIST = "/api/ips/bank"
 
+    const val INTER_BANK_VALIDATION ="/api/account/validation"
+
+    const val IPS_TRANSFER ="api/ips/transfer"
+
 
 }
