@@ -2,7 +2,9 @@ package dev.rajesh.mobile_banking.banktransfer.differentBankTransfer.presentatio
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.compose.viewModel
 import dev.rajesh.mobile_banking.banktransfer.differentBankTransfer.domain.usecase.GetBankListUseCase
+import dev.rajesh.mobile_banking.banktransfer.differentBankTransfer.presentation.state.SelectBankAction
 import dev.rajesh.mobile_banking.banktransfer.differentBankTransfer.presentation.state.SelectBankState
 import dev.rajesh.mobile_banking.logger.AppLogger
 import dev.rajesh.mobile_banking.model.network.toErrorMessage
@@ -10,6 +12,9 @@ import dev.rajesh.mobile_banking.networkhelper.onError
 import dev.rajesh.mobile_banking.networkhelper.onSuccess
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
@@ -34,6 +39,26 @@ class SelectBankViewModel(
     )
 
 
+    private val searchQuery = MutableStateFlow("")
+
+    init {
+        searchQuery.debounce(300) //wait 300ms
+            .onEach { query ->
+                _state.update { state ->
+                    state.copy(
+                        banks = if (query.isBlank()) {
+                            state.allBanks
+                        } else {
+                            state.allBanks.filter { bank ->
+                                bank.bankName.contains(query, ignoreCase = true)
+                            }
+                        }
+                    )
+                }
+            }
+            .launchIn(viewModelScope)
+    }
+
     fun getBankList() = viewModelScope.launch {
         _state.update {
             it.copy(
@@ -45,6 +70,7 @@ class SelectBankViewModel(
                 AppLogger.i(TAG, "Bank list fetch Success: $data")
                 _state.update {
                     it.copy(
+                        allBanks = data,
                         banks = data,
                         isLoading = false
                     )
@@ -62,4 +88,21 @@ class SelectBankViewModel(
             }
     }
 
+    fun onAction(action: SelectBankAction) {
+        when (action) {
+            is SelectBankAction.OnSearchTextChanged -> {
+                _state.update {
+                    it.copy(searchText = action.searchText)
+                }
+                searchQuery.value = action.searchText
+            }
+        }
+    }
+
+    fun clearTextFields(){
+        _state.update {
+            it.copy(searchText = "")
+        }
+        searchQuery.value = ""
+    }
 }

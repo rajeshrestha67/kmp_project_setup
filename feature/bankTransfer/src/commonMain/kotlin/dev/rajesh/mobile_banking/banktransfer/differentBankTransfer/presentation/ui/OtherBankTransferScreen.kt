@@ -1,6 +1,9 @@
 package dev.rajesh.mobile_banking.banktransfer.differentBankTransfer.presentation.ui
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
@@ -8,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
@@ -31,7 +35,9 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import dev.rajesh.mobile_banking.banktransfer.differentBankTransfer.presentation.components.ItemSelector
 import dev.rajesh.mobile_banking.banktransfer.differentBankTransfer.presentation.state.OtherBankTransferScreenAction
+import dev.rajesh.mobile_banking.banktransfer.differentBankTransfer.presentation.state.SelectBankAction
 import dev.rajesh.mobile_banking.banktransfer.differentBankTransfer.presentation.viewmodel.OtherBankTransferViewModel
 import dev.rajesh.mobile_banking.banktransfer.differentBankTransfer.presentation.viewmodel.SelectBankViewModel
 import dev.rajesh.mobile_banking.components.appColors
@@ -51,7 +57,6 @@ import org.koin.compose.viewmodel.koinViewModel
 @Composable
 fun OtherBankTransferScreen(
     onBackClicked: () -> Unit,
-    onSelectBankClicked: () -> Unit
 ) {
 
     val otherBankTransferViewModel: OtherBankTransferViewModel = koinViewModel()
@@ -124,34 +129,18 @@ fun OtherBankTransferScreen(
 
             Spacer(modifier = Modifier.height(MaterialTheme.dimens.small2))
 
-            AppTextField(
-                modifier = Modifier.fillMaxWidth()
-                    .clickable {
-                        shouldShowBankList = true
-                        AppLogger.i("OtherBankTransferScreen", "show bankList")
-                    },
+            ItemSelector(
                 label = "Receiver's Bank",
-                text = state.receiversAccountNumber,
-                hint = "--Select Bank--",
-                onValueChange = {
-                    otherBankTransferViewModel.onAction(
-                        OtherBankTransferScreenAction.OnReceiversAccountNumberChanged(
-                            it
-                        )
-                    )
+                value = if (state.selectedBank != null) {
+                    state.selectedBank?.bankName
+                } else {
+                    "-- Select Bank --"
                 },
-                error = state.receiversAccountNumberError,
-                onErrorStateChange = {
-                    otherBankTransferViewModel.onAction(
-                        OtherBankTransferScreenAction.OnReceiversAccountNumberError(
-                            it
-                        )
-                    )
-                },
-                readOnly = true,
-                rules = FormValidate.requiredValidationRules,
-                imeAction = ImeAction.Next,
+                onClicked = {
+                    shouldShowBankList = true
+                }
             )
+
             Spacer(modifier = Modifier.height(MaterialTheme.dimens.small2))
 
             AppTextField(
@@ -257,15 +246,15 @@ fun OtherBankTransferScreen(
                 text = state.remarks,
                 onValueChange = {
                     otherBankTransferViewModel.onAction(
-                        OtherBankTransferScreenAction.OnAmountChanged(
+                        OtherBankTransferScreenAction.OnRemarksChanged(
                             it
                         )
                     )
                 },
-                error = state.amountError,
+                error = state.remarksError,
                 onErrorStateChange = {
                     otherBankTransferViewModel.onAction(
-                        OtherBankTransferScreenAction.OnAmountError(
+                        OtherBankTransferScreenAction.OnRemarksError(
                             it
                         )
                     )
@@ -295,11 +284,15 @@ fun OtherBankTransferScreen(
 
     if (shouldShowBankList) {
         SelectBankBottomSheet(
-            bankState,
+            state = bankState,
+            viewModel = bankSelectionViewModel,
             onDismiss = {
-                shouldShowBankList= false
+                shouldShowBankList = false
             },
-            onBankSelected = {}
+            onBankSelected = {
+                otherBankTransferViewModel.onAction(OtherBankTransferScreenAction.OnBankSelected(it))
+                shouldShowBankList = false
+            }
         )
     }
 }

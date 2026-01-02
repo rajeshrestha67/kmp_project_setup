@@ -18,7 +18,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import dev.rajesh.mobile_banking.banktransfer.differentBankTransfer.domain.model.BankDetail
 import dev.rajesh.mobile_banking.banktransfer.differentBankTransfer.presentation.components.BankItemRow
+import dev.rajesh.mobile_banking.banktransfer.differentBankTransfer.presentation.state.SelectBankAction
 import dev.rajesh.mobile_banking.banktransfer.differentBankTransfer.presentation.state.SelectBankState
+import dev.rajesh.mobile_banking.banktransfer.differentBankTransfer.presentation.viewmodel.SelectBankViewModel
 import dev.rajesh.mobile_banking.components.appColors
 import dev.rajesh.mobile_banking.components.dimens
 import dev.rajesh.mobile_banking.components.textField.AppTextField
@@ -26,11 +28,11 @@ import dev.rajesh.mobile_banking.components.textField.AppTextField
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SelectBankBottomSheet(
+    viewModel: SelectBankViewModel,
     state: SelectBankState,
     onDismiss: () -> Unit,
     onBankSelected: (BankDetail) -> Unit
 ) {
-
     ModalBottomSheet(
         onDismissRequest = onDismiss,
         shape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp),
@@ -53,15 +55,24 @@ fun SelectBankBottomSheet(
 
             AppTextField(
                 modifier = Modifier.fillMaxWidth(),
-                hint = "",
-                text = "Search",
-                onValueChange = {},
+                hint = "Search",
+                text = state.searchText,
+                onValueChange = {
+                    viewModel.onAction(SelectBankAction.OnSearchTextChanged(it))
+                },
                 error = null,
                 onErrorStateChange = {},
             )
             LazyColumn {
                 items(state.banks) { bank ->
-                    BankItemRow(bank = bank)
+                    BankItemRow(
+                        bank = bank,
+                        onBankSelected = { selectedBank ->
+                            onBankSelected(selectedBank)
+                            viewModel.clearTextFields()
+                            onDismiss()
+                        }
+                    )
                 }
             }
         }

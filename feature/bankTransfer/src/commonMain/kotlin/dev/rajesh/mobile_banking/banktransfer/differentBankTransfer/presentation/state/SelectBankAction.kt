@@ -1,4 +1,6 @@
 package dev.rajesh.mobile_banking.banktransfer.differentBankTransfer.presentation.state
 
-class SelectBankAction {
+
+sealed interface SelectBankAction {
+    data class OnSearchTextChanged(val searchText: String) : SelectBankAction
 }

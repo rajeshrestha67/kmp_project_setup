@@ -1,8 +1,12 @@
 package dev.rajesh.mobile_banking.banktransfer.differentBankTransfer.presentation.state
 
+import dev.rajesh.mobile_banking.banktransfer.differentBankTransfer.domain.model.BankDetail
 import org.jetbrains.compose.resources.StringResource
 
 sealed interface OtherBankTransferScreenAction {
+
+
+    data class OnBankSelected(val selectedBank: BankDetail) : OtherBankTransferScreenAction
 
     data class OnReceiversAccountNumberChanged(val receiversAccountNumber: String) :
         OtherBankTransferScreenAction
@@ -15,7 +19,6 @@ sealed interface OtherBankTransferScreenAction {
 
     data object OnProceedClicked : OtherBankTransferScreenAction
     data object OnCancelClicked : OtherBankTransferScreenAction
-
 
     data class OnReceiversAccountNumberError(val receiversAccountNumberError: StringResource?) :
         OtherBankTransferScreenAction

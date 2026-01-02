@@ -84,9 +84,6 @@ fun NavGraphBuilder.bankTransferNavGraph(
         OtherBankTransferScreen(
             onBackClicked = {
                 navController.popBackStack()
-            },
-            onSelectBankClicked = {
-                navController.navigate(InterBankTransferRoutes.SelectBankRoute)
             }
         )
     }
@@ -170,10 +167,6 @@ fun NavGraphBuilder.bankTransferNavGraph(
             )
 
         }
-    }
-
-    composable<InterBankTransferRoutes.SelectBankRoute>{
-
     }
 
 

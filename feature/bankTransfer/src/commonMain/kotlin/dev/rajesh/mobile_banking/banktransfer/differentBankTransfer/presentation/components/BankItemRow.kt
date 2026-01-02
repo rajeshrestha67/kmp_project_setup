@@ -2,6 +2,7 @@ package dev.rajesh.mobile_banking.banktransfer.differentBankTransfer.presentatio
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -25,11 +26,15 @@ import dev.rajesh.mobile_banking.components.dimens
 
 @Composable
 fun BankItemRow(
-    bank: BankDetail
+    bank: BankDetail,
+    onBankSelected: (BankDetail) -> Unit
 ) {
 
-    Row (
-        verticalAlignment = Alignment.CenterVertically
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier.clickable {
+            onBankSelected(bank)
+        }
     ) {
         GetLetterInitials(bank.bankName)
         Text(
@@ -57,11 +62,11 @@ fun GetLetterInitials(name: String) {
         modifier = Modifier.size(size = 30.dp)
             .clip(shape = CircleShape)
             .background(color = MaterialTheme.appColors.primaryColor)
-            /*.border(
-                width = 1.dp,
-                color = MaterialTheme.appColors.primaryTextColor,
-                shape = CircleShape
-            )*/
+        /*.border(
+            width = 1.dp,
+            color = MaterialTheme.appColors.primaryTextColor,
+            shape = CircleShape
+        )*/
     ) {
         Text(
             modifier = Modifier.align(Alignment.Center),
