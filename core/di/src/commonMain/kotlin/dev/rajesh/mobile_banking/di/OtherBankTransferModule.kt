@@ -1,6 +1,6 @@
 package dev.rajesh.mobile_banking.di
 
-import dev.rajesh.mobile_banking.banktransfer.differentBankTransfer.presentation.viewmodel.OtherBankTransferViewModel
+import dev.rajesh.mobile_banking.banktransfer.interBankTransfer.presentation.viewmodel.InterBankTransferViewModel
 import org.koin.android.annotation.KoinViewModel
 import org.koin.core.annotation.Module
 
@@ -8,5 +8,5 @@ import org.koin.core.annotation.Module
 class OtherBankTransferModule {
 
     @KoinViewModel
-    fun provideOtherBankTransferViewModel() = OtherBankTransferViewModel()
+    fun provideOtherBankTransferViewModel() = InterBankTransferViewModel()
 }

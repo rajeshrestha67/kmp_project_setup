@@ -6,7 +6,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
 import dev.rajesh.mobile_banking.banktransfer.presentation.ui.BankTransferScreen
 import dev.rajesh.mobile_banking.banktransfer.presentation.ui.FavouriteAccountsScreen
-import dev.rajesh.mobile_banking.banktransfer.differentBankTransfer.presentation.ui.OtherBankTransferScreen
+import dev.rajesh.mobile_banking.banktransfer.interBankTransfer.presentation.ui.OtherBankTransferScreen
 import dev.rajesh.mobile_banking.banktransfer.sameBankTransfer.domain.model.CoopBranchDetail
 import dev.rajesh.mobile_banking.banktransfer.sameBankTransfer.presentation.ui.SameBankTransferScreen
 import dev.rajesh.mobile_banking.banktransfer.sameBankTransfer.presentation.ui.SelectBranchScreen
