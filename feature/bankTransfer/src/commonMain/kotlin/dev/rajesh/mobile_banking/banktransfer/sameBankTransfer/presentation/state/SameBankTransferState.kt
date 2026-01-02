@@ -26,6 +26,9 @@ data class SameBankTransferState(
     val validatingAccount: Boolean = false,
     val accountValidationError: AccountValidationError? = null,
 
+    val transferringFund: Boolean = false,
+    val fundTransferError: FundTransferError? = null,
+
     )
 
 enum class TransferTab {
@@ -35,5 +38,10 @@ enum class TransferTab {
 
 data class AccountValidationError(
     val title: String,
+    val message: String
+)
+
+data class FundTransferError(
+    val title:String,
     val message: String
 )

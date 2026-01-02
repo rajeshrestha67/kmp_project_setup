@@ -10,11 +10,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.PictureAsPdf
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -29,6 +27,7 @@ import androidx.compose.ui.unit.dp
 import dev.rajesh.mobile_banking.components.appColors
 import dev.rajesh.mobile_banking.components.button.AppButton
 import dev.rajesh.mobile_banking.components.dimens
+import dev.rajesh.mobile_banking.transactionsuccess.component.SuccessLottie
 import dev.rajesh.mobile_banking.transactionsuccess.component.TransactionDataRow
 import dev.rajesh.mobile_banking.transactionsuccess.model.TransactionData
 
@@ -69,6 +68,8 @@ fun TransactionSuccessFulScreen(
                 .padding(contentPadding)
                 .padding(MaterialTheme.dimens.small3)
         ) {
+            SuccessLottie()
+
             Text(
                 modifier = Modifier.fillMaxWidth(),
                 textAlign = TextAlign.Center,
@@ -92,22 +93,25 @@ fun TransactionSuccessFulScreen(
                     .height(32.dp)
             )
 
-            Row(modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 8.dp),
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 8.dp),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.End
-                ) {
+            ) {
                 Icon(
                     modifier = Modifier.padding(horizontal = MaterialTheme.dimens.small3),
                     imageVector = Icons.Default.PictureAsPdf,
                     contentDescription = "pdf download image",
                     tint = Color.Red
                 )
-                Text("Download Pdf",
+                Text(
+                    "Download Pdf",
                     style = MaterialTheme.typography.labelMedium.copy(
                         color = MaterialTheme.appColors.primaryTextColor
-                    ))
+                    )
+                )
 
             }
             Spacer(

@@ -21,7 +21,10 @@ import dev.rajesh.mobile_banking.transactionsuccess.model.TransactionData
 import dev.rajesh.mobile_banking.utils.serialization.AppJson
 
 
-fun NavGraphBuilder.bankTransferNavGraph(navController: NavController) {
+fun NavGraphBuilder.bankTransferNavGraph(
+    navController: NavController,
+    onExitToDashboard: () -> Unit
+) {
     composable(BankTransferRoute.root) {
         BankTransferScreen(
             onOptionSelected = { option ->
@@ -148,15 +151,16 @@ fun NavGraphBuilder.bankTransferNavGraph(navController: NavController) {
     }
 
     composable<BankTransferRoutes.TransactionSuccessful> {
-        val transactionDataJson: String? = it.toRoute<BankTransferRoutes.TransactionSuccessful>().json
+        val transactionDataJson: String? =
+            it.toRoute<BankTransferRoutes.TransactionSuccessful>().json
 
-        transactionDataJson?.let{jsnData->
+        transactionDataJson?.let { jsnData ->
             val transactionData = AppJson.decodeFromString<TransactionData>(jsnData)
             it.savedStateHandle.remove<String>(TransactionSuccessfulConstant.TRANSACTION_DATA)
             TransactionSuccessFulScreen(
                 data = transactionData,
-                goToDashboardClicked={
-
+                goToDashboardClicked = {
+                    onExitToDashboard()
                 }
             )
 

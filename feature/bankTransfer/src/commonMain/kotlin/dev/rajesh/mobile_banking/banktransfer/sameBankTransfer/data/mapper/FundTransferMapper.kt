@@ -5,6 +5,7 @@ import dev.rajesh.mobile_banking.banktransfer.sameBankTransfer.domain.model.Fund
 
 fun FundTransferResponseDTO.toFundTransferDetail(): FundTransferDetail {
     return FundTransferDetail(
+        status = status,
         transactionIdentifier = detail.transactionIdentifier,
         message = message
     )

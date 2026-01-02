@@ -64,6 +64,7 @@ import dev.rajesh.mobile_banking.confirmation.model.ConfirmationData
 import dev.rajesh.mobile_banking.logger.AppLogger
 import dev.rajesh.mobile_banking.paymentAuthentication.PaymentAuthResult
 import dev.rajesh.mobile_banking.res.SharedRes
+import dev.rajesh.mobile_banking.transactionsuccess.component.SuccessLottie
 import dev.rajesh.mobile_banking.transactionsuccess.model.TransactionData
 import dev.rajesh.mobile_banking.useraccounts.presentation.AccountDetailView
 import dev.rajesh.mobile_banking.useraccounts.presentation.state.AccountSelectionAction
@@ -191,6 +192,16 @@ fun SameBankTransferScreen(
         )
     }
 
+    state.fundTransferError?.let { error ->
+        ErrorDialog(
+            title = error.title,
+            msg = error.message,
+            onDismiss = {
+                viewModel.dismissFundTransferError()
+            }
+        )
+    }
+
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         containerColor = MaterialTheme.appColors.backgroundColor,
@@ -225,9 +236,7 @@ fun SameBankTransferScreen(
         }
     ) { contentPadding ->
 
-        if (state.validatingAccount) {
-            LoadingScreen()
-        }
+
 
         Column(
             modifier = Modifier.padding(contentPadding)
@@ -481,6 +490,10 @@ fun SameBankTransferScreen(
                 isLoading = state.isLoading,
                 text = stringResource(SharedRes.Strings.proceed)
             )
+        }
+
+        if (state.validatingAccount || state.transferringFund) {
+            LoadingScreen()
         }
 
     }

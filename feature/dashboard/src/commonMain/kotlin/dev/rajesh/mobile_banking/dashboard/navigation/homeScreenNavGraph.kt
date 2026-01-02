@@ -13,7 +13,10 @@ import dev.rajesh.mobile_banking.home.navigation.HomeRoutes
 import dev.rajesh.mobile_banking.loadwallet.presentation.navigation.LoadWalletRoute
 import dev.rajesh.mobile_banking.loadwallet.presentation.navigation.loadWalletNavGraph
 
-fun NavGraphBuilder.homeScreenNavGraph(navController: NavController) {
+fun NavGraphBuilder.homeScreenNavGraph(
+    navController: NavController,
+    onExitToDashboard: () -> Unit
+) {
 
     composable<DashboardRoute.HomeRoute> {
         HomeScreen(navController = navController)
@@ -24,7 +27,10 @@ fun NavGraphBuilder.homeScreenNavGraph(navController: NavController) {
         startDestination = BankTransferRoute.root,
         route = HomeRoutes.BANK_TRANSFER
     ) {
-        bankTransferNavGraph(navController)
+        bankTransferNavGraph(
+            navController,
+            onExitToDashboard = onExitToDashboard
+        )
     }
 
     //LoadWallet navGraph

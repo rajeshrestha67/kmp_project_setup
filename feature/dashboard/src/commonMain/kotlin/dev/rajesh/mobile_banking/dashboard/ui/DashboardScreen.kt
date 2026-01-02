@@ -26,6 +26,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import dev.rajesh.mobile_banking.components.AnimatedNavHost
@@ -50,14 +51,14 @@ fun DashboardScreen() {
 
     DashboardScreenContent(
         state = state,
-        onAction = dashboardViewModel::action
+        onAction = dashboardViewModel::action,
     )
 }
 
 @Composable
 fun DashboardScreenContent(
     state: DashboardScreenState,
-    onAction: (DashboardScreenAction) -> Unit
+    onAction: (DashboardScreenAction) -> Unit,
 ) {
     var bottomBarState by remember { mutableStateOf(true) }
     val dashboardNavController = rememberNavController()
@@ -182,7 +183,14 @@ fun DashboardScreenContent(
                 navController = dashboardNavController,
                 startDestination = DashboardRoute.HomeRoute,
             ) {
-                homeScreenNavGraph(navController = dashboardNavController)
+                homeScreenNavGraph(navController = dashboardNavController,
+                    onExitToDashboard = {
+                        dashboardNavController.popBackStack(
+                            route = DashboardRoute.HomeRoute,
+                            inclusive = false
+                        )
+                    }
+                )
                 bankingScreenNavGraph(navController = dashboardNavController)
                 transactionHistoryNavGraph(navController = dashboardNavController)
                 menuScreennavGraph(navController = dashboardNavController)

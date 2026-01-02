@@ -87,6 +87,8 @@ kotlin {
                 implementation(projects.core.ui.res)
                 implementation(projects.core.ui.components)
                 implementation(projects.core.utils)
+                implementation(libs.compottie)
+
 
             }
         }

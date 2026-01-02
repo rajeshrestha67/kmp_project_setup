@@ -42,6 +42,9 @@ sqlite = "2.6.2"
 
 datetime = "0.7.1"
 
+compottie="2.0.2"
+
+
 
 
 [libraries]
@@ -110,6 +113,7 @@ androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref =
 
 #datetime
 kotlinx-datetime = { group = "org.jetbrains.kotlinx", name = "kotlinx-datetime", version.ref = "datetime" }
+compottie = { module = "io.github.alexzhirkevich:compottie", version.ref = "compottie" }
 
 
 

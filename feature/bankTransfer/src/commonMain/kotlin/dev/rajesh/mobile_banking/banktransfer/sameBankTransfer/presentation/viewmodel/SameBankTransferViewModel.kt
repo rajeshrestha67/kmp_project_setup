@@ -10,6 +10,7 @@ import dev.rajesh.mobile_banking.banktransfer.sameBankTransfer.domain.model.requ
 import dev.rajesh.mobile_banking.banktransfer.sameBankTransfer.domain.usecases.AccountValidationUseCase
 import dev.rajesh.mobile_banking.banktransfer.sameBankTransfer.domain.usecases.FundTransferUseCase
 import dev.rajesh.mobile_banking.banktransfer.sameBankTransfer.presentation.state.AccountValidationError
+import dev.rajesh.mobile_banking.banktransfer.sameBankTransfer.presentation.state.FundTransferError
 import dev.rajesh.mobile_banking.banktransfer.sameBankTransfer.presentation.state.SameBankTransferAction
 import dev.rajesh.mobile_banking.banktransfer.sameBankTransfer.presentation.state.SameBankTransferEffect
 import dev.rajesh.mobile_banking.banktransfer.sameBankTransfer.presentation.state.SameBankTransferState
@@ -405,13 +406,29 @@ class SameBankTransferViewModel(
             remarks = _state.value.remarks,
             mPin = mPin,
         )
+        _state.update {
+            it.copy(
+                transferringFund = true
+            )
+        }
 
         fundTransferUseCase(fundTransferRequest)
             .onSuccess { result ->
                 AppLogger.i(TAG, "fund Transfer Success: ${result.message}")
+                _state.update {
+                    it.copy(
+                        transferringFund = false
+                    )
+                }
                 navigateToTransactionSuccessScreen(result, accountDetail)
             }.onError { error ->
                 AppLogger.i(TAG, "fund Transfer Success: ${error.toErrorMessage()}")
+                _state.update {
+                    it.copy(
+                        transferringFund = false
+                    )
+                }
+                showFundTransferError(error.toErrorMessage())
             }
     }
 
@@ -421,7 +438,7 @@ class SameBankTransferViewModel(
     ) {
         val dataList: MutableList<TransactionDataItem> = mutableListOf()
 
-        dataList.add(TransactionDataItem("Status", fundTransferDetail.message))
+        dataList.add(TransactionDataItem("Status", fundTransferDetail.status))
         dataList.add(TransactionDataItem("TransactionId", fundTransferDetail.transactionIdentifier))
 
         dataList.add(TransactionDataItem("Sender's Account Number", accountDetail.accountNumber))
@@ -438,7 +455,7 @@ class SameBankTransferViewModel(
             dataList.add(TransactionDataItem("Receiver's Mobile Number", _state.value.mobileNumber))
         }
         dataList.add(TransactionDataItem("Receiver's Name", _state.value.fullName))
-        dataList.add(TransactionDataItem("Amount", _state.value.amount))
+        dataList.add(TransactionDataItem("Amount (NPR)", _state.value.amount))
         dataList.add(TransactionDataItem("Remarks", _state.value.remarks))
 
         viewModelScope.launch {
@@ -452,6 +469,21 @@ class SameBankTransferViewModel(
                 )
             )
         }
+    }
+
+    private fun showFundTransferError(message: String) {
+        _state.update {
+            it.copy(
+                fundTransferError = FundTransferError(
+                    title = "Error",
+                    message = message
+                )
+            )
+        }
+    }
+
+    fun dismissFundTransferError() {
+        _state.update { it.copy(accountValidationError = null) }
     }
 
 
