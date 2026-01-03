@@ -1,7 +1,7 @@
 package dev.rajesh.mobile_banking.di
 
-import dev.rajesh.mobile_banking.banktransfer.interBankTransfer.data.remote.BankListRemoteDataSource
-import dev.rajesh.mobile_banking.banktransfer.interBankTransfer.data.remote.BankListRemoteDataSourceImpl
+import dev.rajesh.mobile_banking.banktransfer.interBankTransfer.data.remote.bankList.BankListRemoteDataSource
+import dev.rajesh.mobile_banking.banktransfer.interBankTransfer.data.remote.bankList.BankListRemoteDataSourceImpl
 import dev.rajesh.mobile_banking.banktransfer.interBankTransfer.data.repository.BankListRepositoryImpl
 import dev.rajesh.mobile_banking.banktransfer.interBankTransfer.domain.repository.BankListRepository
 import dev.rajesh.mobile_banking.banktransfer.interBankTransfer.domain.usecase.GetBankListUseCase

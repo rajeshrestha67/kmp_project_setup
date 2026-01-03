@@ -1,5 +1,6 @@
 package dev.rajesh.mobile_banking.banktransfer.interBankTransfer.presentation.ui
 
+import ErrorDialog
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
@@ -20,6 +21,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -31,6 +33,9 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
+import dev.rajesh.mobile_banking.banktransfer.interBankTransfer.presentation.state.InterBankTransferEffect
 import dev.rajesh.mobile_banking.banktransfer.interBankTransfer.presentation.state.InterBankTransferScreenAction
 import dev.rajesh.mobile_banking.banktransfer.interBankTransfer.presentation.viewmodel.InterBankTransferViewModel
 import dev.rajesh.mobile_banking.banktransfer.interBankTransfer.presentation.viewmodel.SelectBankViewModel
@@ -38,9 +43,13 @@ import dev.rajesh.mobile_banking.components.ItemSelector
 import dev.rajesh.mobile_banking.components.appColors
 import dev.rajesh.mobile_banking.components.button.AppButton
 import dev.rajesh.mobile_banking.components.dimens
+import dev.rajesh.mobile_banking.components.loadingScreen.LoadingScreen
 import dev.rajesh.mobile_banking.components.textField.AppTextField
 import dev.rajesh.mobile_banking.components.textField.FormValidate
+import dev.rajesh.mobile_banking.confirmation.model.ConfirmationData
+import dev.rajesh.mobile_banking.paymentAuthentication.PaymentAuthResult
 import dev.rajesh.mobile_banking.res.SharedRes
+import dev.rajesh.mobile_banking.transactionsuccess.model.TransactionData
 import dev.rajesh.mobile_banking.useraccounts.presentation.AccountDetailView
 import dev.rajesh.mobile_banking.useraccounts.presentation.state.AccountSelectionAction
 import dev.rajesh.mobile_banking.useraccounts.presentation.viewmodel.AccountSelectionViewModel
@@ -49,7 +58,10 @@ import org.koin.compose.viewmodel.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun OtherBankTransferScreen(
+fun InterBankTransferScreen(
+    navController: NavController,
+    showConfirmation: (ConfirmationData) -> Unit,
+    onTransactionSuccessful: (TransactionData) -> Unit,
     onBackClicked: () -> Unit,
 ) {
 
@@ -65,6 +77,43 @@ fun OtherBankTransferScreen(
     var shouldShowBankList by remember { mutableStateOf(false) }
 
     val focusManager = LocalFocusManager.current
+
+    val savedStateHandle = navController.currentBackStackEntry?.savedStateHandle
+
+    LaunchedEffect(Unit){
+        savedStateHandle?.getStateFlow<String?>(PaymentAuthResult.mPin, null)
+            ?.collect { mPin->
+                mPin?.let {
+                    interBankTransferViewModel.onMPinVerified(it)
+                    savedStateHandle.remove<String>(PaymentAuthResult.mPin)
+                }
+            }
+    }
+
+
+    LaunchedEffect(Unit) {
+        interBankTransferViewModel.effect.collect {
+            when (it) {
+                is InterBankTransferEffect.NavigateToConfirmation -> {
+                    showConfirmation(it.confirmationData)
+                }
+
+                is InterBankTransferEffect.TransactionSuccessful -> {
+                    onTransactionSuccessful(it.transactionData)
+                }
+            }
+        }
+    }
+
+    state.errorData?.let { error ->
+        ErrorDialog(
+            title = "Error",
+            msg = error.message.orEmpty(),
+            onDismiss = {
+                interBankTransferViewModel.dismissError()
+            }
+        )
+    }
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -273,6 +322,10 @@ fun OtherBankTransferScreen(
             )
 
 
+        }
+
+        if (state.isValidatingAccount || state.isTransferringFund) {
+            LoadingScreen()
         }
     }
 

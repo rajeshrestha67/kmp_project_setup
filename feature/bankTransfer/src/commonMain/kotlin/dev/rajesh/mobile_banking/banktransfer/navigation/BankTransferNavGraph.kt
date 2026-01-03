@@ -6,7 +6,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
 import dev.rajesh.mobile_banking.banktransfer.presentation.ui.BankTransferScreen
 import dev.rajesh.mobile_banking.banktransfer.presentation.ui.FavouriteAccountsScreen
-import dev.rajesh.mobile_banking.banktransfer.interBankTransfer.presentation.ui.OtherBankTransferScreen
+import dev.rajesh.mobile_banking.banktransfer.interBankTransfer.presentation.ui.InterBankTransferScreen
 import dev.rajesh.mobile_banking.banktransfer.sameBankTransfer.domain.model.CoopBranchDetail
 import dev.rajesh.mobile_banking.banktransfer.sameBankTransfer.presentation.ui.SameBankTransferScreen
 import dev.rajesh.mobile_banking.banktransfer.sameBankTransfer.presentation.ui.SelectBranchScreen
@@ -60,8 +60,7 @@ fun NavGraphBuilder.bankTransferNavGraph(
                 navController.currentBackStackEntry
                     ?.savedStateHandle
                     ?.set(
-                        ConfirmationConstant.CONFIRMATION_DATA,
-                        json
+                        ConfirmationConstant.CONFIRMATION_DATA, json
                     )
 
                 navController.navigate(BankTransferRoutes.Confirmation(json))
@@ -81,7 +80,25 @@ fun NavGraphBuilder.bankTransferNavGraph(
     }
 
     composable<BankTransferRoutes.OtherBankTransfer> {
-        OtherBankTransferScreen(
+        InterBankTransferScreen(
+            navController = navController,
+            showConfirmation = {
+                val json = AppJson.encodeToString(
+                    ConfirmationData.serializer(),
+                    it
+                )
+                navController.currentBackStackEntry
+                    ?.savedStateHandle
+                    ?.set(
+                        ConfirmationConstant.CONFIRMATION_DATA, json
+                    )
+                navController.navigate(InterBankTransferRoutes.ConfirmationRoute(json))
+            },
+
+            onTransactionSuccessful = {
+
+            },
+
             onBackClicked = {
                 navController.popBackStack()
             }
@@ -112,6 +129,9 @@ fun NavGraphBuilder.bankTransferNavGraph(
         )
     }
 
+    /**
+     * SameBank Transfer Confirmation
+     */
     composable<BankTransferRoutes.Confirmation> {
         val confirmationDataJson: String? = it.toRoute<BankTransferRoutes.Confirmation>().json
 
@@ -133,6 +153,9 @@ fun NavGraphBuilder.bankTransferNavGraph(
 
     }
 
+    /**
+     * Same Bank Transfer Payment Authentication
+     */
     composable<BankTransferRoutes.PaymentAuthentication> {
         PaymentAuthenticationScreen(
             onMPinVerified = { mPin ->
@@ -152,6 +175,9 @@ fun NavGraphBuilder.bankTransferNavGraph(
             })
     }
 
+    /**
+     * Same bank Transfer successful
+     */
     composable<BankTransferRoutes.TransactionSuccessful> {
         val transactionDataJson: String? =
             it.toRoute<BankTransferRoutes.TransactionSuccessful>().json
@@ -169,6 +195,72 @@ fun NavGraphBuilder.bankTransferNavGraph(
         }
     }
 
+    /**
+     * InterBank transfer confirmation
+     */
+    composable<InterBankTransferRoutes.ConfirmationRoute> {
+        val confirmationDataJson: String? =
+            it.toRoute<InterBankTransferRoutes.ConfirmationRoute>().json
+
+        confirmationDataJson?.let { jsonData ->
+            val confirmationData = AppJson.decodeFromString<ConfirmationData>(jsonData)
+            it.savedStateHandle.remove<String>(ConfirmationConstant.CONFIRMATION_DATA)
+            ConfirmationScreen(
+                data = confirmationData,
+                onConfirm = {
+                    // handle confirm
+                    //navigate to mPIn authentication view
+                    navController.navigate(InterBankTransferRoutes.PaymentAuthenticationRoute)
+                },
+                onBackClicked = {
+                    navController.popBackStack()
+                }
+            )
+        }
+
+    }
+
+    /**
+     * Inter bank transfer Payment Authentication
+     */
+    composable<InterBankTransferRoutes.PaymentAuthenticationRoute> {
+        PaymentAuthenticationScreen(
+            onMPinVerified = { mPin ->
+                navController.getBackStackEntry<BankTransferRoutes.OtherBankTransfer>()
+                    .savedStateHandle
+                    .set(PaymentAuthResult.mPin, mPin)
+
+                //clear auth and confirmation screen
+                navController.popBackStack(
+                    route = BankTransferRoutes.OtherBankTransfer,
+                    inclusive = false
+                )
+            },
+
+            onBackClicked = {
+                navController.popBackStack()
+            })
+    }
+
+    /**
+     * InterBank Transfer Transfer Successful
+     */
+    composable<InterBankTransferRoutes.TransactionSuccessfulRoute> {
+        val transactionDataJson: String? =
+            it.toRoute<InterBankTransferRoutes.TransactionSuccessfulRoute>().json
+
+        transactionDataJson?.let { jsnData ->
+            val transactionData = AppJson.decodeFromString<TransactionData>(jsnData)
+            it.savedStateHandle.remove<String>(TransactionSuccessfulConstant.TRANSACTION_DATA)
+            TransactionSuccessFulScreen(
+                data = transactionData,
+                goToDashboardClicked = {
+                    onExitToDashboard()
+                }
+            )
+
+        }
+    }
 
 }
 

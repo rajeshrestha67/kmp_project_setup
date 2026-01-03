@@ -8,6 +8,9 @@ object EndPoint {
     const val COOP_BRANCH = "/get/bankbranches"
     const val VALIDATE_ACCOUNT = "/api/account/validation"
     const val FUND_TRANSFER = "/api/fundtransfer"
+
+    const val  SCHEME_CHARGE = "/api/ips/scheme/charge"
+
     const val BANK_LIST = "/api/ips/bank"
 
     const val INTER_BANK_VALIDATION ="/api/account/validation"

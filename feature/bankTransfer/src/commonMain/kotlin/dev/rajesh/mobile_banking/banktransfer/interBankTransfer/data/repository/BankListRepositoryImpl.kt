@@ -1,7 +1,7 @@
 package dev.rajesh.mobile_banking.banktransfer.interBankTransfer.data.repository
 
 import dev.rajesh.mobile_banking.banktransfer.interBankTransfer.data.mapper.toBankList
-import dev.rajesh.mobile_banking.banktransfer.interBankTransfer.data.remote.BankListRemoteDataSource
+import dev.rajesh.mobile_banking.banktransfer.interBankTransfer.data.remote.bankList.BankListRemoteDataSource
 import dev.rajesh.mobile_banking.banktransfer.interBankTransfer.domain.model.BankDetail
 import dev.rajesh.mobile_banking.banktransfer.interBankTransfer.domain.repository.BankListRepository
 import dev.rajesh.mobile_banking.model.network.DataError

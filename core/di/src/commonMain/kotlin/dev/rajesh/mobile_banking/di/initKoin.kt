@@ -24,7 +24,7 @@ fun initKoin(config: KoinAppDeclaration? = null) {
             CoopBranchModule().module,
             PaymentAuthModule().module,
             AccountSelectionViewModule().module,
-            OtherBankTransferModule().module,
+            InterBankTransferModule().module,
             BankListModule().module
         )
     }

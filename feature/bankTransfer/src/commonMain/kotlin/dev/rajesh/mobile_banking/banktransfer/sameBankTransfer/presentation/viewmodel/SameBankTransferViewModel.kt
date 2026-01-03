@@ -42,7 +42,7 @@ class SameBankTransferViewModel(
     private val requiredValidationUseCase: RequiredValidationUseCase,
     private val accountValidationUseCase: AccountValidationUseCase,
     private val fundTransferUseCase: FundTransferUseCase,
-    private val selectedAccountStore: SelectedAccountStore
+    selectedAccountStore: SelectedAccountStore
 ) : ViewModel() {
 
     companion object {
@@ -301,6 +301,7 @@ class SameBankTransferViewModel(
             _state.update {
                 it.copy(validatingAccount = false)
             }
+            showValidationError("Account Validation Failed")
         }
     }
 

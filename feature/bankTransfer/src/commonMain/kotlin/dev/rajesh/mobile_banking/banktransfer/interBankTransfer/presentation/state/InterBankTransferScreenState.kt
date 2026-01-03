@@ -1,6 +1,7 @@
 package dev.rajesh.mobile_banking.banktransfer.interBankTransfer.presentation.state
 
 import dev.rajesh.mobile_banking.banktransfer.interBankTransfer.domain.model.BankDetail
+import dev.rajesh.mobile_banking.model.ErrorData
 import org.jetbrains.compose.resources.StringResource
 
 data class InterBankTransferScreenState (
@@ -9,7 +10,6 @@ data class InterBankTransferScreenState (
     val amount : String  = "",
     val remarks : String = "",
     val selectedBank: BankDetail? = null,
-
 
     val receiversAccountNumberError: StringResource? = null,
     val receiversFullNameError: StringResource? = null,
@@ -21,7 +21,9 @@ data class InterBankTransferScreenState (
     val isTransferringFund: Boolean = false,
 
     val isError: Boolean = false,
-    val errorMessage :String = ""
+    val errorData : ErrorData? = null,
+
+    val charge: String? = null
 
 
 )

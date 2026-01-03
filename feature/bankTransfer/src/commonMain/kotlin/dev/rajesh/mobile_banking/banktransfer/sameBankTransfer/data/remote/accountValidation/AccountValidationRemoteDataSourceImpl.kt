@@ -33,7 +33,10 @@ class AccountValidationRemoteDataSourceImpl(
                     )
                     parameter("destinationBranchId", accountValidationRequest.destinationBranchId)
                 } else if (accountValidationRequest.destinationMobileNumber != null) {
-                    parameter("destinationMobileNumber", accountValidationRequest.destinationMobileNumber)
+                    parameter(
+                        "destinationMobileNumber",
+                        accountValidationRequest.destinationMobileNumber
+                    )
                 }
 
             }
