@@ -7,6 +7,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import dev.rajesh.mobile_banking.components.appColors
 import dev.rajesh.mobile_banking.components.dimens
 import dev.rajesh.mobile_banking.transactionsuccess.model.TransactionDataItem
@@ -28,11 +29,14 @@ fun TransactionDataRow(it: TransactionDataItem) {
         Text(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = MaterialTheme.dimens.small3)
+                .padding(horizontal = MaterialTheme.dimens.small3,
+                    vertical = MaterialTheme.dimens.small1
+                    )
                 .weight(1f),
             text = it.value,
             style = MaterialTheme.typography.bodyMedium.copy(
-                color = MaterialTheme.appColors.primaryTextColor
+                color = MaterialTheme.appColors.primaryTextColor,
+                fontWeight = FontWeight.Bold
             )
         )
     }

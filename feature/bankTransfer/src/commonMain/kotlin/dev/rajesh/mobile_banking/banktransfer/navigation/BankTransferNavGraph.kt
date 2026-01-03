@@ -95,7 +95,21 @@ fun NavGraphBuilder.bankTransferNavGraph(
                 navController.navigate(InterBankTransferRoutes.ConfirmationRoute(json))
             },
 
-            onTransactionSuccessful = {
+            onTransactionSuccessful = { transactionData ->
+                val transactionDataJson = AppJson.encodeToString(
+                    TransactionData.serializer(),
+                    transactionData
+                )
+                navController.currentBackStackEntry
+                    ?.savedStateHandle
+                    ?.set(TransactionSuccessfulConstant.TRANSACTION_DATA, transactionDataJson)
+
+                navController.navigate(
+                    InterBankTransferRoutes.TransactionSuccessfulRoute(
+                        transactionDataJson
+                    )
+                )
+
 
             },
 

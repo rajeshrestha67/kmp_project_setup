@@ -3,14 +3,17 @@ package dev.rajesh.mobile_banking.banktransfer.interBankTransfer.presentation.vi
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dev.rajesh.mobile_banking.banktransfer.interBankTransfer.domain.model.BankAccountValidationDetail
+import dev.rajesh.mobile_banking.banktransfer.interBankTransfer.domain.model.InterBankTransferDetail
 import dev.rajesh.mobile_banking.banktransfer.interBankTransfer.domain.model.SchemeCharge
 import dev.rajesh.mobile_banking.banktransfer.interBankTransfer.domain.model.request.BankAccountValidationRequest
 import dev.rajesh.mobile_banking.banktransfer.interBankTransfer.domain.model.request.BankTransferRequest
 import dev.rajesh.mobile_banking.banktransfer.interBankTransfer.domain.usecase.BankAccountValidationUseCase
 import dev.rajesh.mobile_banking.banktransfer.interBankTransfer.domain.usecase.FetchSchemeChargeUseCase
+import dev.rajesh.mobile_banking.banktransfer.interBankTransfer.domain.usecase.InterBankTransferUseCase
 import dev.rajesh.mobile_banking.banktransfer.interBankTransfer.presentation.state.InterBankTransferEffect
 import dev.rajesh.mobile_banking.banktransfer.interBankTransfer.presentation.state.InterBankTransferScreenAction
 import dev.rajesh.mobile_banking.banktransfer.interBankTransfer.presentation.state.InterBankTransferScreenState
+import dev.rajesh.mobile_banking.banktransfer.sameBankTransfer.presentation.state.SameBankTransferEffect
 import dev.rajesh.mobile_banking.confirmation.model.ConfirmationData
 import dev.rajesh.mobile_banking.confirmation.model.ConfirmationItem
 import dev.rajesh.mobile_banking.domain.form.RequiredValidationUseCase
@@ -19,6 +22,8 @@ import dev.rajesh.mobile_banking.model.ErrorData
 import dev.rajesh.mobile_banking.model.network.toErrorMessage
 import dev.rajesh.mobile_banking.networkhelper.onError
 import dev.rajesh.mobile_banking.networkhelper.onSuccess
+import dev.rajesh.mobile_banking.transactionsuccess.model.TransactionData
+import dev.rajesh.mobile_banking.transactionsuccess.model.TransactionDataItem
 import dev.rajesh.mobile_banking.user.domain.model.AccountDetail
 import dev.rajesh.mobile_banking.useraccounts.presentation.state.SelectedAccountStore
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -35,6 +40,7 @@ class InterBankTransferViewModel(
     private val requiredValidationUseCase: RequiredValidationUseCase,
     private val fetchSchemeChargeUseCase: FetchSchemeChargeUseCase,
     private val bankAccountValidationUseCase: BankAccountValidationUseCase,
+    private val interBankTransferUseCase: InterBankTransferUseCase,
     selectedAccountStore: SelectedAccountStore
 ) : ViewModel() {
 
@@ -224,34 +230,38 @@ class InterBankTransferViewModel(
         }
     }
 
-    fun fetchSchemeCharge(bankAccountValidationDetail: BankAccountValidationDetail) = viewModelScope.launch {
-        fetchSchemeChargeUseCase(
-            amount = state.value.amount,
-            destinationBankId = state.value.selectedBank?.bankId.orEmpty(),
-            isCoop = false
-        ).onSuccess {result->
-            AppLogger.i(TAG, "scheme charge Fetch success: $result")
-            _state.update {
-                it.copy(
-                    isValidatingAccount = false,
-                    charge =result.details.toString()
-                )
-            }
-            //navigate to confirmation screen
-            showConfirmationData(result, bankAccountValidationDetail)
+    fun fetchSchemeCharge(bankAccountValidationDetail: BankAccountValidationDetail) =
+        viewModelScope.launch {
+            fetchSchemeChargeUseCase(
+                amount = state.value.amount,
+                destinationBankId = state.value.selectedBank?.bankId.orEmpty(),
+                isCoop = false
+            ).onSuccess { result ->
+                AppLogger.i(TAG, "scheme charge Fetch success: $result")
+                _state.update {
+                    it.copy(
+                        isValidatingAccount = false,
+                        charge = result.details.toString()
+                    )
+                }
+                //navigate to confirmation screen
+                showConfirmationData(result, bankAccountValidationDetail)
 
-        }.onError { error ->
-            AppLogger.i(TAG, "scheme charge Fetch Error: ${error.toErrorMessage()}")
-            _state.update {
-                it.copy(
-                    isValidatingAccount = false,
-                    errorData = ErrorData(error.toErrorMessage())
-                )
+            }.onError { error ->
+                AppLogger.i(TAG, "scheme charge Fetch Error: ${error.toErrorMessage()}")
+                _state.update {
+                    it.copy(
+                        isValidatingAccount = false,
+                        errorData = ErrorData(error.toErrorMessage())
+                    )
+                }
             }
         }
-    }
 
-    private fun showConfirmationData(schemeCharge: SchemeCharge, data: BankAccountValidationDetail) {
+    private fun showConfirmationData(
+        schemeCharge: SchemeCharge,
+        data: BankAccountValidationDetail
+    ) {
         val dataList: MutableList<ConfirmationItem> = mutableListOf()
         dataList.add(
             ConfirmationItem(
@@ -289,32 +299,96 @@ class InterBankTransferViewModel(
     }
 
     fun onMPinVerified(mPin: String) {
-        proceedForBankTransfer(mPin)
+        val account = selectedAccount.value ?: return
+        proceedForBankTransfer(mPin, account)
     }
 
-    private fun proceedForBankTransfer(mPin: String) {
-        AppLogger.i(TAG,"Proceed for bank transfer")
-        val account = selectedAccount.value ?: return
+    private fun proceedForBankTransfer(mPin: String, account: AccountDetail) =
+        viewModelScope.launch {
+            AppLogger.i(TAG, "Proceed for bank transfer")
 
-        val bankTransferRequest = BankTransferRequest(
-            sendersAccountNumber = account.accountNumber,
-            destinationBankId = _state.value.selectedBank?.bankId.orEmpty(),
-            destinationBankName = _state.value.selectedBank?.bankName.orEmpty(),
-            receiversAccountNumber = _state.value.receiversAccountNumber,
-            receiversFullName = _state.value.receiversFullName,
-            amount = _state.value.amount,
-            charge = _state.value.charge.orEmpty(),
-            remarks = _state.value.remarks,
-            mPin = mPin
-        )
-
-        _state.update {
-            it.copy(
-                isTransferringFund = true
+            val bankTransferRequest = BankTransferRequest(
+                sendersAccountNumber = account.accountNumber,
+                destinationBankId = _state.value.selectedBank?.bankId.orEmpty(),
+                destinationBankName = _state.value.selectedBank?.bankName.orEmpty(),
+                receiversAccountNumber = _state.value.receiversAccountNumber,
+                receiversFullName = _state.value.receiversFullName,
+                amount = _state.value.amount,
+                charge = _state.value.charge.orEmpty(),
+                remarks = _state.value.remarks,
+                mPin = mPin
             )
+
+            _state.update {
+                it.copy(
+                    isTransferringFund = true
+                )
+            }
+
+            interBankTransferUseCase(bankTransferRequest)
+                .onSuccess { result ->
+                    AppLogger.i(TAG, "inter bank transfer success: ${result}")
+                    _state.update {
+                        it.copy(
+                            isTransferringFund = false
+                        )
+                    }
+                    navigateToTransactionSuccessScreen(result, account)
+                }
+                .onError { error ->
+                    AppLogger.i(TAG, "inter bank transfer error: ${error.toErrorMessage()}")
+                    _state.update {
+                        it.copy(
+                            isTransferringFund = false,
+                            errorData = ErrorData(
+                                error.toErrorMessage()
+                            )
+                        )
+                    }
+                }
+
         }
 
+    private fun navigateToTransactionSuccessScreen(
+        interBankTransferDetail: InterBankTransferDetail,
+        account: AccountDetail
+    ) {
+        val dataList: MutableList<TransactionDataItem> = mutableListOf()
 
+        dataList.add(TransactionDataItem("Status", interBankTransferDetail.status))
+        dataList.add(
+            TransactionDataItem(
+                "TransactionId",
+                interBankTransferDetail.transactionIdentifier
+            )
+        )
+
+        dataList.add(TransactionDataItem("Sender's Account Number", account.accountNumber))
+        dataList.add(TransactionDataItem("Sender's Name", account.accountHolderName))
+
+        dataList.add(
+            TransactionDataItem(
+                "Receiver's Account Number",
+                _state.value.receiversAccountNumber
+            )
+        )
+        dataList.add(TransactionDataItem("Receiver's Name", _state.value.receiversFullName))
+        dataList.add(TransactionDataItem("Bank", _state.value.selectedBank?.bankName.orEmpty()))
+        dataList.add(TransactionDataItem("Amount(NPR.)", _state.value.amount))
+        dataList.add(TransactionDataItem("Charge(NPR.)", _state.value.charge.orEmpty()))
+        dataList.add(TransactionDataItem("Remarks", _state.value.remarks))
+
+        viewModelScope.launch {
+            _effect.emit(
+                InterBankTransferEffect.TransactionSuccessful(
+                    TransactionData(
+                        title = "Transaction Successful",
+                        message = interBankTransferDetail.message,
+                        items = dataList
+                    )
+                )
+            )
+        }
 
     }
 

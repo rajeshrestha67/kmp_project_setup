@@ -1,5 +1,6 @@
 package dev.rajesh.mobile_banking.banktransfer.interBankTransfer.domain.model.request
 
+
 data class BankTransferRequest(
     val sendersAccountNumber: String,
     val destinationBankId: String,

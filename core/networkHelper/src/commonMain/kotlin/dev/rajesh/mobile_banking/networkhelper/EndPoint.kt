@@ -15,7 +15,7 @@ object EndPoint {
 
     const val INTER_BANK_VALIDATION ="/api/account/validation"
 
-    const val IPS_TRANSFER ="api/ips/transfer"
+    const val IPS_TRANSFER ="/api/ips/transfer"
 
 
 }

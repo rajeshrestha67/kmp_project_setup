@@ -5,10 +5,10 @@ import dev.rajesh.mobile_banking.model.ErrorData
 import org.jetbrains.compose.resources.StringResource
 
 data class InterBankTransferScreenState (
-    val receiversAccountNumber: String = "",
-    val receiversFullName : String ="",
-    val amount : String  = "",
-    val remarks : String = "",
+    val receiversAccountNumber: String = "00200501213504",
+    val receiversFullName : String ="Rajesh Shrestha",
+    val amount : String  = "1111",
+    val remarks : String = "test",
     val selectedBank: BankDetail? = null,
 
     val receiversAccountNumberError: StringResource? = null,
