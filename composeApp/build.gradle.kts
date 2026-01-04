@@ -22,6 +22,7 @@ kotlin {
         iosTarget.binaries.framework {
             baseName = "ComposeApp"
             isStatic = true
+            export(projects.core.di)
         }
     }
     
@@ -30,7 +31,7 @@ kotlin {
             implementation(compose.preview)
             implementation(libs.androidx.activity.compose)
             implementation(libs.androidx.core.splashscreen)
-            implementation(projects.core.di)
+            //implementation(projects.core.di)
             implementation(libs.androidx.activity)
         }
         commonMain.dependencies {
@@ -49,7 +50,8 @@ kotlin {
             implementation(libs.org.jetbrains.navigation)
             implementation(libs.kotlinx.serialization.json)
 
-            implementation(projects.core.di)
+            //implementation(projects.core.di)
+            api(projects.core.di)
             implementation(projects.core.ui.res)
             implementation(projects.core.ui.components)
             implementation(projects.core.model)
@@ -73,11 +75,11 @@ kotlin {
             implementation(libs.kotlin.test)
         }
         nativeMain.dependencies {
-            implementation(projects.core.di)
+            //implementation(projects.core.di)
         }
 
         iosMain.dependencies {
-            implementation(projects.core.di)
+            //implementation(projects.core.di)
         }
     }
 }
@@ -113,4 +115,3 @@ android {
 dependencies {
     debugImplementation(compose.uiTooling)
 }
-

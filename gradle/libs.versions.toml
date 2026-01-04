@@ -21,8 +21,10 @@ core = "1.7.0"
 material3 = "1.4.0"
 coreSplashscreen = "1.0.1"
 ksp = "2.2.20-2.0.2"
+
 koin-core = "4.1.1"
 koin-annotations = "2.1.0"
+
 ktor = "3.3.1"
 coil3 = "3.3.0"
 compose = "1.6.11"

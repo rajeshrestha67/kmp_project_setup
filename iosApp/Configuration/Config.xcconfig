@@ -1,7 +1,7 @@
 TEAM_ID=
 
-PRODUCT_NAME=mobileBanking
-PRODUCT_BUNDLE_IDENTIFIER=org.rajesh.mobile_banking.mobileBanking$(TEAM_ID)
+PRODUCT_NAME=mobile banking
+PRODUCT_BUNDLE_IDENTIFIER=org.rajesh.mobile_banking.mobilebanking$(TEAM_ID)
 
 CURRENT_PROJECT_VERSION=1
 MARKETING_VERSION=1.0

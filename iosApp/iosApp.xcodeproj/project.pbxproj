@@ -7,37 +7,37 @@
 	objects = {
 
 /* Begin PBXFileReference section */
-		C85DA575EED4A334838BAB75 /* mobileBanking.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = mobileBanking.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		A6BB85264EE0BC6828DD105C /* mobile banking.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "mobile banking.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		76373AB70EDFEFAD34A2A0D7 /* Exceptions for "iosApp" folder in "iosApp" target */ = {
+		DD3E92D0BAF35D90DF7F7FEF /* Exceptions for "iosApp" folder in "iosApp" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Info.plist,
 			);
-			target = E78DA00142A58113DEA94777 /* iosApp */;
+			target = 1DD3681B6A9894803016E395 /* iosApp */;
 		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		324F36412FABDFE036B023E5 /* iosApp */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-				76373AB70EDFEFAD34A2A0D7 /* Exceptions for "iosApp" folder in "iosApp" target */,
-			);
-			path = iosApp;
-			sourceTree = "<group>";
-		};
-		D8B1EB360618BBCB272D4A6C /* Configuration */ = {
+		6BAA928246711782B447B353 /* Configuration */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = Configuration;
+			sourceTree = "<group>";
+		};
+		DE6937C5A07BCDBFBBACCC4F /* iosApp */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				DD3E92D0BAF35D90DF7F7FEF /* Exceptions for "iosApp" folder in "iosApp" target */,
+			);
+			path = iosApp;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		05D3941E4BDE8566B15EB7C4 /* Frameworks */ = {
+		98952DDB0A90D67AFBF12E22 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -47,19 +47,19 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		87947EBC7E1EA4F6C8F44FCE = {
+		04D87845823D6A80801DD36A = {
 			isa = PBXGroup;
 			children = (
-				D8B1EB360618BBCB272D4A6C /* Configuration */,
-				324F36412FABDFE036B023E5 /* iosApp */,
-				2803D04C3E72F3F23C6457EF /* Products */,
+				6BAA928246711782B447B353 /* Configuration */,
+				DE6937C5A07BCDBFBBACCC4F /* iosApp */,
+				E3DED642997536CF529DDC32 /* Products */,
 			);
 			sourceTree = "<group>";
 		};
-		2803D04C3E72F3F23C6457EF /* Products */ = {
+		E3DED642997536CF529DDC32 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				C85DA575EED4A334838BAB75 /* mobileBanking.app */,
+				A6BB85264EE0BC6828DD105C /* mobile banking.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -67,65 +67,65 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		E78DA00142A58113DEA94777 /* iosApp */ = {
+		1DD3681B6A9894803016E395 /* iosApp */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 8019FF98F9BA6AAF91FFB7AF /* Build configuration list for PBXNativeTarget "iosApp" */;
+			buildConfigurationList = 326E04EE5BC917D44A941AE2 /* Build configuration list for PBXNativeTarget "iosApp" */;
 			buildPhases = (
-				06A5F6985B84245B5F249621 /* Compile Kotlin Framework */,
-				6F387A785D484D681C939D1E /* Sources */,
-				05D3941E4BDE8566B15EB7C4 /* Frameworks */,
-				6CDB4C7405ECFFC06479C4EB /* Resources */,
+				DCD3DA9BC1B3412984EA6243 /* Compile Kotlin Framework */,
+				847BC59FAA841B4F9476E813 /* Sources */,
+				98952DDB0A90D67AFBF12E22 /* Frameworks */,
+				A92510F5F4488881BC9BE391 /* Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
-				324F36412FABDFE036B023E5 /* iosApp */,
+				DE6937C5A07BCDBFBBACCC4F /* iosApp */,
 			);
 			name = iosApp;
 			packageProductDependencies = (
 			);
 			productName = iosApp;
-			productReference = C85DA575EED4A334838BAB75 /* mobileBanking.app */;
+			productReference = A6BB85264EE0BC6828DD105C /* mobile banking.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
-		102E34BF73B8432DC8CC820F /* Project object */ = {
+		69A2D6D9AD41DDF9AA4FF6EC /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1620;
-				LastUpgradeCheck = 1620;
+				LastUpgradeCheck = 2620;
 				TargetAttributes = {
-					E78DA00142A58113DEA94777 = {
+					1DD3681B6A9894803016E395 = {
 						CreatedOnToolsVersion = 16.2;
 					};
 				};
 			};
-			buildConfigurationList = 39D0A639BD7394BD0B020514 /* Build configuration list for PBXProject "iosApp" */;
+			buildConfigurationList = 1232277B3AE2BCD030594B05 /* Build configuration list for PBXProject "iosApp" */;
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
 				Base,
 			);
-			mainGroup = 87947EBC7E1EA4F6C8F44FCE;
+			mainGroup = 04D87845823D6A80801DD36A;
 			minimizedProjectReferenceProxies = 1;
 			preferredProjectObjectVersion = 77;
-			productRefGroup = 2803D04C3E72F3F23C6457EF /* Products */;
+			productRefGroup = E3DED642997536CF529DDC32 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				E78DA00142A58113DEA94777 /* iosApp */,
+				1DD3681B6A9894803016E395 /* iosApp */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		6CDB4C7405ECFFC06479C4EB /* Resources */ = {
+		A92510F5F4488881BC9BE391 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -135,7 +135,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		06A5F6985B84245B5F249621 /* Compile Kotlin Framework */ = {
+		DCD3DA9BC1B3412984EA6243 /* Compile Kotlin Framework */ = {
 			isa = PBXShellScriptBuildPhase;
 			alwaysOutOfDate = 1;
 			buildActionMask = 2147483647;
@@ -157,7 +157,7 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		6F387A785D484D681C939D1E /* Sources */ = {
+		847BC59FAA841B4F9476E813 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -167,9 +167,9 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin XCBuildConfiguration section */
-		918CC214E0194B359964FF23 /* Debug */ = {
+		1342488041406B1204E9FE1F /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReferenceAnchor = D8B1EB360618BBCB272D4A6C /* Configuration */;
+			baseConfigurationReferenceAnchor = 6BAA928246711782B447B353 /* Configuration */;
 			baseConfigurationReferenceRelativePath = Config.xcconfig;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -204,6 +204,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = FAZ99HMC47;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
@@ -227,14 +228,42 @@
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
 		};
-		6A321C60EE25F098E58B5392 /* Release */ = {
+		36F199364A255D6D9716D23F /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReferenceAnchor = D8B1EB360618BBCB272D4A6C /* Configuration */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_ASSET_PATHS = "\"iosApp/Preview Content\"";
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = iosApp/Info.plist;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = org.rajesh;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		6D6D6920774731C4CC34B86D /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReferenceAnchor = 6BAA928246711782B447B353 /* Configuration */;
 			baseConfigurationReferenceRelativePath = Config.xcconfig;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -269,6 +298,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = FAZ99HMC47;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
@@ -285,21 +315,21 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
 		};
-		3047958DA43161C752FD73BB /* Debug */ = {
+		E21F405726E85F24A3270D3C /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = arm64;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"iosApp/Preview Content\"";
-				DEVELOPMENT_TEAM = "${TEAM_ID}";
+				DEVELOPMENT_TEAM = FAZ99HMC47;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = iosApp/Info.plist;
@@ -312,62 +342,35 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				PRODUCT_BUNDLE_IDENTIFIER = org.rajesh;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
-		3D1EAC75D383A6EC52300ADA /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ARCHS = arm64;
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_IDENTITY = "Apple Development";
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_ASSET_PATHS = "\"iosApp/Preview Content\"";
-				DEVELOPMENT_TEAM = "${TEAM_ID}";
-				ENABLE_PREVIEWS = YES;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = iosApp/Info.plist;
-				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
-				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-				);
-				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		39D0A639BD7394BD0B020514 /* Build configuration list for PBXProject "iosApp" */ = {
+		1232277B3AE2BCD030594B05 /* Build configuration list for PBXProject "iosApp" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				918CC214E0194B359964FF23 /* Debug */,
-				6A321C60EE25F098E58B5392 /* Release */,
+				1342488041406B1204E9FE1F /* Debug */,
+				6D6D6920774731C4CC34B86D /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		8019FF98F9BA6AAF91FFB7AF /* Build configuration list for PBXNativeTarget "iosApp" */ = {
+		326E04EE5BC917D44A941AE2 /* Build configuration list for PBXNativeTarget "iosApp" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				3047958DA43161C752FD73BB /* Debug */,
-				3D1EAC75D383A6EC52300ADA /* Release */,
+				E21F405726E85F24A3270D3C /* Debug */,
+				36F199364A255D6D9716D23F /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
-	rootObject = 102E34BF73B8432DC8CC820F /* Project object */;
+	rootObject = 69A2D6D9AD41DDF9AA4FF6EC /* Project object */;
 }

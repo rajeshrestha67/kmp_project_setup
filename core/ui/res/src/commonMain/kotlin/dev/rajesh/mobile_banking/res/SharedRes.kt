@@ -2,7 +2,7 @@ package dev.rajesh.mobile_banking.res
 
 import mobilebanking.core.ui.res.generated.resources.Poppins_Bold
 import mobilebanking.core.ui.res.generated.resources.Poppins_Italic
-import mobilebanking.core.ui.res.generated.resources.Poppins_Medium
+import mobilebanking.core.ui.res.generated.resources.poppins_medium
 import mobilebanking.core.ui.res.generated.resources.Res
 import mobilebanking.core.ui.res.generated.resources.*
 
@@ -12,7 +12,7 @@ object SharedRes {
     }
 
     object Fonts {
-        val poppinsMedium = Res.font.Poppins_Medium
+        val poppinsMedium = Res.font.poppins_medium
         val poppinsBold = Res.font.Poppins_Bold
         val poppinsItalic = Res.font.Poppins_Italic
     }

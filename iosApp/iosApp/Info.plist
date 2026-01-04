@@ -1,8 +1,18 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN"
+    "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
-<dict>
-	<key>CADisableMinimumFrameDurationOnPhone</key>
-	<true/>
-</dict>
+    <dict>
+        <key>CADisableMinimumFrameDurationOnPhone</key>
+        <true />
+
+        <key>NSContactsUsageDescription</key>
+        <string>This app needs access to your contacts</string>
+
+        <key>NSCameraUsageDescription</key>
+        <string>Camera access is required to capture photos.</string>
+
+        <key>NSPhotoLibraryUsageDescription</key>
+        <string>Photo access is required to select images.</string>
+
+    </dict>
 </plist>
