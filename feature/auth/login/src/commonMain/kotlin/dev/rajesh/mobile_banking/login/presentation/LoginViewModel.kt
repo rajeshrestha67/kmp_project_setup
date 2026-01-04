@@ -112,7 +112,12 @@ class LoginViewModel(
             _state.update {
                 it.copy(isLoading = false)
             }
-            _errorChannel.send(error.toErrorMessage())
+            if (error.toErrorMessage().contains("unauthorized device", ignoreCase = true)) {
+                //show otp verification view
+                _errorChannel.send("show otp verification view")
+            } else {
+                _errorChannel.send(error.toErrorMessage())
+            }
         }
 
     }

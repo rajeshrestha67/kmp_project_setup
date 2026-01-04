@@ -43,7 +43,6 @@ class UserRepositoryImpl(
             append("grant_type", grantType)
             append("deviceUniqueIdentifier", deviceIdentifier)
         }
-        AppLogger.i(TAG, "Login api request : $request")
 
         return safeCall {
             httpclient.post(
