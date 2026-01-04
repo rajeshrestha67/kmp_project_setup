@@ -66,13 +66,25 @@ class HomeScreenViewModel(
         userDetailUseCase(true).onSuccess { userDetail ->
             _state.update {
                 it.copy(
-                    fullName = /*userDetail.fullName*/"Rajesh Shrestha",
-                    firstName = userDetail.firstName,
-                    lastName = userDetail.lastName,
-                    accountNumber = "0012595678958",
-                    accountName = "Premium Super Talap Khata"
+                    fullName = "Rajesh Shrestha" ,//userDetail.fullName,
+                    firstName = "Rajesh" ,//userDetail.firstName,
+                    lastName = "Shrestha" ,//userDetail.lastName,
                 )
             }
+            userDetail.accountDetail.forEach { account->
+                if(account.primary.equals("true",ignoreCase = true)){
+                    _state.update {
+                        it.copy(
+                            actualBalance = "85,00,000",//account.actualBalance,
+                            availableBalance = "85,00,000",//account.availableBalance,
+                            accountNumber = "SSA00049",//account.accountNumber,
+                            accountName = "Premium Super Talap Khata"//account.accountType
+                        )
+                    }
+                }
+            }
+
+
         }.onError { error ->
             AppLogger.e(
                 tag = TAG,

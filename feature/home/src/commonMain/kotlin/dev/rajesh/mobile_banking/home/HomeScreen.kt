@@ -314,7 +314,7 @@ fun LazyListScope.userDetailCard(state: HomeScreenState) {
                             )
                         )
                         Text(
-                            text = stringResource(SharedRes.Strings.currencyType) + " " + "8,50,000",
+                            text = stringResource(SharedRes.Strings.currencyType) + " " + state.actualBalance,
                             style = MaterialTheme.typography.bodySmall.copy(
                                 color = MaterialTheme.appColors.onPrimary,
                                 fontSize = MaterialTheme.dimens.smallFontSize
@@ -332,7 +332,7 @@ fun LazyListScope.userDetailCard(state: HomeScreenState) {
                             )
                         )
                         Text(
-                            text = stringResource(SharedRes.Strings.currencyType) + " " + "8,45,000",
+                            text = stringResource(SharedRes.Strings.currencyType) + " " + state.availableBalance,
                             style = MaterialTheme.typography.bodySmall.copy(
                                 color = MaterialTheme.appColors.onPrimary,
                                 fontSize = MaterialTheme.dimens.smallFontSize
@@ -542,7 +542,7 @@ fun QuickServiceItem(
 fun navigateToBankingFeature(navController: NavController, service: BankingServiceDetail) {
     when (service.uniqueIdentifier) {
         "bank_transfer" -> navController.navigate(BankTransferRoute.root)
-        "load_wallet"->navController.navigate(LoadWalletRoute.root)
+        "load_wallet" -> navController.navigate(LoadWalletRoute.root)
     }
 }
 
