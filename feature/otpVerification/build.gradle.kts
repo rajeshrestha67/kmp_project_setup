@@ -1,9 +1,10 @@
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompilationTask
-
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidKotlinMultiplatformLibrary)
-    alias(libs.plugins.ksp)
+    alias(libs.plugins.android.lint)
+    alias(libs.plugins.composeCompiler)
+    alias(libs.plugins.composeMultiplatform)
+    alias(libs.plugins.jetbrains.kotlin.serialization)
 }
 
 kotlin {
@@ -12,7 +13,7 @@ kotlin {
     // which platforms this KMP module supports.
     // See: https://kotlinlang.org/docs/multiplatform-discover-project.html#targets
     androidLibrary {
-        namespace = "dev.rajesh.mobile_banking.di"
+        namespace = "dev.rajesh.mobile_banking.otpverification"
         compileSdk = 36
         minSdk = 24
 
@@ -33,7 +34,7 @@ kotlin {
     // A step-by-step guide on how to include this library in an XCode
     // project can be found here:
     // https://developer.android.com/kotlin/multiplatform/migrate
-    val xcfName = "CoreDiKit"
+    val xcfName = "feature:otpVerificationKit"
 
     iosX64 {
         binaries.framework {
@@ -63,38 +64,37 @@ kotlin {
             dependencies {
                 implementation(libs.kotlin.stdlib)
                 // Add KMP dependencies here
-                implementation(libs.koin.core)
-                implementation(libs.koin.compose)
+                implementation(compose.runtime)
+                implementation(compose.foundation)
+                implementation(compose.material3)
+                implementation(compose.components.uiToolingPreview)
+                implementation(compose.materialIconsExtended)
+                implementation(compose.components.resources)
+
+                implementation(libs.androidx.lifecycle.viewmodelCompose)
+                implementation(libs.androidx.lifecycle.runtimeCompose)
+
+                implementation(libs.jetbrians.material3)
+                implementation(libs.org.jetbrains.navigation)
+
+                implementation(libs.coil.compose)
+                implementation(libs.coil.compose.core)
+                implementation(libs.coil.mp)
+                implementation(libs.coil.network.ktor3)
+
+                implementation(libs.kotlinx.serialization.json)
                 implementation(libs.koin.compose.viewmodel)
-                implementation(libs.koin.compose.viewmodel.navigation)
 
-                api(libs.koin.annotations)
-
-                implementation(libs.ktor.client.core)
-                implementation(libs.ktor.client.content.negotiation)
-                implementation(libs.ktor.client.logging)
-                implementation(libs.ktor.serialization.kotlinx.json)
-
-                implementation(projects.core.network)
-                implementation(projects.core.data)
+                //core features
                 implementation(projects.core.domain)
                 implementation(projects.core.model)
-                implementation(projects.core.crypto)
-
-                implementation(projects.core.ui.components)
                 implementation(projects.core.persistance.datastore)
-
-                implementation(projects.feature.auth.login)
-                implementation(projects.feature.dashboard)
-                implementation(projects.feature.home)
-                implementation(projects.feature.user)
-                implementation(projects.feature.menu)
-                implementation(projects.feature.bankTransfer)
-                implementation(projects.feature.paymentAuthentication)
-                implementation(projects.feature.userAccounts)
-                implementation(projects.feature.otpVerification)
-
-
+                //implementation(projects.core.persistance.room_database)
+                implementation(projects.core.networkHelper)
+                implementation(projects.core.ui.res)
+                implementation(projects.core.ui.components)
+                implementation(projects.core.logger)
+                implementation(projects.core.utils)
             }
         }
 
@@ -111,20 +111,6 @@ kotlin {
                 // dependencies declared in commonMain.
             }
         }
-        sourceSets.named("commonMain").configure {
-            kotlin.srcDir("build/generated/ksp/metadata/commonMain/kotlin")
-        }
-        /* sourceSets {
-             val commonMain by getting {
-                 kotlin.srcDir("build/generated/ksp/metadata/commonMain/kotlin")
-             }
-             val commonTest by getting {
-                 kotlin.srcDir("build/generated/ksp/metadata/commonTest/kotlin")
-             }
-             val androidMain by getting {
-                 kotlin.srcDir("build/generated/ksp/android/androidMain/kotlin")
-             }
-         }*/
 
         getByName("androidDeviceTest") {
             dependencies {
@@ -145,20 +131,4 @@ kotlin {
         }
     }
 
-}
-
-
-ksp {
-    arg("KOIN_USE_COMPOSE_VIEWMODEL", "true")
-    arg("KOIN_CONFIG_CHECK", "true")
-}
-
-dependencies {
-    add("kspCommonMainMetadata", libs.koin.ksp.compiler)
-}
-
-project.tasks.withType(KotlinCompilationTask::class.java).configureEach {
-    if (name != "kspCommonMainKotlinMetadata") {
-        dependsOn("kspCommonMainKotlinMetadata")
-    }
 }

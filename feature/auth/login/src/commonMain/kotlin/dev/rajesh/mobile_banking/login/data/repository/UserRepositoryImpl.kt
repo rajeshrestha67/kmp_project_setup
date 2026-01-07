@@ -3,6 +3,7 @@ package dev.rajesh.mobile_banking.login.data.repository
 import dev.rajesh.mobile_banking.logger.AppLogger
 import dev.rajesh.mobile_banking.login.data.dto.LoginRequestDTO
 import dev.rajesh.mobile_banking.login.data.dto.LoginResponseDTO
+import dev.rajesh.mobile_banking.login.domain.model.LoginRequest
 import dev.rajesh.mobile_banking.login.domain.repository.UserRepository
 import dev.rajesh.mobile_banking.model.network.DataError
 import dev.rajesh.mobile_banking.networkhelper.ApiResult
@@ -19,29 +20,18 @@ class UserRepositoryImpl(
     private val httpclient: HttpClient
 ) : UserRepository {
     override suspend fun login(
-        username: String,
-        password: String,
-        clientId: String,
-        clientSecret: String,
-        grantType: String,
-        deviceIdentifier: String
+        loginRequest: LoginRequest
     ): ApiResult<LoginResponseDTO, DataError> {
-        val request = LoginRequestDTO(
-            username = username,
-            password = password,
-            client_id = clientId,
-            client_secret = clientSecret,
-            grant_type = grantType,
-            deviceUniqueIdentifier = deviceIdentifier,
-        )
-
         val params = Parameters.build {
-            append("username", username)
-            append("password", password)
-            append("client_id", clientId)
-            append("client_secret", clientSecret)
-            append("grant_type", grantType)
-            append("deviceUniqueIdentifier", deviceIdentifier)
+            append("username", loginRequest.username)
+            append("password", loginRequest.password)
+            append("client_id", loginRequest.clientId)
+            append("client_secret", loginRequest.clientSecret)
+            append("grant_type", loginRequest.grantType)
+            append("deviceUniqueIdentifier", loginRequest.deviceUniqueIdentifier)
+            if (loginRequest.otp != null && loginRequest.otp.isNotEmpty()) {
+                append("otp", loginRequest.otp.orEmpty())
+            }
         }
 
         return safeCall {

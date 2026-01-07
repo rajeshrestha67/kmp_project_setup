@@ -2,8 +2,10 @@ package dev.rajesh.mobile_banking.login.domain.usecase
 
 import dev.rajesh.datastore.token.model.Token
 import dev.rajesh.datastore.token.repository.TokenRepository
+import dev.rajesh.mobile_banking.logger.AppLogger
 import dev.rajesh.mobile_banking.login.data.mapper.toData
 import dev.rajesh.mobile_banking.login.domain.model.LoginData
+import dev.rajesh.mobile_banking.login.domain.model.LoginRequest
 import dev.rajesh.mobile_banking.login.domain.repository.UserRepository
 import dev.rajesh.mobile_banking.model.network.DataError
 import dev.rajesh.mobile_banking.networkhelper.ApiResult
@@ -17,20 +19,10 @@ class LoginUseCase(
     private val tokenRepository: TokenRepository
 ) {
     suspend operator fun invoke(
-        username: String,
-        password: String,
-        clientId: String,
-        clientSecret: String,
-        grantType: String,
-        deviceIdentifier: String,
+        loginRequest: LoginRequest
     ): ApiResult<LoginData, DataError> {
         return userRepository.login(
-            username,
-            password,
-            clientId,
-            clientSecret,
-            grantType,
-            deviceIdentifier,
+            loginRequest
         ).map {
             it.toData()
         }.onSuccess { data ->
@@ -38,7 +30,7 @@ class LoginUseCase(
             tokenRepository.saveToken(
                 token.copy(
                     jwtToken = data.access_token,
-                    mPin = password
+                    mPin = loginRequest.password
                 )
             )
 

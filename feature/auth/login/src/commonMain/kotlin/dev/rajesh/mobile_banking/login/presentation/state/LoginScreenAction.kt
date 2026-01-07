@@ -1,4 +1,4 @@
-package dev.rajesh.mobile_banking.login.presentation
+package dev.rajesh.mobile_banking.login.presentation.state
 
 import org.jetbrains.compose.resources.StringResource
 

@@ -1,4 +1,4 @@
-package dev.rajesh.mobile_banking.login.ui
+package dev.rajesh.mobile_banking.login.presentation.ui
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -29,6 +29,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
 import coil3.compose.AsyncImage
 import dev.rajesh.mobile_banking.components.PlatformMessage
 import dev.rajesh.mobile_banking.components.button.AppButton
@@ -37,9 +38,10 @@ import dev.rajesh.mobile_banking.components.hideKeyboardOnTap
 import dev.rajesh.mobile_banking.components.textField.FormValidate
 import dev.rajesh.mobile_banking.components.textField.MobileTextField
 import dev.rajesh.mobile_banking.components.textField.PasswordTextField
-import dev.rajesh.mobile_banking.login.presentation.LoginViewModel
-import dev.rajesh.mobile_banking.login.presentation.LoginScreenAction
-import dev.rajesh.mobile_banking.login.presentation.LoginScreenState
+import dev.rajesh.mobile_banking.login.presentation.state.LoginEffect
+import dev.rajesh.mobile_banking.login.presentation.state.LoginViewModel
+import dev.rajesh.mobile_banking.login.presentation.state.LoginScreenAction
+import dev.rajesh.mobile_banking.login.presentation.state.LoginScreenState
 import dev.rajesh.mobile_banking.res.SharedRes
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.koinInject
@@ -49,7 +51,8 @@ private const val TAG = "LoginScreen"
 
 @Composable
 fun LoginScreen(
-    onNavigateToDashboard: () -> Unit
+    onNavigateToDashboard: () -> Unit,
+    onNavigateToOtpVerification: () -> Unit
 ) {
     val loginViewModel: LoginViewModel = koinViewModel()
     val state by loginViewModel.state.collectAsStateWithLifecycle()
@@ -63,9 +66,15 @@ fun LoginScreen(
     }
 
     LaunchedEffect(Unit) {
-        loginViewModel.successChannel.collect {
-            if (it) {
-                onNavigateToDashboard()
+        loginViewModel.loginEffect.collect {
+            when (it) {
+                LoginEffect.NavigateToDashboard -> {
+                    onNavigateToDashboard()
+                }
+
+                LoginEffect.OtpNeeded -> {
+                    onNavigateToOtpVerification()
+                }
             }
         }
     }
@@ -173,14 +182,14 @@ fun LoginScreenContent(
 
                 Spacer(Modifier.height(32.dp))
 
-                AppButton(
-                    modifier = Modifier.fillMaxWidth(),
-                    onClick = {
-                        onAction(LoginScreenAction.LoginClicked)
-                    },
-                    isLoading = state.isLoading,
-                    text = stringResource(SharedRes.Strings.login)
-                )
+                    AppButton(
+                        modifier = Modifier.fillMaxWidth(),
+                        onClick = {
+                            onAction(LoginScreenAction.LoginClicked)
+                        },
+                        isLoading = state.isLoading,
+                        text = stringResource(SharedRes.Strings.login)
+                    )
 
             }
         }

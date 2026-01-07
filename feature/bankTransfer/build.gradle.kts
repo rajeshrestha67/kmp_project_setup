@@ -102,6 +102,7 @@ kotlin {
                 implementation(projects.feature.paymentAuthentication)
                 implementation(projects.feature.userAccounts)
                 implementation(projects.feature.transactionSuccess)
+                implementation(projects.feature.otpVerification)
             }
         }
 

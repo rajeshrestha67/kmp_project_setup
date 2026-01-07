@@ -1,8 +1,10 @@
-package dev.rajesh.mobile_banking.banktransfer.presentation.ui
+package dev.rajesh.mobile_banking.banktransfer.favouriteAccounts.presentation.ui
 
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -15,13 +17,18 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import dev.rajesh.mobile_banking.banktransfer.favouriteAccounts.presentation.viewModel.FavouriteAccountsViewModel
 import dev.rajesh.mobile_banking.components.appColors
+import org.koin.compose.viewmodel.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FavouriteAccountsScreen(
-    onBackClicked: () -> Unit
+    onBackClicked: () -> Unit,
+    onFavouriteAccountClicked: () -> Unit
 ) {
+
+    //val viewModel: FavouriteAccountsViewModel = koinViewModel()
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -55,7 +62,10 @@ fun FavouriteAccountsScreen(
 
             )
         }
-    ) {
+    ) { contentPadding ->
+        Column(modifier = Modifier.padding(contentPadding)) {
+
+        }
 
     }
 }

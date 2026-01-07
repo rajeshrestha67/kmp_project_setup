@@ -4,8 +4,8 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
+import dev.rajesh.mobile_banking.banktransfer.favouriteAccounts.presentation.ui.FavouriteAccountsScreen
 import dev.rajesh.mobile_banking.banktransfer.presentation.ui.BankTransferScreen
-import dev.rajesh.mobile_banking.banktransfer.presentation.ui.FavouriteAccountsScreen
 import dev.rajesh.mobile_banking.banktransfer.interBankTransfer.presentation.ui.InterBankTransferScreen
 import dev.rajesh.mobile_banking.banktransfer.sameBankTransfer.domain.model.CoopBranchDetail
 import dev.rajesh.mobile_banking.banktransfer.sameBankTransfer.presentation.ui.SameBankTransferScreen
@@ -13,6 +13,7 @@ import dev.rajesh.mobile_banking.banktransfer.sameBankTransfer.presentation.ui.S
 import dev.rajesh.mobile_banking.confirmation.ConfirmationConstant
 import dev.rajesh.mobile_banking.confirmation.model.ConfirmationData
 import dev.rajesh.mobile_banking.confirmation.presentation.ConfirmationScreen
+import dev.rajesh.mobile_banking.otpverification.presentation.ui.OtpVerificationScreen
 import dev.rajesh.mobile_banking.paymentAuthentication.PaymentAuthResult
 import dev.rajesh.mobile_banking.paymentAuthentication.presentation.PaymentAuthenticationScreen
 import dev.rajesh.mobile_banking.transactionsuccess.TransactionSuccessFulScreen
@@ -122,6 +123,8 @@ fun NavGraphBuilder.bankTransferNavGraph(
     composable<BankTransferRoutes.FavouriteAccounts> {
         FavouriteAccountsScreen(onBackClicked = {
             navController.popBackStack()
+        }, onFavouriteAccountClicked = {
+
         })
     }
 

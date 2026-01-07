@@ -89,6 +89,7 @@ kotlin {
 
                 implementation(projects.core.logger)
                 implementation(projects.core.persistance.datastore)
+                implementation(projects.feature.otpVerification)
 
             }
         }
