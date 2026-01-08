@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
@@ -27,6 +28,8 @@ import dev.rajesh.mobile_banking.banktransfer.presentation.component.BankTransfe
 import dev.rajesh.mobile_banking.banktransfer.presentation.model.BankTransferOption
 import dev.rajesh.mobile_banking.components.appColors
 import dev.rajesh.mobile_banking.components.dimens
+import dev.rajesh.mobile_banking.res.SharedRes
+import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -63,8 +66,10 @@ fun BankTransferScreen(
                         onClick = onBackClicked,
                         content = {
                             Icon(
-                                imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                                contentDescription = "back arrow"
+                                modifier = Modifier.size(MaterialTheme.dimens.backButtonSize),
+                                painter = painterResource(SharedRes.Icons.backArrow),
+                                contentDescription = "back arrow",
+                                tint = MaterialTheme.appColors.iconColor,
                             )
                         }
                     )

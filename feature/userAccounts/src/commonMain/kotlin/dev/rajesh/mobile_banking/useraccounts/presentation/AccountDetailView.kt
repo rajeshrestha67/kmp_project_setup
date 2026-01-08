@@ -2,6 +2,7 @@ package dev.rajesh.mobile_banking.useraccounts.presentation
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -35,6 +36,7 @@ import dev.rajesh.mobile_banking.res.SharedRes
 import dev.rajesh.mobile_banking.user.domain.model.AccountDetail
 import dev.rajesh.mobile_banking.useraccounts.presentation.components.AccountSelectionBottomSheet
 import dev.rajesh.mobile_banking.useraccounts.presentation.state.AccountSelectionState
+import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
@@ -105,7 +107,8 @@ fun AccountDetailView(
 
             Column(
                 modifier = Modifier.padding(MaterialTheme.dimens.small2),
-                horizontalAlignment = Alignment.End
+                horizontalAlignment = Alignment.End,
+                verticalArrangement = Arrangement.Center
             ) {
                 Text(
                     stringResource(SharedRes.Strings.primary),
@@ -124,7 +127,8 @@ fun AccountDetailView(
                     onClick = { showSheet = true },
                     content = {
                         Icon(
-                            imageVector = Icons.AutoMirrored.Filled.Chat,
+                            modifier = Modifier.size(16.dp),
+                            painter = painterResource(SharedRes.Icons.forwardArrow),
                             contentDescription = "arrow"
                         )
                     }

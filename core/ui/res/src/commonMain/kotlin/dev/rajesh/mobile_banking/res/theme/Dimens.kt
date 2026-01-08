@@ -35,6 +35,7 @@ data class Dimens(
     val heightForOptionBox: Dp = 0.dp,
     val eventWidth: Dp = 0.dp,
     val cardCornerRadius: Dp = 0.dp,
+    val backButtonSize: Dp = 0.dp,
 )
 
 
@@ -67,4 +68,5 @@ val CompactDimens = Dimens(
     mediumFontSize = 16.sp,
     largeFontSize = 20.sp,
     extraLargeFontSize = 30.sp,
+    backButtonSize = 20.dp,
 )

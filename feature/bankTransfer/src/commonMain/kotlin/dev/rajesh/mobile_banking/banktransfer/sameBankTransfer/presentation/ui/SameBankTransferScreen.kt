@@ -11,10 +11,12 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Contacts
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -65,6 +67,7 @@ import dev.rajesh.mobile_banking.transactionsuccess.model.TransactionData
 import dev.rajesh.mobile_banking.useraccounts.presentation.AccountDetailView
 import dev.rajesh.mobile_banking.useraccounts.presentation.state.AccountSelectionAction
 import dev.rajesh.mobile_banking.useraccounts.presentation.viewmodel.AccountSelectionViewModel
+import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -95,6 +98,8 @@ fun SameBankTransferScreen(
 
     val focusRequester: FocusRequester = remember { FocusRequester() }
     val focusManager = LocalFocusManager.current
+
+    val scrollState = rememberScrollState()
 
     val pickContact = rememberContactPicker(
         onContactPicked = { phoneNumber ->
@@ -222,8 +227,10 @@ fun SameBankTransferScreen(
                         onClick = onBackClicked,
                         content = {
                             Icon(
-                                imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                                contentDescription = "back arrow"
+                                modifier = Modifier.size(MaterialTheme.dimens.backButtonSize),
+                                painter = painterResource(SharedRes.Icons.backArrow),
+                                contentDescription = "back arrow",
+                                tint = MaterialTheme.appColors.iconColor,
                             )
                         }
                     )
@@ -234,10 +241,11 @@ fun SameBankTransferScreen(
     ) { contentPadding ->
 
 
-
         Column(
-            modifier = Modifier.padding(contentPadding)
+            modifier = Modifier
+                .padding(contentPadding)
                 .padding(horizontal = MaterialTheme.dimens.small3)
+                .verticalScroll(scrollState)
         ) {
             Row(
                 modifier = Modifier.fillMaxWidth()

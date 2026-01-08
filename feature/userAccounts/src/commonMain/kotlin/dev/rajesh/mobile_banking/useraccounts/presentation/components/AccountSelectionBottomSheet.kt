@@ -29,7 +29,8 @@ fun AccountSelectionBottomSheet(
 ) {
     ModalBottomSheet(
         onDismissRequest = onDismiss,
-        shape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp)
+        shape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp),
+        containerColor = MaterialTheme.appColors.backgroundColor
     ) {
         Column(
             modifier = Modifier

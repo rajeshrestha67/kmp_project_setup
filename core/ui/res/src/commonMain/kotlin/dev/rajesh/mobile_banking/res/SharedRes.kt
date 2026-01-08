@@ -21,6 +21,9 @@ object SharedRes {
         val logout = Res.drawable.outline_logout_24
         val ic_notification = Res.drawable.ic_notification
         val ic_qr_scanner = Res.drawable.ic_qr_scanner
+        val forwardArrow = Res.drawable.ic_right_arrow
+        val backArrow = Res.drawable.ic_left_arrow
+
     }
 
     object Strings {
