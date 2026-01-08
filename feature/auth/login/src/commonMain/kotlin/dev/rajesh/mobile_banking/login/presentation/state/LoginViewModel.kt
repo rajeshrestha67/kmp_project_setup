@@ -3,21 +3,19 @@ package dev.rajesh.mobile_banking.login.presentation.state
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dev.rajesh.mobile_banking.components.device_info.getDeviceInfo
-import dev.rajesh.mobile_banking.login.domain.usecase.LoginUseCase
 import dev.rajesh.mobile_banking.domain.form.MobileNumberValidateUseCase
 import dev.rajesh.mobile_banking.domain.form.PasswordValidateUseCase
 import dev.rajesh.mobile_banking.logger.AppLogger
 import dev.rajesh.mobile_banking.login.domain.model.LoginRequest
+import dev.rajesh.mobile_banking.login.domain.usecase.LoginUseCase
 import dev.rajesh.mobile_banking.model.network.toErrorMessage
 import dev.rajesh.mobile_banking.networkhelper.Constants
 import dev.rajesh.mobile_banking.networkhelper.onError
 import dev.rajesh.mobile_banking.networkhelper.onSuccess
-import dev.rajesh.mobile_banking.otpverification.presentation.state.OtpEvent
-import dev.rajesh.mobile_banking.otpverification.presentation.viewmodel.OtpVerificationViewModel
+import dev.rajesh.mobile_banking.otpverification.presentation.state.OtpEffect
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.onStart
@@ -29,17 +27,14 @@ import kotlinx.coroutines.launch
 class LoginViewModel(
     private val loginUseCase: LoginUseCase,
     private val mobileNumberValidateUseCase: MobileNumberValidateUseCase,
-    private val passwordValidateUseCase: PasswordValidateUseCase
+    private val passwordValidateUseCase: PasswordValidateUseCase,
 ) : ViewModel() {
 
     private val _errorChannel = Channel<String>()
     val errorChannel = _errorChannel.receiveAsFlow()
 
-    private val _loginEffect = MutableSharedFlow<LoginEffect>()
-    val loginEffect: SharedFlow<LoginEffect> = _loginEffect.asSharedFlow()
-
-    val otpVerificationViewModel = OtpVerificationViewModel()
-
+    private val _otpEffect = MutableSharedFlow<OtpEffect>()
+    val otpEffect = _otpEffect.asSharedFlow()
 
     private val _state = MutableStateFlow(LoginScreenState())
     val state = _state.onStart {
@@ -49,10 +44,6 @@ class LoginViewModel(
         started = SharingStarted.WhileSubscribed(5000),
         initialValue = LoginScreenState()
     )
-
-    init {
-        observeOtpEvents()
-    }
 
     fun onAction(action: LoginScreenAction) {
         when (action) {
@@ -101,7 +92,7 @@ class LoginViewModel(
         }
     }
 
-    private fun login() = viewModelScope.launch {
+    fun login(otp: String? = null) = viewModelScope.launch {
         _state.update {
             it.copy(isLoading = true)
         }
@@ -115,48 +106,36 @@ class LoginViewModel(
                 clientSecret = Constants.clientSecret,
                 grantType = "password",
                 deviceUniqueIdentifier = getDeviceInfo().deviceUniqueIdentifier,
-                otp = state.value.otp
+                otp = otp
             )
         ).onSuccess { data ->
-            _state.update {
-                it.copy(isLoading = false)
-            }
-            _loginEffect.emit(LoginEffect.NavigateToDashboard)
-//            _loginEffect.emit(LoginEffect.OtpNeeded)
             AppLogger.i(TAG, "login: api response: $data")
-        }.onError { error ->
             _state.update {
                 it.copy(isLoading = false)
             }
-            if (error.toErrorMessage().contains("unauthorized device", ignoreCase = true)) {
-                //show otp verification view
-                _loginEffect.emit(LoginEffect.OtpNeeded)
-            } else {
-                _errorChannel.send(error.toErrorMessage())
+            _otpEffect.emit(OtpEffect.ActionSuccess)
+//            _otpEffect.emit(OtpEffect.NeedsVerification)
+        }.onError { error ->
+            val errorMsg = error.toErrorMessage()
+            _state.update {
+                it.copy(isLoading = false)
             }
-        }
-
-    }
-
-    private fun observeOtpEvents() {
-        viewModelScope.launch {
-            otpVerificationViewModel.events.collect { event ->
-                when (event) {
-                    is OtpEvent.VerifyClicked -> {
-                        AppLogger.i("TAG", "otp: ${event.otp}")
-                        _state.update {
-                            it.copy(otp = event.otp)
-                        }
-                        login()
-                    }
-
-                    OtpEvent.ResendClicked -> {
-                        AppLogger.i("TAG", "Resend Otp")
-
-                    }
+            when {
+                // Scenario 1: Device not authorized (First attempt)
+                otp == null && errorMsg.contains("unauthorized", true) -> {
+                    _otpEffect.emit(OtpEffect.NeedsVerification)
+                }
+                // Scenario 2: Wrong OTP (Second attempt while on OTP screen)
+                otp != null -> {
+                    _otpEffect.emit(OtpEffect.OtpError(errorMsg))
+                }
+                // Scenario 3: Standard Login failure (Wrong password, etc.)
+                else -> {
+                    _errorChannel.send(error.toErrorMessage())
                 }
             }
         }
+
     }
 
     companion object {

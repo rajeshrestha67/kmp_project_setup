@@ -23,6 +23,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -34,21 +35,56 @@ import coil3.compose.AsyncImage
 import dev.rajesh.mobile_banking.components.appColors
 import dev.rajesh.mobile_banking.components.button.AppButton
 import dev.rajesh.mobile_banking.components.dimens
-import dev.rajesh.mobile_banking.otpverification.presentation.components.OtpBoxes
 import dev.rajesh.mobile_banking.otpverification.presentation.components.OtpInputField
+import dev.rajesh.mobile_banking.otpverification.presentation.state.OtpEffect
+import dev.rajesh.mobile_banking.otpverification.presentation.state.OtpEvent
 import dev.rajesh.mobile_banking.otpverification.presentation.viewmodel.OtpVerificationViewModel
 import dev.rajesh.mobile_banking.res.SharedRes
+import kotlinx.coroutines.flow.SharedFlow
 import org.koin.compose.viewmodel.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun OtpVerificationScreen(
+    otpViewModel: OtpVerificationViewModel = koinViewModel(),
+    otpEffect: SharedFlow<OtpEffect>,
+    onVerifyClicked: (String) -> Unit,
+    onResendClicked: ()-> Unit,
+    onSuccess: () -> Unit,
     onBackClicked: () -> Unit
 ) {
 
-    val viewModel: OtpVerificationViewModel = koinViewModel()
-    val state by viewModel.state.collectAsState()
+    val state by otpViewModel.state.collectAsState()
 
+    // Listen for effects from the Parent ViewModel
+    LaunchedEffect(Unit) {
+        otpEffect.collect { effect ->
+            when (effect) {
+                is OtpEffect.OtpError -> {
+                    otpViewModel.setApiError(effect.message)
+                }
+
+                is OtpEffect.VerificationSuccess -> {
+                    onSuccess()
+                }
+
+                else -> {}
+            }
+        }
+    }
+
+    LaunchedEffect(Unit) {
+        otpViewModel.events.collect { event ->
+            when (event) {
+                is OtpEvent.VerifyClicked -> {
+                    onVerifyClicked(event.otp)
+                }
+                OtpEvent.ResendClicked -> {
+                    onResendClicked()
+                }
+            }
+        }
+    }
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -118,7 +154,7 @@ fun OtpVerificationScreen(
             OtpInputField(
                 otp = state.otp,
                 otpLength = state.otpLength,
-                onOtpChange = viewModel::onOtpChange
+                onOtpChange = otpViewModel::onOtpChange
             )
 
             if (state.error != null && state.error.toString().isNotEmpty()) {
@@ -159,7 +195,7 @@ fun OtpVerificationScreen(
                         .padding(horizontal = MaterialTheme.dimens.small3, vertical = 8.dp)
                         .clickable {
                             if (state.canResend) {
-                                viewModel.resendOtp()
+                                otpViewModel.resendOtp()
                             }
                         },
                     text = "Resend Code",
@@ -183,9 +219,11 @@ fun OtpVerificationScreen(
 
             AppButton(
                 modifier = Modifier.fillMaxWidth(),
-                onClick = { viewModel.verifyOtp() },
+                onClick = {
+                    //onVerifyClicked(state.otp)
+                    otpViewModel.verifyOtp()
+                },
                 enabled = state.otp.length == state.otpLength,
-                isLoading = state.isLoading,
                 text = "Verify OTP"
             )
 

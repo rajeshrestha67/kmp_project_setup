@@ -26,7 +26,7 @@ fun initKoin(config: KoinAppDeclaration? = null) {
             AccountSelectionViewModule().module,
             InterBankTransferModule().module,
             BankListModule().module,
-            //OtpVerificationModule().module,
+            OtpVerificationModule().module,
             //FavouriteAccountsModule().module
         )
     }

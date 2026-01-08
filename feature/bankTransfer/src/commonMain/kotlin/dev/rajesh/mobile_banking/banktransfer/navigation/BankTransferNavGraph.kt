@@ -13,7 +13,6 @@ import dev.rajesh.mobile_banking.banktransfer.sameBankTransfer.presentation.ui.S
 import dev.rajesh.mobile_banking.confirmation.ConfirmationConstant
 import dev.rajesh.mobile_banking.confirmation.model.ConfirmationData
 import dev.rajesh.mobile_banking.confirmation.presentation.ConfirmationScreen
-import dev.rajesh.mobile_banking.otpverification.presentation.ui.OtpVerificationScreen
 import dev.rajesh.mobile_banking.paymentAuthentication.PaymentAuthResult
 import dev.rajesh.mobile_banking.paymentAuthentication.presentation.PaymentAuthenticationScreen
 import dev.rajesh.mobile_banking.transactionsuccess.TransactionSuccessFulScreen

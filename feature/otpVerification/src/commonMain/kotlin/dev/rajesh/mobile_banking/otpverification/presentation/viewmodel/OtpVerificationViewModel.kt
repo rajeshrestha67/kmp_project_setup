@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
@@ -19,24 +20,22 @@ class OtpVerificationViewModel(
     private val _state = MutableStateFlow(OtpVerificationUiState())
     val state: StateFlow<OtpVerificationUiState> = _state
 
-    private val _events = MutableSharedFlow<OtpEvent>(
-        replay = 1,
-        extraBufferCapacity = 1
-    )
-    val events: SharedFlow<OtpEvent> = _events
+    private val _events = MutableSharedFlow<OtpEvent>(replay = 0, extraBufferCapacity = 1)
+    val events: SharedFlow<OtpEvent> = _events.asSharedFlow()
 
     init {
         startTimer()
     }
 
     fun onOtpChange(otp: String) {
-        _state.value = _state.value.copy(otp = otp)
         if (otp.length <= _state.value.otpLength) {
-            _state.value = _state.value.copy(
-                otp = otp,
-                error = null,
-                isVerified = false
-            )
+            _state.update {
+                it.copy(
+                    otp = otp,
+                    error = null,
+                    isVerified = false
+                )
+            }
         }
     }
 
@@ -57,7 +56,7 @@ class OtpVerificationViewModel(
                     error = null
                 )
             }
-            AppLogger.i(TAG, "1.verifyOtp: ${_state.value.otp}")
+            AppLogger.i(TAG, "verifyOtp: ${_state.value.otp}")
             _events.emit(OtpEvent.VerifyClicked(_state.value.otp))
         }
     }
@@ -89,6 +88,16 @@ class OtpVerificationViewModel(
                 }
                 delay(1000)
             }
+        }
+    }
+
+    fun setApiError(message: String) {
+        _state.update {
+            it.copy(
+                error = message,
+                isLoading = false,
+                isVerified = false
+            )
         }
     }
 

@@ -29,7 +29,6 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewmodel.compose.viewModel
 import coil3.compose.AsyncImage
 import dev.rajesh.mobile_banking.components.PlatformMessage
 import dev.rajesh.mobile_banking.components.button.AppButton
@@ -51,10 +50,8 @@ private const val TAG = "LoginScreen"
 
 @Composable
 fun LoginScreen(
-    onNavigateToDashboard: () -> Unit,
-    onNavigateToOtpVerification: () -> Unit
+    loginViewModel: LoginViewModel
 ) {
-    val loginViewModel: LoginViewModel = koinViewModel()
     val state by loginViewModel.state.collectAsStateWithLifecycle()
 
     val platformMessage: PlatformMessage = koinInject()
@@ -65,19 +62,6 @@ fun LoginScreen(
         }
     }
 
-    LaunchedEffect(Unit) {
-        loginViewModel.loginEffect.collect {
-            when (it) {
-                LoginEffect.NavigateToDashboard -> {
-                    onNavigateToDashboard()
-                }
-
-                LoginEffect.OtpNeeded -> {
-                    onNavigateToOtpVerification()
-                }
-            }
-        }
-    }
     LoginScreenContent(
         state = state,
         onAction = loginViewModel::onAction
@@ -182,14 +166,14 @@ fun LoginScreenContent(
 
                 Spacer(Modifier.height(32.dp))
 
-                    AppButton(
-                        modifier = Modifier.fillMaxWidth(),
-                        onClick = {
-                            onAction(LoginScreenAction.LoginClicked)
-                        },
-                        isLoading = state.isLoading,
-                        text = stringResource(SharedRes.Strings.login)
-                    )
+                AppButton(
+                    modifier = Modifier.fillMaxWidth(),
+                    onClick = {
+                        onAction(LoginScreenAction.LoginClicked)
+                    },
+                    isLoading = state.isLoading,
+                    text = stringResource(SharedRes.Strings.login)
+                )
 
             }
         }
