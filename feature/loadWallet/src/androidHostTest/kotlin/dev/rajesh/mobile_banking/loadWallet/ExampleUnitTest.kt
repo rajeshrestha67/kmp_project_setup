@@ -1,4 +1,4 @@
-package dev.rajesh.mobile_banking.loadwallet
+package dev.rajesh.mobile_banking.loadWallet
 
 import kotlin.test.Test
 import kotlin.test.assertEquals

@@ -61,4 +61,6 @@
 
     <string name="usingReceiversAccountNumber">Using Receiver's Account Number</string>
     <string name="usingReceiversMobileNumber">Using Receiver's Mobile Number</string>
+    <string name="wallet_list">Wallet List</string>
+
 </resources>

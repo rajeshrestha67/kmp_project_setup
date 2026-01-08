@@ -93,6 +93,7 @@ kotlin {
                 implementation(projects.feature.paymentAuthentication)
                 implementation(projects.feature.userAccounts)
                 implementation(projects.feature.otpVerification)
+                implementation(projects.feature.loadWallet)
 
 
             }

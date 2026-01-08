@@ -1,4 +1,4 @@
-package dev.rajesh.mobile_banking.loadwallet
+package dev.rajesh.mobile_banking.loadWallet
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4

@@ -60,6 +60,7 @@
     <string name="primary">Primary</string>
     <string name="usingReceiversAccountNumber">Using Receiver's \nAccount Number</string>
     <string name="usingReceiversMobileNumber">Using Receiver's \nMobile Number</string>
+    <string name="wallet_list">Wallet List</string>
 
 
 </resources>

@@ -65,7 +65,7 @@ import dev.rajesh.mobile_banking.home.domain.model.QuickServiceDetail
 import dev.rajesh.mobile_banking.home.presentation.HomeScreenActions
 import dev.rajesh.mobile_banking.home.presentation.HomeScreenState
 import dev.rajesh.mobile_banking.home.presentation.HomeScreenViewModel
-import dev.rajesh.mobile_banking.loadwallet.presentation.navigation.LoadWalletRoute
+import dev.rajesh.mobile_banking.loadWallet.presentation.navigation.LoadWalletRoute
 import dev.rajesh.mobile_banking.logger.AppLogger
 import dev.rajesh.mobile_banking.res.SharedRes
 import dev.rajesh.mobile_banking.utils.extractInitials

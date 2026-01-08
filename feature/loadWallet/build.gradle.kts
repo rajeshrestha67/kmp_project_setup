@@ -14,7 +14,7 @@ kotlin {
     // which platforms this KMP module supports.
     // See: https://kotlinlang.org/docs/multiplatform-discover-project.html#targets
     androidLibrary {
-        namespace = "dev.rajesh.mobile_banking.loadwallet"
+        namespace = "dev.rajesh.mobile_banking.loadWallet"
         compileSdk = 36
         minSdk = 24
 
