@@ -1,5 +1,6 @@
 package dev.rajesh.mobile_banking.loadWallet.presentation.ui
 
+import ErrorDialog
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
@@ -32,6 +33,7 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.NavController
 import dev.rajesh.mobile_banking.components.appColors
 import dev.rajesh.mobile_banking.components.button.AppButton
 import dev.rajesh.mobile_banking.components.contactPicker.rememberContactPicker
@@ -42,11 +44,15 @@ import dev.rajesh.mobile_banking.components.textField.AmountTextField
 import dev.rajesh.mobile_banking.components.textField.AppTextField
 import dev.rajesh.mobile_banking.components.textField.FormValidate
 import dev.rajesh.mobile_banking.components.textField.MobileTextField
+import dev.rajesh.mobile_banking.confirmation.model.ConfirmationData
 import dev.rajesh.mobile_banking.loadWallet.domain.model.WalletDetail
 import dev.rajesh.mobile_banking.loadWallet.presentation.state.LoadWalletScreenAction
+import dev.rajesh.mobile_banking.loadWallet.presentation.state.WalletEffect
 import dev.rajesh.mobile_banking.loadWallet.presentation.viewmodel.LoadWalletViewModel
 import dev.rajesh.mobile_banking.logger.AppLogger
+import dev.rajesh.mobile_banking.paymentAuthentication.PaymentAuthResult
 import dev.rajesh.mobile_banking.res.SharedRes
+import dev.rajesh.mobile_banking.transactionsuccess.model.TransactionData
 import dev.rajesh.mobile_banking.useraccounts.presentation.AccountDetailView
 import dev.rajesh.mobile_banking.useraccounts.presentation.state.AccountSelectionAction
 import dev.rajesh.mobile_banking.useraccounts.presentation.viewmodel.AccountSelectionViewModel
@@ -58,7 +64,10 @@ import org.koin.compose.viewmodel.koinViewModel
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LoadWalletScreen(
+    navController: NavController,
     walletDetail: WalletDetail,
+    showConfirmation: (ConfirmationData) -> Unit,
+    showTransactionSuccessful: (TransactionData) -> Unit,
     onBackClicked: () -> Unit
 ) {
 
@@ -114,6 +123,44 @@ fun LoadWalletScreen(
             )
         }
     )
+
+
+    LaunchedEffect(Unit) {
+        viewModel.effect.collect {
+            when (it) {
+                is WalletEffect.ToConfirmation -> {
+                    showConfirmation(it.confirmationData)
+                }
+
+                is WalletEffect.ToTransactionSuccessful -> {
+                    showTransactionSuccessful(it.transactionData)
+                }
+            }
+        }
+    }
+
+    state.walletValidationError?.let { error ->
+        ErrorDialog(
+            title = "Error",
+            msg = error.message.orEmpty(),
+            onDismiss = {
+                viewModel.dismissError()
+            }
+        )
+    }
+
+    val savedStateHandle = navController.currentBackStackEntry?.savedStateHandle
+
+    LaunchedEffect(Unit) {
+        savedStateHandle?.getStateFlow<String?>(PaymentAuthResult.mPin, null)
+            ?.collect { mPin ->
+                mPin?.let {
+                    viewModel.onMPinVerified(it)
+                    savedStateHandle.remove<String>(PaymentAuthResult.mPin)
+                }
+            }
+    }
+
 
     LaunchedEffect(Unit) {
         focusRequester.requestFocus()

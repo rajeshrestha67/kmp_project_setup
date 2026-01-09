@@ -15,10 +15,12 @@ data class LoadWalletScreenState(
     val remarks : String = "",
     val remarksError: StringResource? = null,
 
-    val validatingWallet: Boolean = false,
+    val isValidatingWallet: Boolean = false,
     val walletValidationError: ErrorData? = null,
 
-    val loadingWallet: Boolean = false,
+    val charge: String? = null,
+
+    val isLoadingWallet: Boolean = false,
     val loadingWalletError: ErrorData? = null,
 
     val walletDetail: WalletDetail? = null

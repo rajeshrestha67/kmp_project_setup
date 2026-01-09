@@ -1,8 +1,10 @@
 package dev.rajesh.mobile_banking.loadWallet.data.repository
 
+import dev.rajesh.mobile_banking.loadWallet.data.mapper.toWalletChargeDetail
 import dev.rajesh.mobile_banking.loadWallet.data.mapper.toWalletList
 import dev.rajesh.mobile_banking.loadWallet.data.mapper.toWalletValidationDetail
 import dev.rajesh.mobile_banking.loadWallet.data.remote.WalletRemoteDataSource
+import dev.rajesh.mobile_banking.loadWallet.domain.model.WalletChargeDetail
 import dev.rajesh.mobile_banking.loadWallet.domain.model.WalletDetail
 import dev.rajesh.mobile_banking.loadWallet.domain.model.WalletValidationDetail
 import dev.rajesh.mobile_banking.loadWallet.domain.repository.WalletRepository
@@ -31,6 +33,20 @@ class WalletRepositoryImpl(
             amount = amount
         ).map { dto ->
             dto.detail.toWalletValidationDetail()
+        }
+    }
+
+    override suspend fun getWalletCharge(
+        amount: String,
+        serviceChargeOf: String,
+        associatedId: String
+    ): ApiResult<WalletChargeDetail, DataError> {
+        return walletRemoteDataSource.getWalletCharge(
+            amount = amount,
+            serviceChargeOf = serviceChargeOf,
+            associatedId = associatedId
+        ).map { dto ->
+            dto.toWalletChargeDetail()
         }
     }
 }

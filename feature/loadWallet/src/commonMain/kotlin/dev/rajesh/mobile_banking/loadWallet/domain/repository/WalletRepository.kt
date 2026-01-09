@@ -1,5 +1,7 @@
 package dev.rajesh.mobile_banking.loadWallet.domain.repository
 
+import dev.rajesh.mobile_banking.loadWallet.data.dto.WalletChargeResponseDTO
+import dev.rajesh.mobile_banking.loadWallet.domain.model.WalletChargeDetail
 import dev.rajesh.mobile_banking.loadWallet.domain.model.WalletDetail
 import dev.rajesh.mobile_banking.loadWallet.domain.model.WalletValidationDetail
 import dev.rajesh.mobile_banking.model.network.DataError
@@ -13,4 +15,10 @@ interface WalletRepository {
         walletUsername: String,
         amount: String,
     ): ApiResult<WalletValidationDetail, DataError>
+
+    suspend fun getWalletCharge(
+        amount: String,
+        serviceChargeOf: String,
+        associatedId: String
+    ): ApiResult<WalletChargeDetail, DataError>
 }

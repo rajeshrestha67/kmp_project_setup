@@ -6,6 +6,7 @@ import dev.rajesh.mobile_banking.loadWallet.data.remote.WalletRemoteDataSourceIm
 import dev.rajesh.mobile_banking.loadWallet.data.repository.WalletRepositoryImpl
 import dev.rajesh.mobile_banking.loadWallet.domain.repository.WalletRepository
 import dev.rajesh.mobile_banking.loadWallet.domain.usecase.GetWalletListUseCase
+import dev.rajesh.mobile_banking.loadWallet.domain.usecase.GetWalletServiceChargeUseCase
 import dev.rajesh.mobile_banking.loadWallet.domain.usecase.ValidateWalletUseCase
 import dev.rajesh.mobile_banking.loadWallet.presentation.viewmodel.LoadWalletViewModel
 import dev.rajesh.mobile_banking.loadWallet.presentation.viewmodel.WalletListViewModel
@@ -48,15 +49,24 @@ class WalletModule {
         walletRepository = walletRepository
     )
 
+    @Factory
+    fun provideGetWalletServiceChargeUseCase(
+        walletRepository: WalletRepository
+    ) = GetWalletServiceChargeUseCase(
+        repository = walletRepository
+    )
+
     @KoinViewModel
     fun provideLoadWalletViewModel(
         requiredValidationUseCase: RequiredValidationUseCase,
         validateWalletUseCase: ValidateWalletUseCase,
+        getWalletServiceChargeUseCase: GetWalletServiceChargeUseCase,
         selectedAccountStore: SelectedAccountStore
     ) = LoadWalletViewModel(
         requiredValidationUseCase = requiredValidationUseCase,
         validateWalletUseCase = validateWalletUseCase,
-        selectedAccountStore = selectedAccountStore
+        selectedAccountStore = selectedAccountStore,
+        getWalletServiceChargeUseCase = getWalletServiceChargeUseCase
     )
 
 }

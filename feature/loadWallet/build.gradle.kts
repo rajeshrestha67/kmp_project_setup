@@ -100,6 +100,9 @@ kotlin {
                 implementation(projects.core.utils)
 
                 implementation(projects.feature.userAccounts)
+                implementation(projects.feature.confirmation)
+                implementation(projects.feature.paymentAuthentication)
+                implementation(projects.feature.transactionSuccess)
 
             }
         }

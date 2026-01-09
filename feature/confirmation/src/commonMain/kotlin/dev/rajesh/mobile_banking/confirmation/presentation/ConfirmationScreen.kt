@@ -42,7 +42,6 @@ fun ConfirmationScreen(
     onConfirm: () -> Unit,
     onBackClicked: () -> Unit
 ) {
-    AppLogger.e("Confirmation screen", "I am here")
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         containerColor = MaterialTheme.appColors.backgroundColor,

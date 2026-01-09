@@ -37,6 +37,9 @@ fun NavGraphBuilder.homeScreenNavGraph(
         startDestination = LoadWalletRoute.root,
         route = HomeRoutes.LOAD_WALLET
     ) {
-        loadWalletNavGraph(navController)
+        loadWalletNavGraph(
+            navController,
+            onExitToDashboard = onExitToDashboard
+        )
     }
 }

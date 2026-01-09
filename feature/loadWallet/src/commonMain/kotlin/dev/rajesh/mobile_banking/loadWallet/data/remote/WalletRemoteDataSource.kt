@@ -1,5 +1,6 @@
 package dev.rajesh.mobile_banking.loadWallet.data.remote
 
+import dev.rajesh.mobile_banking.loadWallet.data.dto.WalletChargeResponseDTO
 import dev.rajesh.mobile_banking.loadWallet.data.dto.WalletListResponseDTO
 import dev.rajesh.mobile_banking.loadWallet.data.dto.WalletValidationResponseDTO
 import dev.rajesh.mobile_banking.model.network.DataError
@@ -13,4 +14,10 @@ sealed interface WalletRemoteDataSource {
         walletUsername: String,
         amount: String,
     ): ApiResult<WalletValidationResponseDTO, DataError>
+
+    suspend fun getWalletCharge(
+        amount: String,
+        serviceChargeOf: String,
+        associatedId: String
+    ): ApiResult<WalletChargeResponseDTO, DataError>
 }
