@@ -255,7 +255,7 @@ fun LoadWalletScreen(
                 modifier = Modifier.fillMaxWidth(),
                 text = stringResource(SharedRes.Strings.proceed),
                 onClick = {
-                    viewModel.onAction(LoadWalletScreenAction.OnProceedClicked)
+                    viewModel.onAction(LoadWalletScreenAction.OnProceedClicked(walletDetail))
                 }
             )
 

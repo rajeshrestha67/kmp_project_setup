@@ -1,7 +1,9 @@
 package dev.rajesh.mobile_banking.loadWallet.data.mapper
 
 import dev.rajesh.mobile_banking.loadWallet.data.dto.WalletListResponseDTO
+import dev.rajesh.mobile_banking.loadWallet.data.dto.WalletValidationDetailDTO
 import dev.rajesh.mobile_banking.loadWallet.domain.model.WalletDetail
+import dev.rajesh.mobile_banking.loadWallet.domain.model.WalletValidationDetail
 import dev.rajesh.mobile_banking.networkhelper.Constants
 
 
@@ -30,4 +32,14 @@ fun WalletListResponseDTO.toWalletList(): List<WalletDetail> {
             status = it.status
         )
     }
+}
+
+fun WalletValidationDetailDTO.toWalletValidationDetail(): WalletValidationDetail {
+    return WalletValidationDetail(
+        status = status,
+        message = message,
+        customerName = customerName,
+        customerProfileImageUrl = customerProfileImageUrl.orEmpty(),
+        validationIdentifier = validationIdentifier.orEmpty(),
+    )
 }

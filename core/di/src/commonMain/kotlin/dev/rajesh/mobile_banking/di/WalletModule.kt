@@ -6,8 +6,10 @@ import dev.rajesh.mobile_banking.loadWallet.data.remote.WalletRemoteDataSourceIm
 import dev.rajesh.mobile_banking.loadWallet.data.repository.WalletRepositoryImpl
 import dev.rajesh.mobile_banking.loadWallet.domain.repository.WalletRepository
 import dev.rajesh.mobile_banking.loadWallet.domain.usecase.GetWalletListUseCase
+import dev.rajesh.mobile_banking.loadWallet.domain.usecase.ValidateWalletUseCase
 import dev.rajesh.mobile_banking.loadWallet.presentation.viewmodel.LoadWalletViewModel
 import dev.rajesh.mobile_banking.loadWallet.presentation.viewmodel.WalletListViewModel
+import dev.rajesh.mobile_banking.useraccounts.presentation.state.SelectedAccountStore
 import io.ktor.client.HttpClient
 import org.koin.android.annotation.KoinViewModel
 import org.koin.core.annotation.Factory
@@ -39,9 +41,22 @@ class WalletModule {
         getWalletListUseCase = getWalletListUseCase
     )
 
+    @Factory
+    fun provideValidateWalletUseCase(
+        walletRepository: WalletRepository
+    ) = ValidateWalletUseCase(
+        walletRepository = walletRepository
+    )
+
     @KoinViewModel
     fun provideLoadWalletViewModel(
-        requiredValidationUseCase: RequiredValidationUseCase
-    ) = LoadWalletViewModel(requiredValidationUseCase)
+        requiredValidationUseCase: RequiredValidationUseCase,
+        validateWalletUseCase: ValidateWalletUseCase,
+        selectedAccountStore: SelectedAccountStore
+    ) = LoadWalletViewModel(
+        requiredValidationUseCase = requiredValidationUseCase,
+        validateWalletUseCase = validateWalletUseCase,
+        selectedAccountStore = selectedAccountStore
+    )
 
 }

@@ -1,5 +1,6 @@
 package dev.rajesh.mobile_banking.loadWallet.presentation.state
 
+import dev.rajesh.mobile_banking.loadWallet.domain.model.WalletDetail
 import org.jetbrains.compose.resources.StringResource
 
 sealed interface LoadWalletScreenAction {
@@ -12,10 +13,7 @@ sealed interface LoadWalletScreenAction {
     data class OnAmountError(val amountError: StringResource?):LoadWalletScreenAction
     data class OnRemarksError(val remarksError: StringResource?):LoadWalletScreenAction
 
-    data class OnAccountNumberChanged(val accountNumber: String): LoadWalletScreenAction
-    data class OnAccountNumberError(val accountNumberError: StringResource?): LoadWalletScreenAction
-
-    data object OnProceedClicked: LoadWalletScreenAction
+    data class OnProceedClicked(val walletDetail: WalletDetail): LoadWalletScreenAction
 
 
 }

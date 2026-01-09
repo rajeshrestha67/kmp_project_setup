@@ -1,11 +1,10 @@
 package dev.rajesh.mobile_banking.loadWallet.presentation.state
 
+import dev.rajesh.mobile_banking.loadWallet.domain.model.WalletDetail
 import dev.rajesh.mobile_banking.model.ErrorData
 import org.jetbrains.compose.resources.StringResource
 
 data class LoadWalletScreenState(
-    val accountNumber: String = "",
-    val accountNumberError: StringResource? = null,
 
     val walletId: String = "",
     val walletIdError: StringResource? = null,
@@ -21,4 +20,6 @@ data class LoadWalletScreenState(
 
     val loadingWallet: Boolean = false,
     val loadingWalletError: ErrorData? = null,
+
+    val walletDetail: WalletDetail? = null
 )
