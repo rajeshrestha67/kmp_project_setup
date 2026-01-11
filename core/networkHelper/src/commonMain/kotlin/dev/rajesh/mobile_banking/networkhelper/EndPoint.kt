@@ -19,5 +19,6 @@ object EndPoint {
     const val WALLET_LIST = "api/wallet/list"
     const val WALLET_VALIDATION = "/api/walletvalidate"
     const val WALLET_SERVICE_CHARGE = "api/services/charge/get"
+    const val WALLET_LOAD = "/api/wallet/load"
 
 }

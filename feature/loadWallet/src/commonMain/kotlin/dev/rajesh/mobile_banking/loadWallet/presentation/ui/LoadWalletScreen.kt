@@ -38,6 +38,7 @@ import dev.rajesh.mobile_banking.components.appColors
 import dev.rajesh.mobile_banking.components.button.AppButton
 import dev.rajesh.mobile_banking.components.contactPicker.rememberContactPicker
 import dev.rajesh.mobile_banking.components.dimens
+import dev.rajesh.mobile_banking.components.loadingScreen.LoadingScreen
 import dev.rajesh.mobile_banking.components.permissions.READ_CONTACT_PERMISSION
 import dev.rajesh.mobile_banking.components.permissions.rememberRequestPermission
 import dev.rajesh.mobile_banking.components.textField.AmountTextField
@@ -140,6 +141,16 @@ fun LoadWalletScreen(
     }
 
     state.walletValidationError?.let { error ->
+        ErrorDialog(
+            title = "Error",
+            msg = error.message.orEmpty(),
+            onDismiss = {
+                viewModel.dismissError()
+            }
+        )
+    }
+
+    state.walletTransferError?.let { error->
         ErrorDialog(
             title = "Error",
             msg = error.message.orEmpty(),
@@ -306,6 +317,10 @@ fun LoadWalletScreen(
                 }
             )
 
+        }
+
+        if(state.isValidatingWallet || state.isWalletTransferring){
+            LoadingScreen()
         }
     }
 }

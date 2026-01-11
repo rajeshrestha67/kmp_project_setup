@@ -26,7 +26,7 @@ fun LoadingScreen(
     ) {
         CircularProgressIndicator(
             modifier = Modifier.size(MaterialTheme.dimens.medium3),
-            color = MaterialTheme.colorScheme.secondaryContainer
+            color = MaterialTheme.appColors.primaryColor
         )
     }
 }

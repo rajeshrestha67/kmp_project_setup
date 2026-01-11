@@ -2,9 +2,11 @@ package dev.rajesh.mobile_banking.loadWallet.data.mapper
 
 import dev.rajesh.mobile_banking.loadWallet.data.dto.WalletChargeResponseDTO
 import dev.rajesh.mobile_banking.loadWallet.data.dto.WalletListResponseDTO
+import dev.rajesh.mobile_banking.loadWallet.data.dto.WalletLoadResponseDTO
 import dev.rajesh.mobile_banking.loadWallet.data.dto.WalletValidationDetailDTO
 import dev.rajesh.mobile_banking.loadWallet.domain.model.WalletChargeDetail
 import dev.rajesh.mobile_banking.loadWallet.domain.model.WalletDetail
+import dev.rajesh.mobile_banking.loadWallet.domain.model.WalletLoadDetails
 import dev.rajesh.mobile_banking.loadWallet.domain.model.WalletValidationDetail
 import dev.rajesh.mobile_banking.networkhelper.Constants
 
@@ -52,5 +54,20 @@ fun WalletChargeResponseDTO.toWalletChargeDetail(): WalletChargeDetail {
         details = details,
         message = message,
         status = status
+    )
+}
+
+fun WalletLoadResponseDTO.toWalletLoadDetail(): WalletLoadDetails {
+    return WalletLoadDetails(
+        message = message,
+        descOneFieldName = details.descOneFieldName,
+        amount = details.amount,
+        walletIcon = details.walletIcon,
+        walletName = details.walletName,
+        descTwoFieldValue = details.descTwoFieldValue,
+        descTwoFieldName = details.descTwoFieldName,
+        transactionIdentifier = details.transactionIdentifier,
+        descOneFieldValue = details.descOneFieldValue,
+        accountNumber = details.accountNumber
     )
 }

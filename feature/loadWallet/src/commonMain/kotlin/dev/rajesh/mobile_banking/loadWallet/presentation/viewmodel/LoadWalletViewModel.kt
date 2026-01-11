@@ -5,10 +5,12 @@ import androidx.lifecycle.viewModelScope
 import dev.rajesh.mobile_banking.confirmation.model.ConfirmationData
 import dev.rajesh.mobile_banking.confirmation.model.ConfirmationItem
 import dev.rajesh.mobile_banking.domain.form.RequiredValidationUseCase
-import dev.rajesh.mobile_banking.loadWallet.domain.model.WalletChargeDetail
+import dev.rajesh.mobile_banking.loadWallet.domain.model.WalletLoadDetails
 import dev.rajesh.mobile_banking.loadWallet.domain.model.WalletValidationDetail
 import dev.rajesh.mobile_banking.loadWallet.domain.usecase.GetWalletServiceChargeUseCase
 import dev.rajesh.mobile_banking.loadWallet.domain.usecase.ValidateWalletUseCase
+import dev.rajesh.mobile_banking.loadWallet.domain.usecase.WalletLoadUseCase
+import dev.rajesh.mobile_banking.loadWallet.presentation.model.WalletLoadRequest
 import dev.rajesh.mobile_banking.loadWallet.presentation.state.LoadWalletScreenAction
 import dev.rajesh.mobile_banking.loadWallet.presentation.state.LoadWalletScreenState
 import dev.rajesh.mobile_banking.loadWallet.presentation.state.WalletEffect
@@ -17,6 +19,8 @@ import dev.rajesh.mobile_banking.model.ErrorData
 import dev.rajesh.mobile_banking.model.network.toErrorMessage
 import dev.rajesh.mobile_banking.networkhelper.onError
 import dev.rajesh.mobile_banking.networkhelper.onSuccess
+import dev.rajesh.mobile_banking.transactionsuccess.model.TransactionData
+import dev.rajesh.mobile_banking.transactionsuccess.model.TransactionDataItem
 import dev.rajesh.mobile_banking.user.domain.model.AccountDetail
 import dev.rajesh.mobile_banking.useraccounts.presentation.state.SelectedAccountStore
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -32,6 +36,7 @@ class LoadWalletViewModel(
     private val requiredValidationUseCase: RequiredValidationUseCase,
     private val validateWalletUseCase: ValidateWalletUseCase,
     private val getWalletServiceChargeUseCase: GetWalletServiceChargeUseCase,
+    private val walletLoadUseCase: WalletLoadUseCase,
     selectedAccountStore: SelectedAccountStore
 ) : ViewModel() {
 
@@ -190,7 +195,7 @@ class LoadWalletViewModel(
                 _state.update {
                     it.copy(
                         isValidatingWallet = false,
-                        charge = chargeData.details.toString()
+                        charge = chargeData.details.toString(),
                     )
                 }
                 showConfirmationData(walletValidationDetail)
@@ -210,7 +215,10 @@ class LoadWalletViewModel(
 
     fun dismissError() {
         _state.update {
-            it.copy(walletValidationError = null)
+            it.copy(
+                walletValidationError = null,
+                walletTransferError = null
+            )
         }
     }
 
@@ -221,9 +229,61 @@ class LoadWalletViewModel(
     }
 
     fun proceedForWalletTransfer(mPin: String, account: AccountDetail) = viewModelScope.launch {
-        AppLogger.i(
-            TAG,
-            "Proceed for wallet transfer"
+        AppLogger.i(TAG, "Proceed for wallet transfer")
+        _state.update {
+            it.copy(isWalletTransferring = true)
+        }
+        val walletLoadRequest = WalletLoadRequest(
+            senderAccountNumber = account.accountNumber,
+            walletId = _state.value.walletDetail?.id.toString(),
+            walletUsername = _state.value.walletId,
+            amount = _state.value.amount,
+            remarks = _state.value.remarks,
+            validationIdentifier = _state.value.validationIdentifier.orEmpty()
         )
+
+        walletLoadUseCase(walletLoadRequest).onSuccess { resultData ->
+            AppLogger.i(TAG, "Successful wallet transfer: $resultData")
+            _state.update {
+                it.copy(isWalletTransferring = false)
+            }
+            navigateToTransactionSuccessScreen(resultData, account)
+        }.onError { error ->
+            AppLogger.i(TAG, "Error on wallet transfer: ${error.toErrorMessage()}")
+            _state.update {
+                it.copy(
+                    isWalletTransferring = false,
+                    walletTransferError = ErrorData(error.toErrorMessage())
+                )
+            }
+        }
     }
+
+    private fun navigateToTransactionSuccessScreen(
+        resultData: WalletLoadDetails,
+        account: AccountDetail
+    ) {
+        val dataList: MutableList<TransactionDataItem> = mutableListOf()
+        dataList.add(TransactionDataItem("Status", ""))
+        dataList.add(TransactionDataItem("TransactionId", resultData.transactionIdentifier))
+        dataList.add(TransactionDataItem("Sender's Account Number", account.accountNumber))
+        dataList.add(TransactionDataItem("Service to", _state.value.walletDetail?.name.orEmpty()))
+        dataList.add(TransactionDataItem("Wallet Id", _state.value.walletId))
+        dataList.add(TransactionDataItem("Amount", "NPR.${_state.value.amount}"))
+        dataList.add(TransactionDataItem("Charge", "NPR.${_state.value.charge.orEmpty()}"))
+        dataList.add(TransactionDataItem("Remarks", _state.value.remarks))
+
+        viewModelScope.launch {
+            _effect.emit(
+                WalletEffect.ToTransactionSuccessful(
+                    transactionData = TransactionData(
+                        title = "Transaction Successful",
+                        message = resultData.message,
+                        items = dataList
+                    )
+                )
+            )
+        }
+    }
+
 }
