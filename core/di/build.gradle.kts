@@ -94,6 +94,7 @@ kotlin {
                 implementation(projects.feature.userAccounts)
                 implementation(projects.feature.otpVerification)
                 implementation(projects.feature.loadWallet)
+                implementation(projects.feature.qrScanner)
 
 
             }

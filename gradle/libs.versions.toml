@@ -46,6 +46,9 @@ datetime = "0.7.1"
 
 compottie="2.0.2"
 
+camerax = "1.3.2"
+mlkit-barcode = "17.2.0"
+
 
 
 
@@ -116,6 +119,14 @@ androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref =
 #datetime
 kotlinx-datetime = { group = "org.jetbrains.kotlinx", name = "kotlinx-datetime", version.ref = "datetime" }
 compottie = { module = "io.github.alexzhirkevich:compottie", version.ref = "compottie" }
+
+# CameraX
+camerax-camera2 = { group = "androidx.camera", name = "camera-camera2", version.ref = "camerax" }
+camerax-lifecycle = { group = "androidx.camera", name = "camera-lifecycle", version.ref = "camerax" }
+camerax-view = { group = "androidx.camera", name = "camera-view", version.ref = "camerax" }
+
+# ML Kit
+mlkit-barcode-scanning = { group = "com.google.mlkit", name = "barcode-scanning", version.ref = "mlkit-barcode" }
 
 
 

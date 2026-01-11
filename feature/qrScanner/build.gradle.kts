@@ -87,6 +87,8 @@ kotlin {
                 implementation(libs.kotlinx.serialization.json)
                 implementation(libs.koin.compose.viewmodel)
 
+
+
                 implementation(projects.core.domain)
                 implementation(projects.core.model)
                 implementation(projects.core.persistance.datastore)
@@ -97,6 +99,8 @@ kotlin {
                 implementation(projects.core.utils)
 
                 implementation(projects.feature.user)
+
+
             }
         }
 
@@ -111,6 +115,11 @@ kotlin {
                 // Add Android-specific dependencies here. Note that this source set depends on
                 // commonMain by default and will correctly pull the Android artifacts of any KMP
                 // dependencies declared in commonMain.
+
+                implementation(libs.camerax.camera2)
+                implementation(libs.camerax.lifecycle)
+                implementation(libs.camerax.view)
+                implementation(libs.mlkit.barcode.scanning)
             }
         }
 
