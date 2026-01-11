@@ -67,12 +67,12 @@ class HomeScreenViewModel(
             _state.update {
                 it.copy(
                     fullName = userDetail.fullName,
-                    firstName =userDetail.firstName,
+                    firstName = userDetail.firstName,
                     lastName = userDetail.lastName,
                 )
             }
-            userDetail.accountDetail.forEach { account->
-                if(account.primary.equals("true",ignoreCase = true)){
+            userDetail.accountDetail.forEach { account ->
+                if (account.primary.equals("true", ignoreCase = true)) {
                     _state.update {
                         it.copy(
                             actualBalance = account.actualBalance,
@@ -140,25 +140,28 @@ class HomeScreenViewModel(
         }
     }
 
-    fun onBankingServiceClicked(service: BankingServiceDetail) {
-        viewModelScope.launch {
-            _actions.send(HomeScreenActions.OnBankingServiceClicked(service))
+    fun onAction(actions: HomeScreenActions) {
+        when (actions) {
+            is HomeScreenActions.OnBankingServiceClicked -> {
+                emit(HomeScreenActions.OnBankingServiceClicked(actions.service))
+            }
+
+            is HomeScreenActions.OnQuickServiceClicked -> {
+                emit(HomeScreenActions.OnQuickServiceClicked(actions.service))
+            }
+
+            HomeScreenActions.OnQrScannerClicked -> {
+                emit(HomeScreenActions.OnQrScannerClicked)
+            }
+
+            HomeScreenActions.OnNotificationClicked -> {}
+            HomeScreenActions.OnSwipeRefresh -> {}
         }
     }
 
-    fun onQuickServiceClicked(service: QuickServiceDetail) {
-        when (service.uniqueIdentifier) {
-            "bank_transfer" -> {
-
-            }
-
-            "fund_transfer" -> {
-
-            }
-
-            else -> {
-
-            }
+    fun emit(action: HomeScreenActions) {
+        viewModelScope.launch {
+            _actions.send(action)
         }
     }
 

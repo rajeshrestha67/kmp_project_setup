@@ -97,6 +97,7 @@ kotlin {
                 implementation(projects.feature.user)
                 implementation(projects.feature.bankTransfer)
                 implementation(projects.feature.loadWallet)
+                implementation(projects.feature.qrScanner)
             }
         }
 

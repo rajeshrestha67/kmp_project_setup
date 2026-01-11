@@ -16,18 +16,6 @@ object HomeRoutes {
     // Feature entry points from home
     const val BANK_TRANSFER = "home/bank_transfer"
     const val LOAD_WALLET = "home/load_wallet"
-    const val PAY_BILLS = "home/pay_bills"
+    const val QR_SCANNER = "home/qrScanner"
 
-    // Quick services
-    const val QR_SCAN = "home/qr_scan"
-    const val LOCATE_ATM = "home/locate_atm"
-
-    // Helper to build feature routes
-    fun getBankTransferRoute(internalRoute: String): String {
-        return "home/bank_transfer/$internalRoute"
-    }
-
-    fun getLoadWalletRoute(internalRoute: String): String {
-        return "home/load_wallet/$internalRoute"
-    }
 }

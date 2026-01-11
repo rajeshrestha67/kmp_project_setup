@@ -11,6 +11,9 @@ import dev.rajesh.mobile_banking.home.HomeScreen
 import dev.rajesh.mobile_banking.home.navigation.HomeRoutes
 import dev.rajesh.mobile_banking.loadWallet.presentation.navigation.LoadWalletRoute
 import dev.rajesh.mobile_banking.loadWallet.presentation.navigation.loadWalletNavGraph
+import dev.rajesh.mobile_banking.qrscanner.navigation.QrScannerNavGraph
+import dev.rajesh.mobile_banking.qrscanner.navigation.QrScannerRoute
+import dev.rajesh.mobile_banking.qrscanner.navigation.QrScannerRoutes
 
 fun NavGraphBuilder.homeScreenNavGraph(
     navController: NavController,
@@ -38,6 +41,17 @@ fun NavGraphBuilder.homeScreenNavGraph(
         route = HomeRoutes.LOAD_WALLET
     ) {
         loadWalletNavGraph(
+            navController,
+            onExitToDashboard = onExitToDashboard
+        )
+    }
+
+    //Qr Scanner
+    navigation(
+        startDestination = QrScannerRoute.root,
+        route = HomeRoutes.QR_SCANNER
+    ) {
+        QrScannerNavGraph(
             navController,
             onExitToDashboard = onExitToDashboard
         )

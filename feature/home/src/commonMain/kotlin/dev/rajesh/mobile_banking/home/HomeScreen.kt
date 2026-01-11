@@ -67,6 +67,7 @@ import dev.rajesh.mobile_banking.home.presentation.HomeScreenState
 import dev.rajesh.mobile_banking.home.presentation.HomeScreenViewModel
 import dev.rajesh.mobile_banking.loadWallet.presentation.navigation.LoadWalletRoute
 import dev.rajesh.mobile_banking.logger.AppLogger
+import dev.rajesh.mobile_banking.qrscanner.navigation.QrScannerRoute
 import dev.rajesh.mobile_banking.res.SharedRes
 import dev.rajesh.mobile_banking.utils.extractInitials
 import org.jetbrains.compose.resources.painterResource
@@ -99,6 +100,10 @@ fun HomeScreen(navController: NavController) {
 //                        navController = navController,
 //                        service = action.service
 //                    )
+                }
+
+                is HomeScreenActions.OnQrScannerClicked -> {
+                    navController.navigate(QrScannerRoute.root)
                 }
 
                 else -> Unit
@@ -166,10 +171,9 @@ fun HomeScreen(navController: NavController) {
 
                         IconButton(
                             onClick = {
-
+                                viewModel.onAction(HomeScreenActions.OnQrScannerClicked)
                             }) {
                             Icon(
-                                //imageVector = Icons.AutoMirrored.Filled.Chat,
                                 modifier = Modifier.size(24.dp),
                                 painter = painterResource(SharedRes.Icons.ic_qr_scanner),
                                 contentDescription = "logout"
@@ -411,7 +415,7 @@ fun LazyListScope.bankingServiceList(
                             service,
                             onClick = { item ->
                                 AppLogger.i("HomeScreen", "Clicked: ${item.name}")
-                                viewModel.onBankingServiceClicked(item)
+                                viewModel.onAction(HomeScreenActions.OnBankingServiceClicked(item))
                             })
                     }
                 }

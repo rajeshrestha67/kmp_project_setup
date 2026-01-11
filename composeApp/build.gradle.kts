@@ -14,7 +14,7 @@ kotlin {
             jvmTarget.set(JvmTarget.JVM_11)
         }
     }
-    
+
     listOf(
         iosArm64(),
         iosSimulatorArm64()
@@ -25,7 +25,7 @@ kotlin {
             export(projects.core.di)
         }
     }
-    
+
     sourceSets {
         androidMain.dependencies {
             implementation(compose.preview)
@@ -71,6 +71,7 @@ kotlin {
             implementation(projects.feature.menu)
             implementation(projects.feature.bankTransfer)
             implementation(projects.feature.otpVerification)
+            implementation(projects.feature.qrScanner)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
