@@ -20,5 +20,6 @@ object EndPoint {
     const val WALLET_VALIDATION = "/api/walletvalidate"
     const val WALLET_SERVICE_CHARGE = "api/services/charge/get"
     const val WALLET_LOAD = "/api/wallet/load"
+    const val Q_PAY_MERCHANT_DETAIL="/api/qpay/merchant_detail"
 
 }

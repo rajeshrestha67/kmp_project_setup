@@ -23,6 +23,8 @@ object SharedRes {
         val ic_qr_scanner = Res.drawable.ic_qr_scanner
         val forwardArrow = Res.drawable.ic_right_arrow
         val backArrow = Res.drawable.ic_left_arrow
+        val ic_close = Res.drawable.ic_close
+        val ic_close_circle_stroke = Res.drawable.ic_close_circle_stroke
 
     }
 

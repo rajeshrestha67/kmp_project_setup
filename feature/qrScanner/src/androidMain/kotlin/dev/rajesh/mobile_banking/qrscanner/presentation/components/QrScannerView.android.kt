@@ -11,7 +11,11 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.viewinterop.AndroidView
@@ -33,6 +37,14 @@ actual fun QrScannerView(
 
     val cameraExecutor = remember { Executors.newSingleThreadExecutor() }
     val scanner = remember { BarcodeScanning.getClient() }
+
+    var processingLock by remember { mutableStateOf(false) }
+
+    LaunchedEffect(isPaused) {
+        if (!isPaused) {
+            processingLock = false
+        }
+    }
 
     DisposableEffect(Unit) {
         onDispose {
@@ -60,7 +72,7 @@ actual fun QrScannerView(
 
                     analyzer.setAnalyzer(cameraExecutor) { imageProxy ->
                         val mediaImage = imageProxy.image
-                        if (isPaused || mediaImage == null) {
+                        if (isPaused || processingLock || mediaImage == null) {
                             imageProxy.close()
                             return@setAnalyzer
                         }
@@ -73,7 +85,10 @@ actual fun QrScannerView(
                         scanner.process(image)
                             .addOnSuccessListener { barcodes ->
                                 val result = barcodes.firstOrNull()?.rawValue
-                                if (result != null && !isPaused) onResult(result)
+                                if (result != null && !isPaused && !processingLock) {
+                                    processingLock = true
+                                    onResult(result)
+                                }
                             }
                             .addOnCompleteListener { imageProxy.close() }
                     }
@@ -94,6 +109,6 @@ actual fun QrScannerView(
             },
             modifier = Modifier.fillMaxSize()
         )
-        ScannerOverlay(isPaused)
+        ScannerOverlay(isPaused = isPaused || processingLock)
     }
 }
