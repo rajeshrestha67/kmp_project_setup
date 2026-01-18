@@ -102,10 +102,6 @@ fun QrScannerScreen(onBackClicked: () -> Boolean) {
 
     )
 
-
-
-
-
     LaunchedEffect(Unit) {
         cameraPermission()
     }

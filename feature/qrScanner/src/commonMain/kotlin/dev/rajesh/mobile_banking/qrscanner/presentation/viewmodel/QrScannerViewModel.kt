@@ -5,24 +5,21 @@ import androidx.lifecycle.viewModelScope
 import dev.rajesh.mobile_banking.logger.AppLogger
 import dev.rajesh.mobile_banking.model.ErrorData
 import dev.rajesh.mobile_banking.model.network.toErrorMessage
-import dev.rajesh.mobile_banking.networkhelper.Constants
 import dev.rajesh.mobile_banking.networkhelper.onError
 import dev.rajesh.mobile_banking.networkhelper.onSuccess
+import dev.rajesh.mobile_banking.qrscanner.domain.qrDecoder.QrDecoder
 import dev.rajesh.mobile_banking.qrscanner.domain.usecases.GetQPayMerchantDetailUseCase
 import dev.rajesh.mobile_banking.qrscanner.presentation.state.QrScannerScreenAction
 import dev.rajesh.mobile_banking.qrscanner.presentation.state.QrScannerScreenState
-import dev.rajesh.mobile_banking.utils.decryptQrData
-import io.ktor.utils.io.charsets.Charsets
-import io.ktor.utils.io.core.toByteArray
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlin.io.encoding.Base64
 
 class QrScannerViewModel(
-    private val getQPayMerchantDetailUseCase: GetQPayMerchantDetailUseCase
+    private val getQPayMerchantDetailUseCase: GetQPayMerchantDetailUseCase,
+    private val qrDecoder: QrDecoder
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(QrScannerScreenState())
@@ -52,15 +49,16 @@ class QrScannerViewModel(
 //                        getQPayMerchantDetail(action.scannedData)
 //                    }
                     getQPayMerchantDetail(action.scannedData)
-
                 }
             }
 
             is QrScannerScreenAction.OnQrImageSelectedFromGallery -> {
-
+                decodeQrFromImage(action.imageUri)
             }
         }
     }
+
+
 
     fun dismissError() {
         _state.update { it.copy(errorData = null) }
@@ -68,10 +66,20 @@ class QrScannerViewModel(
 
     private fun getQPayMerchantDetail(payload: String) = viewModelScope.launch {
         getQPayMerchantDetailUseCase(payload).onSuccess { resultData ->
-            AppLogger.e(TAG, "fetch Q_pay merchant detail: Success: $resultData")
+            AppLogger.d(TAG, "fetch Q_pay merchant detail: Success: $resultData")
         }.onError { error ->
-            AppLogger.e(TAG, "fetch Q_pay merchant detail: Error: ${error.toErrorMessage()}")
+            AppLogger.d(TAG, "fetch Q_pay merchant detail: Error: ${error.toErrorMessage()}")
         }
+    }
+
+    private fun decodeQrFromImage(path: String) = viewModelScope.launch {
+        qrDecoder.decodeQrFromImage(path)
+            .onSuccess {
+                AppLogger.d(TAG, "decodeQrFromImage: Success $it")
+            }
+            .onFailure {
+                AppLogger.d(TAG, "decodeQrFromImage: Failed $it")
+            }
     }
 
 

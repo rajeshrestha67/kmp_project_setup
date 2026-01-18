@@ -3,6 +3,8 @@ package dev.rajesh.mobile_banking.di
 import dev.rajesh.mobile_banking.qrscanner.data.remote.QPayRemoteDataSource
 import dev.rajesh.mobile_banking.qrscanner.data.remote.QPayRemoteDataSourceImpl
 import dev.rajesh.mobile_banking.qrscanner.data.repository.QPayRepositoryImpl
+import dev.rajesh.mobile_banking.qrscanner.domain.qrDecoder.QrDecoder
+import dev.rajesh.mobile_banking.qrscanner.domain.qrDecoder.QrDecoderFactory
 import dev.rajesh.mobile_banking.qrscanner.domain.repository.QPayRepository
 import dev.rajesh.mobile_banking.qrscanner.domain.usecases.GetQPayMerchantDetailUseCase
 import dev.rajesh.mobile_banking.qrscanner.presentation.viewmodel.QrScannerViewModel
@@ -13,7 +15,6 @@ import org.koin.core.annotation.Module
 
 @Module
 class QrScannerModule {
-
 
     @Factory(binds = [QPayRemoteDataSource::class])
     fun provideQPayRemoteDataSource(
@@ -32,11 +33,13 @@ class QrScannerModule {
         repository = repository
     )
 
-
     @KoinViewModel
     fun qrScannerViewModel(
-        getQPayMerchantDetailUseCase: GetQPayMerchantDetailUseCase
+        getQPayMerchantDetailUseCase: GetQPayMerchantDetailUseCase,
+        qrDecoder: QrDecoder
     ) = QrScannerViewModel(
-        getQPayMerchantDetailUseCase = getQPayMerchantDetailUseCase
+        getQPayMerchantDetailUseCase = getQPayMerchantDetailUseCase,
+        qrDecoder = qrDecoder
     )
+
 }
