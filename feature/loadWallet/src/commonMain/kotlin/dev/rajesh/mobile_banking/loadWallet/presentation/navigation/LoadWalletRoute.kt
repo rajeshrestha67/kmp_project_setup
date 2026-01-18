@@ -13,7 +13,10 @@ sealed interface LoadWalletRoutes {
     data object LoadWalletRoot : LoadWalletRoutes
 
     @Serializable
-    data class LoadWalletDetail(val json: String) : LoadWalletRoutes
+    data class LoadWalletDetail(
+        val json: String? = null,
+        val qrWalletJson: String? = null,
+    ) : LoadWalletRoutes
 
     @Serializable
     data class ConfirmationRoute(val json: String) : LoadWalletRoutes

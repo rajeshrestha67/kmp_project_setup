@@ -13,9 +13,15 @@ data class QPayMerchantDetailResponseDTO(
 
 @Serializable
 data class QPayMerchantDetailDTO(
-    val bankTransfer: Boolean,
-    val accountDetails: AccountDetailsDTO,
-    val status: String
+    val status: String,
+    val bankTransfer: Boolean?,
+    val internalFundTransfer: Boolean?,
+    val accountDetails: AccountDetailsDTO?,
+    val walletId: String?,
+    val walletType: String?,
+    val loadWallet: Boolean?,
+    val name: String?,
+
 )
 
 @Serializable

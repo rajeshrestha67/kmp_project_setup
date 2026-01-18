@@ -99,6 +99,8 @@ kotlin {
                 implementation(projects.core.utils)
 
                 implementation(projects.feature.user)
+                implementation(projects.feature.bankTransfer)
+                implementation(projects.feature.loadWallet)
 
 
             }

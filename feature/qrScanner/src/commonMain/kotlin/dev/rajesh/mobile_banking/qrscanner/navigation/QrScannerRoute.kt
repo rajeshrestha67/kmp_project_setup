@@ -12,14 +12,18 @@ sealed interface QrScannerRoutes {
     data object QrScannerRoot : QrScannerRoutes
 
     @Serializable
-    data object SameBankTransferRoute: QrScannerRoutes
+    data class SameBankTransferRoute(val json: String) : QrScannerRoutes
 
     @Serializable
-    data object InterBankTransferRoute: QrScannerRoutes
+    data class InterBankTransferRoute(val json: String) : QrScannerRoutes
 
     @Serializable
-    data object WalletTransferRoute: QrScannerRoutes
+    data class WalletTransferRoute(
+        val walletId: String,
+        val walletType: String,
+        val name: String
+    ) : QrScannerRoutes
 
     @Serializable
-    data object FonePayRoute: QrScannerRoutes
+    data object FonePayRoute : QrScannerRoutes
 }

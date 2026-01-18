@@ -18,7 +18,7 @@ class QPayRemoteDataSourceImpl(
     override suspend fun getQPayMerchantDetails(payload: String): ApiResult<QPayMerchantDetailResponseDTO, DataError> {
 
         val params = Parameters.build {
-            append("payload", payload)
+            append("pay_load", payload)
         }
 
         return safeCall {

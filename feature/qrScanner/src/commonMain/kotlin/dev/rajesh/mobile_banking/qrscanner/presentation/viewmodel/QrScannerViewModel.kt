@@ -2,6 +2,7 @@ package dev.rajesh.mobile_banking.qrscanner.presentation.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dev.rajesh.mobile_banking.loadWallet.domain.model.QrWallet
 import dev.rajesh.mobile_banking.logger.AppLogger
 import dev.rajesh.mobile_banking.model.ErrorData
 import dev.rajesh.mobile_banking.model.network.toErrorMessage
@@ -9,10 +10,13 @@ import dev.rajesh.mobile_banking.networkhelper.onError
 import dev.rajesh.mobile_banking.networkhelper.onSuccess
 import dev.rajesh.mobile_banking.qrscanner.domain.qrDecoder.QrDecoder
 import dev.rajesh.mobile_banking.qrscanner.domain.usecases.GetQPayMerchantDetailUseCase
+import dev.rajesh.mobile_banking.qrscanner.presentation.state.QrNavigationEffect
 import dev.rajesh.mobile_banking.qrscanner.presentation.state.QrScannerScreenAction
 import dev.rajesh.mobile_banking.qrscanner.presentation.state.QrScannerScreenState
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -22,6 +26,9 @@ class QrScannerViewModel(
     private val qrDecoder: QrDecoder
 ) : ViewModel() {
 
+
+    private val _effect = Channel<QrNavigationEffect>()
+    val effect = _effect.receiveAsFlow()
     private val _state = MutableStateFlow(QrScannerScreenState())
 
     val state = _state.stateIn(
@@ -59,16 +66,68 @@ class QrScannerViewModel(
     }
 
 
-
     fun dismissError() {
-        _state.update { it.copy(errorData = null) }
+        _state.update {
+            it.copy(
+                errorData = null,
+                isFetchingQrMerchantDetails = false
+            )
+        }
     }
 
     private fun getQPayMerchantDetail(payload: String) = viewModelScope.launch {
+        _state.update {
+            it.copy(
+                isFetchingQrMerchantDetails = true
+            )
+        }
         getQPayMerchantDetailUseCase(payload).onSuccess { resultData ->
             AppLogger.d(TAG, "fetch Q_pay merchant detail: Success: $resultData")
+            _state.update {
+                it.copy(
+                    isFetchingQrMerchantDetails = false
+                )
+            }
+            when {
+                resultData.bankTransfer -> {
+                    resultData.accountDetails?.let { accountDetails ->
+                        _effect.send(QrNavigationEffect.ToInterbankTransfer(accountDetails = accountDetails))
+                    }
+                }
+
+                resultData.internalFundTransfer -> {
+                    resultData.accountDetails?.let { accountDetails ->
+                        _effect.send(QrNavigationEffect.ToSameBankTransfer(accountDetails = accountDetails))
+                    }
+                }
+
+                resultData.loadWallet -> {
+                    _effect.send(
+                        QrNavigationEffect.ToWallet(
+                            QrWallet(
+                                id = resultData.walletId.orEmpty(),
+                                name = resultData.walletType.orEmpty(),
+                                walletHolderName = resultData.name.orEmpty()
+                            )
+                        )
+                    )
+
+                }
+
+                else -> {
+
+                }
+
+            }
+
         }.onError { error ->
             AppLogger.d(TAG, "fetch Q_pay merchant detail: Error: ${error.toErrorMessage()}")
+            _state.update {
+                it.copy(
+                    isFetchingQrMerchantDetails = true,
+                    errorData = ErrorData(error.toErrorMessage())
+                )
+            }
         }
     }
 

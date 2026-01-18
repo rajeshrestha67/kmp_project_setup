@@ -4,9 +4,14 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class QPayMerchantDetail(
+    val status: String,
     val bankTransfer: Boolean,
-    val accountDetails: AccountDetails,
-    val status: String
+    val internalFundTransfer: Boolean,
+    val loadWallet: Boolean,
+    val accountDetails: AccountDetails?,
+    val walletId: String?,
+    val walletType: String?,
+    val name: String?,
 )
 
 @Serializable

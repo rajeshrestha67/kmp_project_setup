@@ -7,6 +7,7 @@ import androidx.navigation.toRoute
 import dev.rajesh.mobile_banking.confirmation.ConfirmationConstant
 import dev.rajesh.mobile_banking.confirmation.model.ConfirmationData
 import dev.rajesh.mobile_banking.confirmation.presentation.ConfirmationScreen
+import dev.rajesh.mobile_banking.loadWallet.domain.model.QrWallet
 import dev.rajesh.mobile_banking.loadWallet.domain.model.WalletDetail
 import dev.rajesh.mobile_banking.loadWallet.presentation.ui.LoadWalletScreen
 import dev.rajesh.mobile_banking.loadWallet.presentation.ui.WalletListScreen
@@ -42,8 +43,11 @@ fun NavGraphBuilder.loadWalletNavGraph(
     // wallet details
     composable<LoadWalletRoutes.LoadWalletDetail> {
         val walletDetailJson: String? = it.toRoute<LoadWalletRoutes.LoadWalletDetail>().json
+
+        var walletDetail: WalletDetail? = null
         walletDetailJson?.let { json ->
-            val walletDetail = AppJson.decodeFromString<WalletDetail>(json)
+            walletDetail = AppJson.decodeFromString<WalletDetail>(json)
+
             it.savedStateHandle.remove<String>(LoadWalletRoute.root)
             LoadWalletScreen(
                 navController = navController,
@@ -93,7 +97,7 @@ fun NavGraphBuilder.loadWalletNavGraph(
             ConfirmationScreen(
                 data = confirmationData,
                 onConfirm = {
-                    navController.navigate(LoadWalletRoutes.PaymentAuthenticationRoute){
+                    navController.navigate(LoadWalletRoutes.PaymentAuthenticationRoute) {
                         //remove confirmation screen from stack
                         popUpTo<LoadWalletRoutes.ConfirmationRoute> {
                             inclusive = true
@@ -116,10 +120,10 @@ fun NavGraphBuilder.loadWalletNavGraph(
                     .set(PaymentAuthResult.mPin, mPin)
 
                 //clear auth and confirmation screen
-               /* navController.popBackStack(
-                    route = LoadWalletRoutes.LoadWalletDetail,
-                    inclusive = false
-                )*/
+                /* navController.popBackStack(
+                     route = LoadWalletRoutes.LoadWalletDetail,
+                     inclusive = false
+                 )*/
                 navController.popBackStack()
             },
 

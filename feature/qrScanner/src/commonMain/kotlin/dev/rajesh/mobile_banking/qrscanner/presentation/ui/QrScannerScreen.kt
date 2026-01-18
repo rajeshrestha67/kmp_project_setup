@@ -21,6 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import dev.rajesh.mobile_banking.components.dimens
+import dev.rajesh.mobile_banking.components.loadingScreen.LoadingScreen
 import dev.rajesh.mobile_banking.components.media.checkGalleryFullAccess
 import dev.rajesh.mobile_banking.components.media.checkGalleryLimitAccess
 import dev.rajesh.mobile_banking.components.media.rememberGalleryLauncher
@@ -28,8 +29,11 @@ import dev.rajesh.mobile_banking.components.permissions.CAMERA_PERMISSION
 import dev.rajesh.mobile_banking.components.permissions.GALLERY_PERMISSION
 import dev.rajesh.mobile_banking.components.permissions.GALLERY_PERMISSION_LIMITED
 import dev.rajesh.mobile_banking.components.permissions.rememberRequestPermission
+import dev.rajesh.mobile_banking.loadWallet.domain.model.QrWallet
 import dev.rajesh.mobile_banking.logger.AppLogger
+import dev.rajesh.mobile_banking.qrscanner.domain.model.AccountDetails
 import dev.rajesh.mobile_banking.qrscanner.presentation.components.QrScannerView
+import dev.rajesh.mobile_banking.qrscanner.presentation.state.QrNavigationEffect
 import dev.rajesh.mobile_banking.qrscanner.presentation.state.QrScannerScreenAction
 import dev.rajesh.mobile_banking.qrscanner.presentation.viewmodel.QrScannerViewModel
 import dev.rajesh.mobile_banking.res.SharedRes
@@ -39,7 +43,12 @@ import org.koin.compose.viewmodel.koinViewModel
 private const val TAG = "QrScannerScreen"
 
 @Composable
-fun QrScannerScreen(onBackClicked: () -> Boolean) {
+fun QrScannerScreen(
+    toInterBankTransfer: (AccountDetails) -> Unit,
+    toSameBankTransfer: (AccountDetails) -> Unit,
+    toWallet: (QrWallet) -> Unit,
+    onBackClicked: () -> Boolean
+) {
 
     val viewModel: QrScannerViewModel = koinViewModel()
     val state by viewModel.state.collectAsState()
@@ -115,6 +124,28 @@ fun QrScannerScreen(onBackClicked: () -> Boolean) {
         }
     }
 
+    LaunchedEffect(Unit) {
+        viewModel.effect.collect {
+            when (it) {
+                is QrNavigationEffect.ToInterbankTransfer -> {
+                    toInterBankTransfer(it.accountDetails)
+                }
+
+                is QrNavigationEffect.ToSameBankTransfer -> {
+                    toSameBankTransfer(it.accountDetails)
+                }
+
+                is QrNavigationEffect.ToWallet -> {
+                    toWallet(it.qrWallet)
+                }
+
+                is QrNavigationEffect.ShowError -> {}
+            }
+        }
+    }
+
+
+
     state.errorData?.let {
         ErrorDialog(
             title = "Error",
@@ -173,6 +204,9 @@ fun QrScannerScreen(onBackClicked: () -> Boolean) {
                 }
             }
 
+            if (state.isFetchingQrMerchantDetails) {
+                LoadingScreen()
+            }
 
         }
 
