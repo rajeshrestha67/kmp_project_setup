@@ -15,7 +15,8 @@ sealed interface LoadWalletRoutes {
     @Serializable
     data class LoadWalletDetail(
         val json: String? = null,
-        val qrWalletJson: String? = null,
+        val walletUserId: String? = null,
+        val walletHolderName: String? = null,
     ) : LoadWalletRoutes
 
     @Serializable

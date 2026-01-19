@@ -8,4 +8,5 @@ data class QrScannerScreenState(
     val errorData: ErrorData? = null,
 
     val isFetchingQrMerchantDetails: Boolean = false,
+    val isFetchingWalletList: Boolean = false
 )

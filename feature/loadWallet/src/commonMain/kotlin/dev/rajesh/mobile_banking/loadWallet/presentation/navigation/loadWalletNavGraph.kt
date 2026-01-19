@@ -43,6 +43,9 @@ fun NavGraphBuilder.loadWalletNavGraph(
     // wallet details
     composable<LoadWalletRoutes.LoadWalletDetail> {
         val walletDetailJson: String? = it.toRoute<LoadWalletRoutes.LoadWalletDetail>().json
+        val walletUserId: String? = it.toRoute<LoadWalletRoutes.LoadWalletDetail>().walletUserId
+        val walletHolderName: String? =
+            it.toRoute<LoadWalletRoutes.LoadWalletDetail>().walletHolderName
 
         var walletDetail: WalletDetail? = null
         walletDetailJson?.let { json ->
@@ -52,6 +55,8 @@ fun NavGraphBuilder.loadWalletNavGraph(
             LoadWalletScreen(
                 navController = navController,
                 walletDetail = walletDetail,
+                walletUserId = walletUserId,
+                walletHolderName = walletHolderName,
                 showConfirmation = {
                     val json = AppJson.encodeToString(
                         ConfirmationData.serializer(),

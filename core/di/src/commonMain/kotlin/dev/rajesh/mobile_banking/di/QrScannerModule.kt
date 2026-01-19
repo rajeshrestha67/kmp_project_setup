@@ -1,5 +1,6 @@
 package dev.rajesh.mobile_banking.di
 
+import dev.rajesh.mobile_banking.loadWallet.domain.usecase.GetWalletListUseCase
 import dev.rajesh.mobile_banking.qrscanner.data.remote.QPayRemoteDataSource
 import dev.rajesh.mobile_banking.qrscanner.data.remote.QPayRemoteDataSourceImpl
 import dev.rajesh.mobile_banking.qrscanner.data.repository.QPayRepositoryImpl
@@ -36,10 +37,12 @@ class QrScannerModule {
     @KoinViewModel
     fun qrScannerViewModel(
         getQPayMerchantDetailUseCase: GetQPayMerchantDetailUseCase,
-        qrDecoder: QrDecoder
+        qrDecoder: QrDecoder,
+        getWalletUseCase: GetWalletListUseCase
     ) = QrScannerViewModel(
         getQPayMerchantDetailUseCase = getQPayMerchantDetailUseCase,
-        qrDecoder = qrDecoder
+        qrDecoder = qrDecoder,
+        getWalletListUseCase = getWalletUseCase
     )
 
 }

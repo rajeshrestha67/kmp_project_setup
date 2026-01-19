@@ -67,6 +67,8 @@ import org.koin.compose.viewmodel.koinViewModel
 fun LoadWalletScreen(
     navController: NavController,
     walletDetail: WalletDetail,
+    walletUserId: String? = null,
+    walletHolderName: String? = null,
     showConfirmation: (ConfirmationData) -> Unit,
     showTransactionSuccessful: (TransactionData) -> Unit,
     onBackClicked: () -> Unit
@@ -125,6 +127,9 @@ fun LoadWalletScreen(
         }
     )
 
+    walletUserId?.let {
+        viewModel.onAction(LoadWalletScreenAction.OnWalletIdChanged(it))
+    }
 
     LaunchedEffect(Unit) {
         viewModel.effect.collect {
@@ -150,7 +155,7 @@ fun LoadWalletScreen(
         )
     }
 
-    state.walletTransferError?.let { error->
+    state.walletTransferError?.let { error ->
         ErrorDialog(
             title = "Error",
             msg = error.message.orEmpty(),
@@ -319,7 +324,7 @@ fun LoadWalletScreen(
 
         }
 
-        if(state.isValidatingWallet || state.isWalletTransferring){
+        if (state.isValidatingWallet || state.isWalletTransferring) {
             LoadingScreen()
         }
     }

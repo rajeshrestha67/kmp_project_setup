@@ -30,6 +30,7 @@ import dev.rajesh.mobile_banking.components.permissions.GALLERY_PERMISSION
 import dev.rajesh.mobile_banking.components.permissions.GALLERY_PERMISSION_LIMITED
 import dev.rajesh.mobile_banking.components.permissions.rememberRequestPermission
 import dev.rajesh.mobile_banking.loadWallet.domain.model.QrWallet
+import dev.rajesh.mobile_banking.loadWallet.domain.model.WalletDetail
 import dev.rajesh.mobile_banking.logger.AppLogger
 import dev.rajesh.mobile_banking.qrscanner.domain.model.AccountDetails
 import dev.rajesh.mobile_banking.qrscanner.presentation.components.QrScannerView
@@ -46,7 +47,7 @@ private const val TAG = "QrScannerScreen"
 fun QrScannerScreen(
     toInterBankTransfer: (AccountDetails) -> Unit,
     toSameBankTransfer: (AccountDetails) -> Unit,
-    toWallet: (QrWallet) -> Unit,
+    toWallet: (walletDetail: WalletDetail, walletUserId: String, walletHolderName: String) -> Unit,
     onBackClicked: () -> Boolean
 ) {
 
@@ -136,7 +137,7 @@ fun QrScannerScreen(
                 }
 
                 is QrNavigationEffect.ToWallet -> {
-                    toWallet(it.qrWallet)
+                    toWallet(it.walletDetails, it.walletUserId, it.walletHolderName)
                 }
 
                 is QrNavigationEffect.ShowError -> {}

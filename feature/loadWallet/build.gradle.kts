@@ -103,7 +103,6 @@ kotlin {
                 implementation(projects.feature.confirmation)
                 implementation(projects.feature.paymentAuthentication)
                 implementation(projects.feature.transactionSuccess)
-
             }
         }
 

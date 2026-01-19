@@ -3,11 +3,13 @@ package dev.rajesh.mobile_banking.qrscanner.presentation.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dev.rajesh.mobile_banking.loadWallet.domain.model.QrWallet
+import dev.rajesh.mobile_banking.loadWallet.domain.usecase.GetWalletListUseCase
 import dev.rajesh.mobile_banking.logger.AppLogger
 import dev.rajesh.mobile_banking.model.ErrorData
 import dev.rajesh.mobile_banking.model.network.toErrorMessage
 import dev.rajesh.mobile_banking.networkhelper.onError
 import dev.rajesh.mobile_banking.networkhelper.onSuccess
+import dev.rajesh.mobile_banking.qrscanner.domain.model.QPayMerchantDetail
 import dev.rajesh.mobile_banking.qrscanner.domain.qrDecoder.QrDecoder
 import dev.rajesh.mobile_banking.qrscanner.domain.usecases.GetQPayMerchantDetailUseCase
 import dev.rajesh.mobile_banking.qrscanner.presentation.state.QrNavigationEffect
@@ -23,7 +25,8 @@ import kotlinx.coroutines.launch
 
 class QrScannerViewModel(
     private val getQPayMerchantDetailUseCase: GetQPayMerchantDetailUseCase,
-    private val qrDecoder: QrDecoder
+    private val qrDecoder: QrDecoder,
+    private val getWalletListUseCase: GetWalletListUseCase
 ) : ViewModel() {
 
 
@@ -102,16 +105,7 @@ class QrScannerViewModel(
                 }
 
                 resultData.loadWallet -> {
-                    _effect.send(
-                        QrNavigationEffect.ToWallet(
-                            QrWallet(
-                                id = resultData.walletId.orEmpty(),
-                                name = resultData.walletType.orEmpty(),
-                                walletHolderName = resultData.name.orEmpty()
-                            )
-                        )
-                    )
-
+                    getWalletList(resultData)
                 }
 
                 else -> {
@@ -131,13 +125,52 @@ class QrScannerViewModel(
         }
     }
 
+    private fun getWalletList(resultData: QPayMerchantDetail) = viewModelScope.launch {
+        _state.update {
+            it.copy(isFetchingWalletList = true)
+        }
+        getWalletListUseCase.invoke()
+            .onSuccess { walletData ->
+                _state.update {
+                    it.copy(isFetchingWalletList = false)
+                }
+
+                val wallet = walletData.find {
+                    it.name.equals(resultData.walletType, ignoreCase = true)
+                }
+
+                wallet?.let {
+                    _effect.send(
+                        QrNavigationEffect.ToWallet(
+                            walletDetails = it,
+                            walletUserId =  resultData.walletId.orEmpty(),
+                            walletHolderName = resultData.name.orEmpty()
+                        )
+                    )
+                }
+            }.onError { error ->
+                _state.update {
+                    it.copy(
+                        isFetchingWalletList = false,
+                        errorData = ErrorData(error.toErrorMessage())
+                    )
+                }
+            }
+    }
+
     private fun decodeQrFromImage(path: String) = viewModelScope.launch {
         qrDecoder.decodeQrFromImage(path)
             .onSuccess {
                 AppLogger.d(TAG, "decodeQrFromImage: Success $it")
+                getQPayMerchantDetail(payload = it)
             }
             .onFailure {
                 AppLogger.d(TAG, "decodeQrFromImage: Failed $it")
+                _state.update {
+                    it.copy(
+                        errorData = ErrorData("Unable to read Qr")
+                    )
+                }
             }
     }
 
