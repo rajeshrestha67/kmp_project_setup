@@ -207,11 +207,8 @@ fun SameBankTransferScreen(
         )
     }
 
-    LaunchedEffect(accountNumber, accountName, coopBranch) {
-        viewModel.onAction(
-            SameBankTransferAction
-                .InitFromNavigation(accountNumber, accountName, coopBranch)
-        )
+    LaunchedEffect(Unit) {
+        viewModel.initFromNavigation(accountNumber, accountName, coopBranch)
     }
 
     Scaffold(

@@ -72,6 +72,26 @@ class SameBankTransferViewModel(
         selectedAccountStore.selectedAccount
 
 
+    private var initialized = false
+
+    fun initFromNavigation(
+        accountNumber: String?,
+        accountName: String?,
+        coopBranch: CoopBranchDetail?
+    ) {
+        if (initialized) return
+        initialized = true
+
+        _state.update {
+            it.copy(
+                accountNumber = accountNumber.orEmpty(),
+                fullName = accountName.orEmpty(),
+                branch = coopBranch
+            )
+        }
+    }
+
+
     fun onAction(action: SameBankTransferAction) {
         when (action) {
             is SameBankTransferAction.OnFullNameChanged -> {
