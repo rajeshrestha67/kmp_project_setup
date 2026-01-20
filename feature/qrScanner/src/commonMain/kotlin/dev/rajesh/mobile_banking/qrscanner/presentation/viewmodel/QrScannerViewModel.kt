@@ -139,7 +139,7 @@ class QrScannerViewModel(
                     it.copy(isFetchingBankList = false)
                 }
                 val bank = bankList.find {
-                    it.swiftCode.equals(accountDetails.bankCode, ignoreCase = false)
+                    it.bankId.equals(accountDetails.bankCode, ignoreCase = false)
                 }
                 _effect.send(
                     QrNavigationEffect.ToInterbankTransfer(

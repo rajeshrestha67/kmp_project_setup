@@ -51,6 +51,7 @@ import dev.rajesh.mobile_banking.components.loadingScreen.LoadingScreen
 import dev.rajesh.mobile_banking.components.textField.AppTextField
 import dev.rajesh.mobile_banking.components.textField.FormValidate
 import dev.rajesh.mobile_banking.confirmation.model.ConfirmationData
+import dev.rajesh.mobile_banking.logger.AppLogger
 import dev.rajesh.mobile_banking.paymentAuthentication.PaymentAuthResult
 import dev.rajesh.mobile_banking.res.SharedRes
 import dev.rajesh.mobile_banking.transactionsuccess.model.TransactionData
@@ -125,6 +126,7 @@ fun InterBankTransferScreen(
     }
 
     LaunchedEffect(accountNumber, accountName, bank) {
+        AppLogger.d("InterBankTransferScreen", "BankCode: ${bank?.bankId}")
         interBankTransferViewModel.onAction(
             InterBankTransferScreenAction.InitFromNavigation(
                 accountNumber = accountNumber,
