@@ -146,6 +146,15 @@ class InterBankTransferViewModel(
 
             }
 
+            is InterBankTransferScreenAction.InitFromNavigation -> {
+                _state.update {
+                    it.copy(
+                        receiversAccountNumber = action.accountNumber.orEmpty(),
+                        receiversFullName = action.accountName.orEmpty(),
+                        selectedBank = action.bank
+                    )
+                }
+            }
         }
 
     }
@@ -158,48 +167,23 @@ class InterBankTransferViewModel(
         val amountError = requiredValidationUseCase(state.value.amount)
         val remarksError = requiredValidationUseCase(state.value.remarks)
 
-        when {
-            selectedBankError -> {
-                _state.update {
-                    it.copy()
-                }
-            }
+        val hasError = selectedBankError
+                || receiversAccountNumberError != null
+                || receiversFullNameError != null
+                || amountError != null
+                || remarksError != null
 
-            receiversAccountNumberError != null -> {
-                _state.update {
-                    it.copy(
-                        receiversAccountNumberError = receiversAccountNumberError
-                    )
-                }
+        if (hasError) {
+            _state.update {
+                it.copy(
+                    receiversAccountNumberError = receiversAccountNumberError,
+                    receiversFullNameError = receiversFullNameError,
+                    amountError = amountError,
+                    remarksError = remarksError,
+                )
             }
-
-            receiversFullNameError != null -> {
-                _state.update {
-                    it.copy(
-                        receiversFullNameError = receiversFullNameError
-                    )
-                }
-            }
-
-            amountError != null -> {
-                _state.update {
-                    it.copy(
-                        amountError = amountError
-                    )
-                }
-            }
-
-            remarksError != null -> {
-                _state.update {
-                    it.copy(
-                        remarksError = remarksError
-                    )
-                }
-            }
-
-            else -> {
-                proceedForValidation()
-            }
+        } else {
+            proceedForValidation()
         }
     }
 

@@ -1,5 +1,7 @@
 package dev.rajesh.mobile_banking.di
 
+import dev.rajesh.mobile_banking.banktransfer.interBankTransfer.domain.usecase.GetBankListUseCase
+import dev.rajesh.mobile_banking.banktransfer.sameBankTransfer.domain.usecases.FetchCoopBranchUseCase
 import dev.rajesh.mobile_banking.loadWallet.domain.usecase.GetWalletListUseCase
 import dev.rajesh.mobile_banking.qrscanner.data.remote.QPayRemoteDataSource
 import dev.rajesh.mobile_banking.qrscanner.data.remote.QPayRemoteDataSourceImpl
@@ -38,11 +40,15 @@ class QrScannerModule {
     fun qrScannerViewModel(
         getQPayMerchantDetailUseCase: GetQPayMerchantDetailUseCase,
         qrDecoder: QrDecoder,
-        getWalletUseCase: GetWalletListUseCase
+        getBankListUseCase: GetBankListUseCase,
+        getWalletUseCase: GetWalletListUseCase,
+        fetchCoopBranchUseCase: FetchCoopBranchUseCase
     ) = QrScannerViewModel(
         getQPayMerchantDetailUseCase = getQPayMerchantDetailUseCase,
         qrDecoder = qrDecoder,
-        getWalletListUseCase = getWalletUseCase
+        getBankListUseCase = getBankListUseCase,
+        getWalletListUseCase = getWalletUseCase,
+        fetchCoopBranchUseCase = fetchCoopBranchUseCase
     )
 
 }

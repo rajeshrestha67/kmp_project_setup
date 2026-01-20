@@ -1,10 +1,12 @@
 package dev.rajesh.mobile_banking.banktransfer.navigation
 
+import androidx.compose.runtime.remember
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
 import dev.rajesh.mobile_banking.banktransfer.favouriteAccounts.presentation.ui.FavouriteAccountsScreen
+import dev.rajesh.mobile_banking.banktransfer.interBankTransfer.domain.model.BankDetail
 import dev.rajesh.mobile_banking.banktransfer.presentation.ui.BankTransferScreen
 import dev.rajesh.mobile_banking.banktransfer.interBankTransfer.presentation.ui.InterBankTransferScreen
 import dev.rajesh.mobile_banking.banktransfer.sameBankTransfer.domain.model.CoopBranchDetail
@@ -29,8 +31,8 @@ fun NavGraphBuilder.bankTransferNavGraph(
         BankTransferScreen(
             onOptionSelected = { option ->
                 when (option.id) {
-                    1 -> navController.navigate(BankTransferRoutes.SameBankTransfer)
-                    2 -> navController.navigate(BankTransferRoutes.OtherBankTransfer)
+                    1 -> navController.navigate(BankTransferRoutes.SameBankTransfer())
+                    2 -> navController.navigate(BankTransferRoutes.OtherBankTransfer())
                     3 -> navController.navigate(
                         BankTransferRoutes.FavouriteAccounts
                     )
@@ -43,11 +45,25 @@ fun NavGraphBuilder.bankTransferNavGraph(
     }
 
     composable<BankTransferRoutes.SameBankTransfer> {
+        val route = it.toRoute<BankTransferRoutes.SameBankTransfer>()
+        val accountNumber: String? = route.accountNumber
+        val accountName: String? = route.accountName
+        val coopBranchJson: String? = route.coopBranchJson
+
+        val coopBranch = remember(coopBranchJson) {
+            coopBranchJson?.let {
+                AppJson.decodeFromString<CoopBranchDetail>(coopBranchJson)
+            }
+        }
+
         SameBankTransferScreen(
             navController = navController,
             onBackClicked = {
                 navController.popBackStack()
             },
+            accountNumber = accountNumber,
+            accountName = accountName,
+            coopBranch = coopBranch,
             onSelectCoopBranchClicked = {
                 navController.navigate(BankTransferRoutes.SelectCoopBranch)
             },
@@ -80,8 +96,22 @@ fun NavGraphBuilder.bankTransferNavGraph(
     }
 
     composable<BankTransferRoutes.OtherBankTransfer> {
+        val route = it.toRoute<BankTransferRoutes.OtherBankTransfer>()
+        val accountNumber: String? = route.accountNumber
+        val accountName: String? = route.accountName
+        val bankJson: String? = route.bank
+
+        val bank = remember(bankJson) {
+            bankJson?.let {
+                AppJson.decodeFromString<BankDetail>(bankJson)
+            }
+        }
+
         InterBankTransferScreen(
             navController = navController,
+            accountNumber = accountNumber,
+            accountName = accountName,
+            bank = bank,
             showConfirmation = {
                 val json = AppJson.encodeToString(
                     ConfirmationData.serializer(),
@@ -248,7 +278,7 @@ fun NavGraphBuilder.bankTransferNavGraph(
 
                 //clear auth and confirmation screen
                 navController.popBackStack(
-                    route = BankTransferRoutes.OtherBankTransfer,
+                    route = BankTransferRoutes.OtherBankTransfer(),
                     inclusive = false
                 )
             },

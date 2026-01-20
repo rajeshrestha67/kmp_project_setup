@@ -2,13 +2,15 @@ package dev.rajesh.mobile_banking.qrscanner.presentation.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import dev.rajesh.mobile_banking.loadWallet.domain.model.QrWallet
+import dev.rajesh.mobile_banking.banktransfer.interBankTransfer.domain.usecase.GetBankListUseCase
+import dev.rajesh.mobile_banking.banktransfer.sameBankTransfer.domain.usecases.FetchCoopBranchUseCase
 import dev.rajesh.mobile_banking.loadWallet.domain.usecase.GetWalletListUseCase
 import dev.rajesh.mobile_banking.logger.AppLogger
 import dev.rajesh.mobile_banking.model.ErrorData
 import dev.rajesh.mobile_banking.model.network.toErrorMessage
 import dev.rajesh.mobile_banking.networkhelper.onError
 import dev.rajesh.mobile_banking.networkhelper.onSuccess
+import dev.rajesh.mobile_banking.qrscanner.domain.model.AccountDetails
 import dev.rajesh.mobile_banking.qrscanner.domain.model.QPayMerchantDetail
 import dev.rajesh.mobile_banking.qrscanner.domain.qrDecoder.QrDecoder
 import dev.rajesh.mobile_banking.qrscanner.domain.usecases.GetQPayMerchantDetailUseCase
@@ -26,6 +28,8 @@ import kotlinx.coroutines.launch
 class QrScannerViewModel(
     private val getQPayMerchantDetailUseCase: GetQPayMerchantDetailUseCase,
     private val qrDecoder: QrDecoder,
+    private val getBankListUseCase: GetBankListUseCase,
+    private val fetchCoopBranchUseCase: FetchCoopBranchUseCase,
     private val getWalletListUseCase: GetWalletListUseCase
 ) : ViewModel() {
 
@@ -94,13 +98,13 @@ class QrScannerViewModel(
             when {
                 resultData.bankTransfer -> {
                     resultData.accountDetails?.let { accountDetails ->
-                        _effect.send(QrNavigationEffect.ToInterbankTransfer(accountDetails = accountDetails))
+                        getBankList(accountDetails)
                     }
                 }
 
                 resultData.internalFundTransfer -> {
                     resultData.accountDetails?.let { accountDetails ->
-                        _effect.send(QrNavigationEffect.ToSameBankTransfer(accountDetails = accountDetails))
+                        fetchCoopBranchList(accountDetails)
                     }
                 }
 
@@ -125,6 +129,64 @@ class QrScannerViewModel(
         }
     }
 
+    private fun getBankList(accountDetails: AccountDetails) = viewModelScope.launch {
+        _state.update {
+            it.copy(isFetchingBankList = true)
+        }
+        getBankListUseCase.invoke()
+            .onSuccess { bankList ->
+                _state.update {
+                    it.copy(isFetchingBankList = false)
+                }
+                val bank = bankList.find {
+                    it.swiftCode.equals(accountDetails.bankCode, ignoreCase = false)
+                }
+                _effect.send(
+                    QrNavigationEffect.ToInterbankTransfer(
+                        accountDetails = accountDetails,
+                        bank = bank
+                    )
+                )
+
+
+            }
+            .onError { error ->
+                AppLogger.d(TAG, "Error: fetching bank list: ${error.toErrorMessage()}")
+                _state.update {
+                    it.copy(
+                        isFetchingBankList = false,
+                        errorData = ErrorData(error.toErrorMessage())
+                    )
+                }
+            }
+    }
+
+    private fun fetchCoopBranchList(accountDetails: AccountDetails) = viewModelScope.launch {
+        _state.update {
+            it.copy(isFetchingCoopBranchList = true)
+        }
+        fetchCoopBranchUseCase.invoke()
+            .onSuccess { branches ->
+                _state.update {
+                    it.copy(isFetchingCoopBranchList = false)
+                }
+                val branch = branches.find {
+                    it.branchCode.equals(accountDetails.bankCode, ignoreCase = false)
+                }
+                _effect.send(
+                    QrNavigationEffect.ToSameBankTransfer(
+                        accountDetails = accountDetails,
+                        branch = branch
+                    )
+                )
+            }
+            .onError {
+                _state.update {
+                    it.copy(isFetchingCoopBranchList = false)
+                }
+            }
+    }
+
     private fun getWalletList(resultData: QPayMerchantDetail) = viewModelScope.launch {
         _state.update {
             it.copy(isFetchingWalletList = true)
@@ -143,7 +205,7 @@ class QrScannerViewModel(
                     _effect.send(
                         QrNavigationEffect.ToWallet(
                             walletDetails = it,
-                            walletUserId =  resultData.walletId.orEmpty(),
+                            walletUserId = resultData.walletId.orEmpty(),
                             walletHolderName = resultData.name.orEmpty()
                         )
                     )

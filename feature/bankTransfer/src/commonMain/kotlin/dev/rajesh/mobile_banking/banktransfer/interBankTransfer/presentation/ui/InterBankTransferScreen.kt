@@ -38,6 +38,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import dev.rajesh.mobile_banking.banktransfer.interBankTransfer.domain.model.BankDetail
 import dev.rajesh.mobile_banking.banktransfer.interBankTransfer.presentation.state.InterBankTransferEffect
 import dev.rajesh.mobile_banking.banktransfer.interBankTransfer.presentation.state.InterBankTransferScreenAction
 import dev.rajesh.mobile_banking.banktransfer.interBankTransfer.presentation.viewmodel.InterBankTransferViewModel
@@ -64,6 +65,9 @@ import org.koin.compose.viewmodel.koinViewModel
 @Composable
 fun InterBankTransferScreen(
     navController: NavController,
+    accountNumber: String? = null,
+    accountName: String? = null,
+    bank: BankDetail? = null,
     showConfirmation: (ConfirmationData) -> Unit,
     onTransactionSuccessful: (TransactionData) -> Unit,
     onBackClicked: () -> Unit,
@@ -119,6 +123,17 @@ fun InterBankTransferScreen(
             }
         )
     }
+
+    LaunchedEffect(accountNumber, accountName, bank) {
+        interBankTransferViewModel.onAction(
+            InterBankTransferScreenAction.InitFromNavigation(
+                accountNumber = accountNumber,
+                accountName = accountName,
+                bank = bank
+            )
+        )
+    }
+
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),

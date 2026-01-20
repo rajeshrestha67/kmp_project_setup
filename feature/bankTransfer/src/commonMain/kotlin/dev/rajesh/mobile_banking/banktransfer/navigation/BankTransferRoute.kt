@@ -12,10 +12,18 @@ sealed interface BankTransferRoutes {
     data object BankTransferRoot : BankTransferRoutes
 
     @Serializable
-    data object SameBankTransfer : BankTransferRoutes
+    data class SameBankTransfer(
+        val accountNumber: String? = null,
+        val accountName: String? = null,
+        val coopBranchJson: String? = null,
+    ) : BankTransferRoutes
 
     @Serializable
-    data object OtherBankTransfer : BankTransferRoutes
+    data class OtherBankTransfer(
+        val accountNumber: String? = null,
+        val accountName: String? = null,
+        val bank: String? = null,
+    ) : BankTransferRoutes
 
     @Serializable
     data object FavouriteAccounts : BankTransferRoutes

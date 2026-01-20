@@ -154,6 +154,16 @@ class SameBankTransferViewModel(
                 }
 
             }
+
+            is SameBankTransferAction.InitFromNavigation -> {
+                _state.update {
+                    it.copy(
+                        accountNumber = action.accountNumber.orEmpty(),
+                        fullName = action.accountName.orEmpty(),
+                        branch = action.coopBranch
+                    )
+                }
+            }
         }
     }
 

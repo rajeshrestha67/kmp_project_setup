@@ -20,6 +20,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import dev.rajesh.mobile_banking.banktransfer.interBankTransfer.domain.model.BankDetail
+import dev.rajesh.mobile_banking.banktransfer.sameBankTransfer.domain.model.CoopBranchDetail
 import dev.rajesh.mobile_banking.components.dimens
 import dev.rajesh.mobile_banking.components.loadingScreen.LoadingScreen
 import dev.rajesh.mobile_banking.components.media.checkGalleryFullAccess
@@ -45,8 +47,8 @@ private const val TAG = "QrScannerScreen"
 
 @Composable
 fun QrScannerScreen(
-    toInterBankTransfer: (AccountDetails) -> Unit,
-    toSameBankTransfer: (AccountDetails) -> Unit,
+    toInterBankTransfer: (AccountDetails, BankDetail?) -> Unit,
+    toSameBankTransfer: (AccountDetails, CoopBranchDetail?) -> Unit,
     toWallet: (walletDetail: WalletDetail, walletUserId: String, walletHolderName: String) -> Unit,
     onBackClicked: () -> Boolean
 ) {
@@ -129,11 +131,14 @@ fun QrScannerScreen(
         viewModel.effect.collect {
             when (it) {
                 is QrNavigationEffect.ToInterbankTransfer -> {
-                    toInterBankTransfer(it.accountDetails)
+                    toInterBankTransfer(
+                        it.accountDetails,
+                        it.bank
+                    )
                 }
 
                 is QrNavigationEffect.ToSameBankTransfer -> {
-                    toSameBankTransfer(it.accountDetails)
+                    toSameBankTransfer(it.accountDetails, it.branch)
                 }
 
                 is QrNavigationEffect.ToWallet -> {

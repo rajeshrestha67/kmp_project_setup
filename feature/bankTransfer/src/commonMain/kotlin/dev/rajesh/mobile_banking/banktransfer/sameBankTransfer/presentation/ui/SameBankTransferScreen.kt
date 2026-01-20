@@ -44,6 +44,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import dev.rajesh.mobile_banking.banktransfer.navigation.BankTransferResult
+import dev.rajesh.mobile_banking.banktransfer.sameBankTransfer.domain.model.CoopBranchDetail
 import dev.rajesh.mobile_banking.banktransfer.sameBankTransfer.presentation.state.SameBankTransferAction
 import dev.rajesh.mobile_banking.banktransfer.sameBankTransfer.presentation.state.SameBankTransferEffect
 import dev.rajesh.mobile_banking.banktransfer.sameBankTransfer.presentation.state.TransferTab
@@ -79,6 +80,9 @@ private const val TAG = "SameBankTransferScreen"
 fun SameBankTransferScreen(
     navController: NavController,
     onBackClicked: () -> Unit,
+    accountNumber: String? = null,
+    accountName: String? = null,
+    coopBranch: CoopBranchDetail? = null,
     onSelectCoopBranchClicked: () -> Unit,
     showConfirmation: (ConfirmationData) -> Unit,
     onTransactionSuccessful: (TransactionData) -> Unit
@@ -200,6 +204,13 @@ fun SameBankTransferScreen(
             onDismiss = {
                 viewModel.dismissFundTransferError()
             }
+        )
+    }
+
+    LaunchedEffect(accountNumber, accountName, coopBranch) {
+        viewModel.onAction(
+            SameBankTransferAction
+                .InitFromNavigation(accountNumber, accountName, coopBranch)
         )
     }
 

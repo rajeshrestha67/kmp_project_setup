@@ -6,6 +6,12 @@ import org.jetbrains.compose.resources.StringResource
 sealed interface InterBankTransferScreenAction {
 
 
+    data class InitFromNavigation(
+        val accountNumber: String?,
+        val accountName: String?,
+        val bank: BankDetail?
+    ) : InterBankTransferScreenAction
+
     data class OnBankSelected(val selectedBank: BankDetail) : InterBankTransferScreenAction
 
     data class OnReceiversAccountNumberChanged(val receiversAccountNumber: String) :
