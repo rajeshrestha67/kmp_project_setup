@@ -1,12 +1,8 @@
 package dev.rajesh.mobile_banking.di
 
-import dev.rajesh.mobile_banking.banktransfer.sameBankTransfer.data.remote.accountValidation.AccountValidationRemoteDataSource
-import dev.rajesh.mobile_banking.banktransfer.sameBankTransfer.data.remote.accountValidation.AccountValidationRemoteDataSourceImpl
-import dev.rajesh.mobile_banking.banktransfer.sameBankTransfer.data.remote.fundTransfer.FundTransferRemoteDataSource
-import dev.rajesh.mobile_banking.banktransfer.sameBankTransfer.data.remote.fundTransfer.FundTransferRemoteDataSourceImpl
-import dev.rajesh.mobile_banking.banktransfer.sameBankTransfer.data.repository.AccountValidationRepositoryImpl
+import dev.rajesh.mobile_banking.banktransfer.sameBankTransfer.data.remote.dataSource.FundTransferRemoteDataSource
+import dev.rajesh.mobile_banking.banktransfer.sameBankTransfer.data.remote.dataSource.FundTransferRemoteDataSourceImpl
 import dev.rajesh.mobile_banking.banktransfer.sameBankTransfer.data.repository.FundTransferRepositoryImpl
-import dev.rajesh.mobile_banking.banktransfer.sameBankTransfer.domain.repository.AccountValidationRepository
 import dev.rajesh.mobile_banking.banktransfer.sameBankTransfer.domain.repository.FundTransferRepository
 import dev.rajesh.mobile_banking.banktransfer.sameBankTransfer.domain.usecases.AccountValidationUseCase
 import dev.rajesh.mobile_banking.banktransfer.sameBankTransfer.domain.usecases.FundTransferUseCase
@@ -24,20 +20,10 @@ class SameBankTransferModule {
     @Factory
     fun provideRequiredValidationUseCase() = RequiredValidationUseCase()
 
-    @Factory(binds = [AccountValidationRemoteDataSource::class])
-    fun provideAccountValidationRemoteDataSource(
-        httpClient: HttpClient
-    ) = AccountValidationRemoteDataSourceImpl(httpClient)
-
-    @Factory(binds = [AccountValidationRepository::class])
-    fun provideAccountValidationRepository(
-        accountValidationRemoteDataSource: AccountValidationRemoteDataSource
-    ) = AccountValidationRepositoryImpl(accountValidationRemoteDataSource)
-
     @Factory
     fun provideAccountValidationUseCase(
-        accountValidationRepository: AccountValidationRepository
-    ) = AccountValidationUseCase(accountValidationRepository)
+        repository: FundTransferRepository
+    ) = AccountValidationUseCase(repository)
 
     @KoinViewModel
     fun sameBankTransferViewModel(
