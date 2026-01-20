@@ -8,9 +8,9 @@ import dev.rajesh.mobile_banking.networkhelper.ApiResult
 
 
 class InterBankTransferUseCase(
-    private val interBankTransferRepository: InterBankTransferRepository
+    private val repository: InterBankTransferRepository
 ) {
     suspend operator fun invoke(bankTransferRequest: BankTransferRequest): ApiResult<InterBankTransferDetail, DataError> {
-        return interBankTransferRepository.interBankTransfer(bankTransferRequest)
+        return repository.interBankTransfer(bankTransferRequest)
     }
 }
