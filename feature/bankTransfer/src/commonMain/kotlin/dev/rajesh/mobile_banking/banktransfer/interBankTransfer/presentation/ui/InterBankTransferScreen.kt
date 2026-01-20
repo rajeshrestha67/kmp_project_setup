@@ -339,7 +339,8 @@ fun InterBankTransferScreen(
             Spacer(modifier = Modifier.height(MaterialTheme.dimens.small3))
 
             AppButton(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth()
+                    .padding(bottom = 50.dp),
                 onClick = {
                     interBankTransferViewModel.onAction(InterBankTransferScreenAction.OnProceedClicked)
                 },

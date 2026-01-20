@@ -62,6 +62,8 @@ class QrScannerViewModel(
 //                    } ?: {
 //                        getQPayMerchantDetail(action.scannedData)
 //                    }
+                    AppLogger.d(TAG, "Qr Scan Data: ${action.scannedData}")
+
                     getQPayMerchantDetail(action.scannedData)
                 }
             }
@@ -171,7 +173,7 @@ class QrScannerViewModel(
                     it.copy(isFetchingCoopBranchList = false)
                 }
                 val branch = branches.find {
-                    it.branchCode.equals(accountDetails.bankCode, ignoreCase = false)
+                    it.branchCode.equals(accountDetails.branchCode, ignoreCase = false)
                 }
                 _effect.send(
                     QrNavigationEffect.ToSameBankTransfer(

@@ -31,7 +31,7 @@ fun NavGraphBuilder.bankTransferNavGraph(
         BankTransferScreen(
             onOptionSelected = { option ->
                 when (option.id) {
-                    1 -> navController.navigate(BankTransferRoutes.SameBankTransfer)
+                    1 -> navController.navigate(BankTransferRoutes.SameBankTransfer())
                     2 -> navController.navigate(BankTransferRoutes.OtherBankTransfer())
                     3 -> navController.navigate(
                         BankTransferRoutes.FavouriteAccounts
@@ -210,8 +210,8 @@ fun NavGraphBuilder.bankTransferNavGraph(
                     .set(PaymentAuthResult.mPin, mPin)
 
                 //clear auth and confirmation screen
-                navController.popBackStack(
-                    route = BankTransferRoutes.SameBankTransfer,
+                navController.popBackStack<BankTransferRoutes.SameBankTransfer>(
+                    //route = BankTransferRoutes.SameBankTransfer,
                     inclusive = false
                 )
             },

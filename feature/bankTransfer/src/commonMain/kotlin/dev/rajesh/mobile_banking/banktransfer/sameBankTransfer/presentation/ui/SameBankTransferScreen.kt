@@ -249,8 +249,6 @@ fun SameBankTransferScreen(
             )
         }
     ) { contentPadding ->
-
-
         Column(
             modifier = Modifier
                 .padding(contentPadding)
@@ -498,7 +496,8 @@ fun SameBankTransferScreen(
             Spacer(modifier = Modifier.height(16.dp))
 
             AppButton(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth()
+                    .padding(bottom = 50.dp),
                 onClick = {
                     viewModel.onAction(SameBankTransferAction.OnProceedClicked)
                 },
