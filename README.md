@@ -39,3 +39,10 @@ Use commands below to
 
 Generate shared resources
 ./gradlew :composeApp:generateComposeResClass 
+
+
+
+kover commands
+================
+./gradlew koververify       ---> to verify kover
+./gradlew koverHtmlReport   ---> to generate html report

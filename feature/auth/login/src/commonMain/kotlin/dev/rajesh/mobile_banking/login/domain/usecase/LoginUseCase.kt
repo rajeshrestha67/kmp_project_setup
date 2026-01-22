@@ -23,9 +23,7 @@ class LoginUseCase(
     ): ApiResult<LoginData, DataError> {
         return userRepository.login(
             loginRequest
-        ).map {
-            it.toData()
-        }.onSuccess { data ->
+        ).onSuccess { data ->
             val token = tokenRepository.token.firstOrNull() ?: Token()
             tokenRepository.saveToken(
                 token.copy(
@@ -33,10 +31,6 @@ class LoginUseCase(
                     mPin = loginRequest.password
                 )
             )
-
-
-        }/*.onError {
-
-        }*/
+        }
     }
 }

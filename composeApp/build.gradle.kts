@@ -6,6 +6,34 @@ plugins {
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
     alias(libs.plugins.jetbrains.kotlin.serialization)
+//    id("org.jetbrains.kotlinx.kover") version "0.8.0"
+    alias(libs.plugins.kover)
+}
+
+allprojects{
+    kover{
+        reports{
+            verify {
+                rule {
+                    minBound(80)
+                }
+            }
+
+            filters {
+                excludes {
+                    classes("*.MainActivity") //Android entry class
+
+                    //generated classes and resources
+                    packages("*.generated.*")
+
+                    // Compose Related
+                    classes("*ComposableSingletons*")
+                    annotatedBy("androidx.compose.runtime.Composable")
+                }
+            }
+        }
+    }
+
 }
 
 kotlin {
@@ -96,6 +124,7 @@ android {
         targetSdk = libs.versions.android.targetSdk.get().toInt()
         versionCode = 1
         versionName = "1.0"
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
     packaging {
         resources {

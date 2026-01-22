@@ -51,6 +51,11 @@ mlkit-barcode = "17.2.0"
 
 ucrop = "2.2.8"
 
+#testing dependencies
+kover ="0.9.4"
+coroutine-test = "1.10.2"
+koin-test = "4.1.1"
+kotest-version = "6.0.3"
 
 
 
@@ -134,6 +139,13 @@ mlkit-barcode-scanning = { group = "com.google.mlkit", name = "barcode-scanning"
 #implementation("com.github.yalantis:ucrop:2.2.8")
 ucrop = { module = "com.github.yalantis:ucrop", version.ref = "ucrop" }
 
+#test
+coroutine-test ={module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutine-test"}
+koin-test = { module = "io.insert-koin:koin-test", version.ref = "koin-test" }
+kotest-assertions = { group = "io.kotest", name = "kotest-assertions-core", version.ref = "kotest-version" }
+kotest-framework = { group = "io.kotest", name = "kotest-framework-engine", version.ref = "kotest-version" }
+kotest-property = { group = "io.kotest", name = "kotest-property", version.ref = "kotest-version" }
+
 
 
 [plugins]
@@ -149,3 +161,6 @@ ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 composeHotReload = { id = "org.jetbrains.compose.hot-reload", version.ref = "composeHotReload" }
 jetbrains-kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 androidx-room = { id = "androidx.room", version.ref = "room" }
+kover = { id = "org.jetbrains.kotlinx.kover", version.ref = "kover" }
+
+

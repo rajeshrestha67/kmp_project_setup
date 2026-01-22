@@ -4,7 +4,9 @@ plugins {
     alias(libs.plugins.composeCompiler)
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.jetbrains.kotlin.serialization)
+    alias(libs.plugins.kover)
 }
+kover{}
 
 kotlin {
 
@@ -97,6 +99,12 @@ kotlin {
         commonTest {
             dependencies {
                 implementation(libs.kotlin.test)
+                implementation(libs.coroutine.test)
+                implementation(libs.koin.test)
+                implementation(libs.kotest.framework)
+                implementation(libs.kotest.assertions)
+                implementation("io.ktor:ktor-client-mock:3.3.1")
+
             }
         }
 
