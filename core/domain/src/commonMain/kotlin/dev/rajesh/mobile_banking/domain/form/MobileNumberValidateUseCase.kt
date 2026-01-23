@@ -7,11 +7,16 @@ import org.jetbrains.compose.resources.StringResource
 class MobileNumberValidateUseCase {
 
     operator fun invoke(mobileNumber: String): StringResource? {
-        val trimmed = mobileNumber.trim()
+        var trimmed = mobileNumber.trim()
             .replace(" ", "")
             .replace("-", "")
+            .replace("+", "")
+            .replace("(", "")
+            .replace(")", "")
 
+        if (trimmed.startsWith("977")) {
+            trimmed = trimmed.replaceFirst("977", "")
+        }
         return FormValidate.mobileNumberValidationRules.validate(trimmed)
-
     }
 }

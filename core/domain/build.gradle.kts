@@ -8,7 +8,22 @@ plugins {
     alias(libs.plugins.kover)
 
 }
-kover{}
+kover{
+    reports{
+        verify{
+            rule{
+                minBound(80)
+            }
+        }
+
+        filters{
+            excludes{
+                //generated classes and resources
+                packages("*.generated.*")
+            }
+        }
+    }
+}
 
 kotlin {
 
