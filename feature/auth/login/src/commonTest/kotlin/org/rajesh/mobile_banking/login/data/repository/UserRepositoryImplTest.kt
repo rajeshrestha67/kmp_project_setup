@@ -1,98 +1,39 @@
 package org.rajesh.mobile_banking.login.data.repository
 
-import dev.rajesh.datastore.token.repository.TokenRepository
-import dev.rajesh.mobile_banking.login.data.dto.LoginRequestDTO
 import dev.rajesh.mobile_banking.login.data.repository.UserRepositoryImpl
 import dev.rajesh.mobile_banking.login.domain.repository.UserRepository
-import dev.rajesh.mobile_banking.networkhelper.EndPoint
-import io.ktor.client.HttpClient
-import io.ktor.client.engine.mock.MockEngine
-import io.ktor.client.engine.mock.respond
-import io.ktor.client.engine.mock.respondBadRequest
-import io.ktor.client.engine.mock.toByteArray
-import io.ktor.http.HttpHeaders
-import io.ktor.http.HttpStatusCode
-import io.ktor.http.headersOf
+import dev.rajesh.mobile_banking.model.network.DataError
+import dev.rajesh.mobile_banking.networkhelper.ApiResult
 import kotlinx.coroutines.test.runTest
-import kotlinx.serialization.json.Json
-import io.ktor.serialization.kotlinx.json.json
-
-import org.koin.core.context.startKoin
-import org.koin.core.module.dsl.singleOf
-import org.koin.dsl.bind
-import org.koin.dsl.module
-import org.koin.test.KoinTest
-import org.koin.test.inject
+import org.rajesh.mobile_banking.login.fake.FakeLoginRemoteDataSource
+import org.rajesh.mobile_banking.login.testUtils.fakeLoginRequest
 import kotlin.test.BeforeTest
 import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 
-class UserRepositoryImplTest : KoinTest {
-
-    private val repository: UserRepository by inject()
-
+class UserRepositoryImplTest {
+    private lateinit var fakeRemoteDS: FakeLoginRemoteDataSource
+    private lateinit var repository: UserRepository
 
     @BeforeTest
     fun setUp() {
-        val mockEngine = MockEngine { request ->
-            if (request.url.encodedPath.endsWith(EndPoint.LOGIN)) {
-                val bodyText = request.body.toByteArray().decodeToString()
-                val loginRequest = Json.decodeFromString<LoginRequestDTO>(bodyText)
-                when {
-                    loginRequest.username != "valid@gmail.com" -> {
-                        respond(
-                            content = """{"message": "invalid email"}""",
-                            status = HttpStatusCode.OK,
-                            headers = headersOf(HttpHeaders.ContentType, "application/json")
-                        )
-                    }
-
-                    loginRequest.password != "password" -> {
-                        respond(
-                            content = """{"message": "invalid password"}""",
-                            status = HttpStatusCode.OK,
-                            headers = headersOf(HttpHeaders.ContentType, "application/json")
-                        )
-                    }
-
-                    else -> {
-                        respond(
-                            content = """{"token": "fakeToken","role": "HRM_EMPLOYEE"}""",
-                            status = HttpStatusCode.OK,
-                            headers = headersOf(HttpHeaders.ContentType, "application/json")
-                        )
-                    }
-                }
-
-            } else {
-                respondBadRequest()
-            }
-        }
-
-        startKoin {
-            modules(
-                module {
-                    single {
-                        HttpClient(mockEngine) {
-                            install(ContentNegotiation) {
-                                json(
-                                    Json {
-                                        ignoreUnknownKeys = true
-                                        isLenient = true
-                                    }
-                                )
-                            }
-                        }
-                    }
-                    singleOf(::UserRepositoryImpl).bind<UserRepository>()
-                    singleOf(::FakeTokenRepository).bind<TokenRepository>()
-                }
-            )
-        }
-
+        fakeRemoteDS = FakeLoginRemoteDataSource()
+        repository = UserRepositoryImpl(fakeRemoteDS)
     }
 
     @Test
-    fun `login - success return success-style ApiResult`() = runTest {
+    fun login_success_maps_dto_to_domain() = runTest {
+        val result = repository.login(fakeLoginRequest("9802304437", "2287"))
 
+        assertTrue(result is ApiResult.Success)
+        assertEquals("fake_token", (result.data.access_token))
+    }
+
+    @Test
+    fun login_error_propagates_error() = runTest {
+        fakeRemoteDS.result = ApiResult.Error(DataError.NetworkError.Custom("Network Error"))
+        val result = repository.login(fakeLoginRequest("9802304437", "2287"))
+        assertTrue(result is ApiResult.Error)
     }
 }

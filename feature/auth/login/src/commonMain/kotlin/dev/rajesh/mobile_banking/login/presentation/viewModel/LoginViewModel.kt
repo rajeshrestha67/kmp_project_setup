@@ -1,4 +1,4 @@
-package dev.rajesh.mobile_banking.login.presentation.state
+package dev.rajesh.mobile_banking.login.presentation.viewModel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -8,6 +8,8 @@ import dev.rajesh.mobile_banking.domain.form.PasswordValidateUseCase
 import dev.rajesh.mobile_banking.logger.AppLogger
 import dev.rajesh.mobile_banking.login.domain.model.LoginRequest
 import dev.rajesh.mobile_banking.login.domain.usecase.LoginUseCase
+import dev.rajesh.mobile_banking.login.presentation.state.LoginScreenAction
+import dev.rajesh.mobile_banking.login.presentation.state.LoginScreenState
 import dev.rajesh.mobile_banking.model.network.toErrorMessage
 import dev.rajesh.mobile_banking.networkhelper.Constants
 import dev.rajesh.mobile_banking.networkhelper.onError
@@ -41,7 +43,7 @@ class LoginViewModel(
 
     }.stateIn(
         viewModelScope,
-        started = SharingStarted.WhileSubscribed(5000),
+        started = SharingStarted.Companion.WhileSubscribed(5000),
         initialValue = LoginScreenState()
     )
 

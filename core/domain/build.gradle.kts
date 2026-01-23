@@ -5,7 +5,10 @@ plugins {
     alias(libs.plugins.ksp)
     alias(libs.plugins.composeCompiler)
     alias(libs.plugins.composeMultiplatform)
+    alias(libs.plugins.kover)
+
 }
+kover{}
 
 kotlin {
 
@@ -15,7 +18,7 @@ kotlin {
     androidLibrary {
         namespace = "dev.rajesh.mobile_banking.domain"
         compileSdk = 36
-        minSdk = 24
+        minSdk = 26
 
         withHostTestBuilder {
         }
@@ -24,6 +27,15 @@ kotlin {
             sourceSetTreeName = "test"
         }.configure {
             instrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        }
+
+        packaging {
+            resources {
+                excludes += setOf(
+                    "META-INF/AL2.0",
+                    "META-INF/LGPL2.1"
+                )
+            }
         }
     }
 
@@ -78,12 +90,19 @@ kotlin {
                 implementation(projects.core.ui.res)
                 implementation(projects.core.persistance.datastore)
 
+                implementation(libs.ktor.client.content.negotiation)
+                implementation(libs.ktor.serialization.kotlinx.json)
+
             }
         }
 
         commonTest {
             dependencies {
                 implementation(libs.kotlin.test)
+                implementation(libs.kotest.framework)
+                implementation(libs.kotest.assertions)
+                implementation(libs.koin.test)
+                implementation(libs.coroutine.test)
             }
         }
 

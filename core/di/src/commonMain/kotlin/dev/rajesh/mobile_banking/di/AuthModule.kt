@@ -8,7 +8,7 @@ import dev.rajesh.mobile_banking.login.data.datasource.LoginRemoteDataSourceImpl
 import dev.rajesh.mobile_banking.login.data.repository.UserRepositoryImpl
 import dev.rajesh.mobile_banking.login.domain.repository.UserRepository
 import dev.rajesh.mobile_banking.login.domain.usecase.LoginUseCase
-import dev.rajesh.mobile_banking.login.presentation.state.LoginViewModel
+import dev.rajesh.mobile_banking.login.presentation.viewModel.LoginViewModel
 import dev.rajesh.mobile_banking.otpverification.presentation.viewmodel.OtpVerificationViewModel
 import io.ktor.client.HttpClient
 import org.koin.android.annotation.KoinViewModel

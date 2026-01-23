@@ -5,7 +5,7 @@ import androidx.compose.runtime.remember
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
-import dev.rajesh.mobile_banking.login.presentation.state.LoginViewModel
+import dev.rajesh.mobile_banking.login.presentation.viewModel.LoginViewModel
 import dev.rajesh.mobile_banking.login.presentation.ui.LoginScreen
 import dev.rajesh.mobile_banking.otpverification.presentation.state.OtpEffect
 import dev.rajesh.mobile_banking.otpverification.presentation.ui.OtpVerificationScreen

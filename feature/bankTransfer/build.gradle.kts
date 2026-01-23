@@ -15,7 +15,7 @@ kotlin {
     androidLibrary {
         namespace = "dev.rajesh.mobile_banking.banktransfer"
         compileSdk = 36
-        minSdk = 24
+        minSdk = 26
 
         withHostTestBuilder {
         }

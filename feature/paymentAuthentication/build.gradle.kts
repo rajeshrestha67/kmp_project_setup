@@ -17,7 +17,7 @@ kotlin {
     androidLibrary {
         namespace = "dev.rajesh.mobile_banking.paymentAuthentication"
         compileSdk = 36
-        minSdk = 24
+        minSdk = 26
 
         withHostTestBuilder {
         }

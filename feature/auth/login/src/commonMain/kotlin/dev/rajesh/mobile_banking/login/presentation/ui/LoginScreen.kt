@@ -38,7 +38,7 @@ import dev.rajesh.mobile_banking.components.textField.FormValidate
 import dev.rajesh.mobile_banking.components.textField.MobileTextField
 import dev.rajesh.mobile_banking.components.textField.PasswordTextField
 import dev.rajesh.mobile_banking.login.presentation.state.LoginEffect
-import dev.rajesh.mobile_banking.login.presentation.state.LoginViewModel
+import dev.rajesh.mobile_banking.login.presentation.viewModel.LoginViewModel
 import dev.rajesh.mobile_banking.login.presentation.state.LoginScreenAction
 import dev.rajesh.mobile_banking.login.presentation.state.LoginScreenState
 import dev.rajesh.mobile_banking.res.SharedRes

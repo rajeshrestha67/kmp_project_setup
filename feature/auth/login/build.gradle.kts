@@ -16,7 +16,7 @@ kotlin {
     androidLibrary {
         namespace = "dev.rajesh.mobile_banking.login"
         compileSdk = 36
-        minSdk = 24
+        minSdk = 26
 
         withHostTestBuilder {
         }
@@ -25,6 +25,15 @@ kotlin {
             sourceSetTreeName = "test"
         }.configure {
             instrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        }
+
+        packaging {
+            resources {
+                excludes += setOf(
+                    "META-INF/AL2.0",
+                    "META-INF/LGPL2.1"
+                )
+            }
         }
     }
 
@@ -93,17 +102,20 @@ kotlin {
                 implementation(projects.core.persistance.datastore)
                 implementation(projects.feature.otpVerification)
 
+                implementation(libs.ktor.client.content.negotiation)
+                implementation(libs.ktor.serialization.kotlinx.json)
+
             }
         }
 
         commonTest {
             dependencies {
                 implementation(libs.kotlin.test)
-                implementation(libs.coroutine.test)
-                implementation(libs.koin.test)
                 implementation(libs.kotest.framework)
                 implementation(libs.kotest.assertions)
-                implementation("io.ktor:ktor-client-mock:3.3.1")
+                implementation(libs.koin.test)
+                implementation(libs.coroutine.test)
+                implementation(libs.ktor.client.mock)
 
             }
         }

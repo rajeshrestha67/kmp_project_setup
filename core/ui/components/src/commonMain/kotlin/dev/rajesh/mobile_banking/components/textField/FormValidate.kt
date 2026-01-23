@@ -23,8 +23,12 @@ object FormValidate {
     }
 
 
+    val emailRegex =
+        Regex("^[a-zA-Z0-9.!#\$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*\$")
+    val emailRegex2 = Regex("^[A-Za-z0-9._%+-]+@[A-Za-z0-9-]+(\\.[A-Za-z]{2,})+$")
+
     val emailRule = Rule { text ->
-        if (!text.matches(Regex("^[a-zA-Z0-9.!#\$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*\$"))) {
+        if (!text.matches(emailRegex2)) {
             SharedRes.Strings.invalidEmailAddress
         } else {
             null
@@ -81,7 +85,7 @@ object FormValidate {
         }
     }
     val passwordLengthRule = Rule { text ->
-       // if (!text.matches(Regex(".{6,}"))) {  //for 6 digit password
+        // if (!text.matches(Regex(".{6,}"))) {  //for 6 digit password
         if (!text.matches(Regex("^\\d{4,6}$"))) { //for 4-6 digit password
             SharedRes.Strings.invalidPasswordLength
         } else {
