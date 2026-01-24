@@ -18,7 +18,6 @@ import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
 import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
-import org.koin.dsl.module
 import org.rajesh.mobile_banking.login.fake.FakeDeviceInfoProvider
 import org.rajesh.mobile_banking.login.fake.FakeTokenRepository
 import org.rajesh.mobile_banking.login.fake.FakeUserRepository
@@ -78,40 +77,14 @@ class LoginViewModelTest {
         state.mobileNumberError shouldBe SharedRes.Strings.invalidMobileNumber
     }
 
-//    @Test
-//    fun invalid_password_should_update_passwordError_and_not_call_login ()= runTest {
-//        loginViewModel.onAction(LoginScreenAction.OnMobileNumberChanged("9802304437"))
-//        loginViewModel.onAction(LoginScreenAction.OnPasswordChanged("12"))
-//        loginViewModel.onAction(LoginScreenAction.LoginClicked)
-//
-//        val state = loginViewModel.state.value
-//        state.passwordError shouldBe SharedRes.Strings.invalidPassword
-//    }
+    @Test
+    fun invalid_password_should_update_passwordError_and_not_call_login ()= runTest {
+        loginViewModel.onAction(LoginScreenAction.OnMobileNumberChanged("9802304437"))
+        loginViewModel.onAction(LoginScreenAction.OnPasswordChanged("12"))
+        loginViewModel.onAction(LoginScreenAction.LoginClicked)
 
-//    @Test
-//    fun on_mobile_number_changed_updates_state() = runTest {
-//        loginViewModel.onAction(LoginScreenAction.OnMobileNumberChanged("9800000000"))
-//        loginViewModel.state.value.mobileNumber shouldBe "9800000000"
-//    }
-
-//    @Test
-//    fun on_password_changed_updates_state() = runTest {
-//        loginViewModel.onAction(LoginScreenAction.OnPasswordChanged("my_secret"))
-//        loginViewModel.state.value.password shouldBe "my_secret"
-//    }
-
-
-//    @Test
-//    fun on_mobile_number_error_action_updates_state() = runTest {
-//        loginViewModel.onAction(LoginScreenAction.OnMobileNumberError(SharedRes.Strings.invalidMobileNumber))
-//        loginViewModel.state.value.mobileNumberError shouldBe SharedRes.Strings.invalidMobileNumber
-//    }
-
-//
-//    @Test
-//    fun on_password_error_action_updates_state() = runTest {
-//        loginViewModel.onAction(LoginScreenAction.OnPasswordError(SharedRes.Strings.invalidPassword))
-//        loginViewModel.state.value.passwordError shouldBe SharedRes.Strings.invalidPassword
-//    }
+        val state = loginViewModel.state.value
+        state.passwordError shouldBe SharedRes.Strings.invalidPasswordLength
+    }
 
 }

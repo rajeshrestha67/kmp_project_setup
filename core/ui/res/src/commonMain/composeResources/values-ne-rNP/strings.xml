@@ -27,7 +27,7 @@
     <string name="invalid_password_uppercase">कम्तिमा एउटा ठूलो अक्षर हुनुपर्छ</string>
     <string name="invalid_password_lowercase">कम्तिमा एउटा सानो अक्षर हुनुपर्छ</string>
     <string name="invalid_password_digit">कम्तिमा एउटा अङ्क हुनुपर्छ</string>
-    <string name="invalid_password_length">पासवर्ड कम्तिमा ६ वर्ण लामो हुनुपर्छ</string>
+    <string name="invalid_password_length">पासवर्ड कम्तिमा ४ वर्ण लामो हुनुपर्छ</string>
     <string name="invalid_password_special_char">कम्तिमा एउटा विशेष वर्ण हुनुपर्छ</string>
 
     <string name="home">गृह</string>

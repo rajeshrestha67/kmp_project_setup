@@ -4,7 +4,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dev.rajesh.mobile_banking.components.device_info.DefaultDeviceInfoProvider
 import dev.rajesh.mobile_banking.components.device_info.DeviceInfoProvider
-import dev.rajesh.mobile_banking.components.device_info.getDeviceInfo
 import dev.rajesh.mobile_banking.domain.form.MobileNumberValidateUseCase
 import dev.rajesh.mobile_banking.domain.form.PasswordValidateUseCase
 import dev.rajesh.mobile_banking.logger.AppLogger
@@ -20,12 +19,9 @@ import dev.rajesh.mobile_banking.otpverification.presentation.state.OtpEffect
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
-import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.receiveAsFlow
-import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
@@ -43,19 +39,25 @@ class LoginViewModel(
     val otpEffect = _otpEffect.asSharedFlow()
 
     private val _state = MutableStateFlow(LoginScreenState())
-    val state : StateFlow<LoginScreenState> = _state
+    val state: StateFlow<LoginScreenState> = _state
 
     fun onAction(action: LoginScreenAction) {
         when (action) {
             is LoginScreenAction.OnMobileNumberChanged -> {
                 _state.update {
-                    it.copy(mobileNumber = action.mobileNumber)
+                    it.copy(
+                        mobileNumber = action.mobileNumber,
+                        mobileNumberError = null
+                    )
                 }
             }
 
             is LoginScreenAction.OnPasswordChanged -> {
                 _state.update {
-                    it.copy(password = action.password)
+                    it.copy(
+                        password = action.password,
+                        passwordError = null
+                    )
                 }
             }
 
@@ -76,19 +78,18 @@ class LoginViewModel(
             LoginScreenAction.LoginClicked -> {
                 val mobileNumberError = mobileNumberValidateUseCase(state.value.mobileNumber)
                 val passwordError = passwordValidateUseCase(state.value.password)
-                when {
-                    mobileNumberError != null -> {
-                        _state.update { it.copy(mobileNumberError = mobileNumberError) }
+
+                val hasError = mobileNumberError != null || passwordError != null
+                if(hasError){
+                    _state.update {
+                        it.copy(
+                            mobileNumberError = mobileNumberError,
+                            passwordError = passwordError
+                        )
                     }
-
-                    passwordError != null -> {
-                        _state.update { it.copy(passwordError = passwordError) }
-
-                    }
-
-                    else -> login()
+                }else{
+                    login()
                 }
-
             }
         }
     }
