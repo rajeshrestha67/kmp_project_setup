@@ -2,6 +2,8 @@ package dev.rajesh.mobile_banking.login.presentation.viewModel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dev.rajesh.mobile_banking.components.device_info.DefaultDeviceInfoProvider
+import dev.rajesh.mobile_banking.components.device_info.DeviceInfoProvider
 import dev.rajesh.mobile_banking.components.device_info.getDeviceInfo
 import dev.rajesh.mobile_banking.domain.form.MobileNumberValidateUseCase
 import dev.rajesh.mobile_banking.domain.form.PasswordValidateUseCase
@@ -19,6 +21,7 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.receiveAsFlow
@@ -30,6 +33,7 @@ class LoginViewModel(
     private val loginUseCase: LoginUseCase,
     private val mobileNumberValidateUseCase: MobileNumberValidateUseCase,
     private val passwordValidateUseCase: PasswordValidateUseCase,
+    private val deviceInfoProvider: DeviceInfoProvider = DefaultDeviceInfoProvider
 ) : ViewModel() {
 
     private val _errorChannel = Channel<String>()
@@ -39,13 +43,7 @@ class LoginViewModel(
     val otpEffect = _otpEffect.asSharedFlow()
 
     private val _state = MutableStateFlow(LoginScreenState())
-    val state = _state.onStart {
-
-    }.stateIn(
-        viewModelScope,
-        started = SharingStarted.Companion.WhileSubscribed(5000),
-        initialValue = LoginScreenState()
-    )
+    val state : StateFlow<LoginScreenState> = _state
 
     fun onAction(action: LoginScreenAction) {
         when (action) {
@@ -74,6 +72,7 @@ class LoginViewModel(
             }
 
             LoginScreenAction.OnBiometricLogin -> TODO()
+
             LoginScreenAction.LoginClicked -> {
                 val mobileNumberError = mobileNumberValidateUseCase(state.value.mobileNumber)
                 val passwordError = passwordValidateUseCase(state.value.password)
@@ -100,6 +99,7 @@ class LoginViewModel(
         }
 
         val username = Constants.clientId + state.value.mobileNumber
+        AppLogger.i(TAG, "Device Info: ${deviceInfoProvider.fetchDeviceInfo()}")
         loginUseCase(
             loginRequest = LoginRequest(
                 username = username,
@@ -107,7 +107,8 @@ class LoginViewModel(
                 clientId = Constants.clientId,
                 clientSecret = Constants.clientSecret,
                 grantType = "password",
-                deviceUniqueIdentifier = getDeviceInfo().deviceUniqueIdentifier,
+                //deviceUniqueIdentifier = getDeviceInfo().deviceUniqueIdentifier,
+                deviceUniqueIdentifier = deviceInfoProvider.fetchDeviceInfo().deviceUniqueIdentifier,
                 otp = otp
             )
         ).onSuccess { data ->

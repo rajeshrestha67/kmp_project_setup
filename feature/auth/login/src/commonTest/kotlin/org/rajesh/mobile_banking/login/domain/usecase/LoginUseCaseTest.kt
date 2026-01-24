@@ -30,8 +30,13 @@ class LoginUseCaseTest {
 
     @Test
     fun login_success_and_saves_token() = runTest {
+        //Arrange
         val request = fakeLoginRequest("9802304437", "2287")
+
+        //Act
         val result = useCase(request)
+
+        //Assert
         assertTrue { result is ApiResult.Success }
         assertEquals("fake_token", fakeTokenRepository.savedToken?.jwtToken)
     }

@@ -35,6 +35,7 @@ class MobileNumberValidateUseCaseTest : KoinTest {
     @Test
     fun invalid_mobile_number_should_fail() {
         listOf(
+            "123",
             "980230443", //9 digit only
             "98023044371", //11 digits
             " 98023044371",// space with incorrect mobile number, 11 digits
