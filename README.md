@@ -44,5 +44,11 @@ Generate shared resources
 
 kover commands
 ================
-./gradlew koververify       ---> to verify kover
-./gradlew koverHtmlReport   ---> to generate html report
+////to verify kover
+=========================
+./gradlew koververify      
+
+
+//////to generate html report
+==============================
+./gradlew koverHtmlReport

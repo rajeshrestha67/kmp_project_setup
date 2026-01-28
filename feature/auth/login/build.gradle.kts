@@ -6,7 +6,27 @@ plugins {
     alias(libs.plugins.jetbrains.kotlin.serialization)
     alias(libs.plugins.kover)
 }
-kover{}
+
+allprojects{
+    kover{
+        reports{
+            verify{
+                rule { minBound(80) }
+            }
+            filters{
+                excludes{
+                    //generated classes and resources
+                    packages("*.generated.*")
+
+                    // Compose Related
+                    classes("*ComposableSingletons*")
+                    annotatedBy("androidx.compose.runtime.Composable")
+
+                }
+            }
+        }
+    }
+}
 
 kotlin {
 
