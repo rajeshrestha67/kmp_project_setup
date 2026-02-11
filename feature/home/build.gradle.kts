@@ -4,6 +4,29 @@ plugins {
     alias(libs.plugins.composeCompiler)
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.jetbrains.kotlin.serialization)
+    alias(libs.plugins.kover)
+}
+
+
+allprojects{
+    kover{
+        reports{
+            verify{
+                rule { minBound(80) }
+            }
+            filters{
+                excludes{
+                    //generated classes and resources
+                    packages("*.generated.*")
+
+                    // Compose Related
+                    classes("*ComposableSingletons*")
+                    annotatedBy("androidx.compose.runtime.Composable")
+
+                }
+            }
+        }
+    }
 }
 
 kotlin {
@@ -23,6 +46,14 @@ kotlin {
             sourceSetTreeName = "test"
         }.configure {
             instrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        }
+        packaging {
+            resources {
+                excludes += setOf(
+                    "META-INF/AL2.0",
+                    "META-INF/LGPL2.1"
+                )
+            }
         }
     }
 
@@ -98,12 +129,20 @@ kotlin {
                 implementation(projects.feature.bankTransfer)
                 implementation(projects.feature.loadWallet)
                 implementation(projects.feature.qrScanner)
+                implementation(libs.kotlinx.datetime)
+
             }
         }
 
         commonTest {
             dependencies {
                 implementation(libs.kotlin.test)
+                implementation(libs.kotest.framework)
+                implementation(libs.kotest.assertions)
+                implementation(libs.koin.test)
+                implementation(libs.coroutine.test)
+                implementation(libs.ktor.client.mock)
+                implementation(libs.kotlinx.datetime)
             }
         }
 

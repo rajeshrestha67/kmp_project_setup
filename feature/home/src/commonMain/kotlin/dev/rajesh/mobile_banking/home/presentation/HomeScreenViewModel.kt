@@ -6,6 +6,7 @@ import dev.rajesh.mobile_banking.home.domain.model.BankingServiceDetail
 import dev.rajesh.mobile_banking.home.domain.model.QuickServiceDetail
 import dev.rajesh.mobile_banking.home.domain.usecase.FetchBankingServiceUseCase
 import dev.rajesh.mobile_banking.home.domain.usecase.FetchQuickServicesUseCase
+import dev.rajesh.mobile_banking.home.domain.usecase.GetGreetingUseCase
 import dev.rajesh.mobile_banking.logger.AppLogger
 import dev.rajesh.mobile_banking.model.network.toErrorMessage
 import dev.rajesh.mobile_banking.networkhelper.onError
@@ -16,16 +17,21 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlin.time.Clock
+import kotlin.time.ExperimentalTime
 
+@OptIn(ExperimentalTime::class)
 class HomeScreenViewModel(
     private val userDetailUseCase: FetchUserDetailUseCase,
     private val fetchBankingServiceUseCase: FetchBankingServiceUseCase,
-    private val fetchQuickServicesUseCase: FetchQuickServicesUseCase
+    private val fetchQuickServicesUseCase: FetchQuickServicesUseCase,
+    private val greetingUseCase: GetGreetingUseCase
 ) : ViewModel() {
 
     companion object {
@@ -33,24 +39,22 @@ class HomeScreenViewModel(
     }
 
     private val _state = MutableStateFlow(HomeScreenState())
-    val state = _state
-        .onStart {
-            fetchUserDetails(isRefreshing = false)
-            fetchBankingService()
-            fetchQuickServices()
-            updateGreeting()
-        }
-        .stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5000),
-            initialValue = HomeScreenState()
-        )
+    val state = _state.asStateFlow()
 
     private val _actions = Channel<HomeScreenActions>(Channel.BUFFERED)
     val actions = _actions.receiveAsFlow()
 
+    init {
+        //_state.update { it.copy(greetingMsg = greetingUseCase()) }
+        updateGreeting()
+        fetchUserDetails(isRefreshing = false)
+        fetchBankingService()
+        fetchQuickServices()
+    }
+
+    @OptIn(ExperimentalTime::class)
     private fun updateGreeting() {
-        val greetings = DateUtils.getGreetingForCurrentTime()
+        val greetings = greetingUseCase()
         _state.update {
             it.copy(greetingMsg = greetings)
         }
@@ -63,34 +67,36 @@ class HomeScreenViewModel(
             )
         }
 
-        userDetailUseCase(true).onSuccess { userDetail ->
-            _state.update {
-                it.copy(
-                    fullName = userDetail.fullName,
-                    firstName = userDetail.firstName,
-                    lastName = userDetail.lastName,
-                )
-            }
-            userDetail.accountDetail.forEach { account ->
-                if (account.primary.equals("true", ignoreCase = true)) {
-                    _state.update {
-                        it.copy(
-                            actualBalance = account.actualBalance,
-                            availableBalance = account.availableBalance,
-                            accountNumber = account.accountNumber,
-                            accountName = account.accountType
-                        )
+        userDetailUseCase(true)
+            .onSuccess { userDetail ->
+                _state.update {
+                    it.copy(
+                        fullName = userDetail.fullName,
+                        firstName = userDetail.firstName,
+                        lastName = userDetail.lastName,
+                        isRefreshing = false
+                    )
+                }
+                userDetail.accountDetail.forEach { account ->
+                    if (account.primary.equals("true", ignoreCase = true)) {
+                        _state.update {
+                            it.copy(
+                                actualBalance = account.actualBalance,
+                                availableBalance = account.availableBalance,
+                                accountNumber = account.accountNumber,
+                                accountName = account.accountType
+                            )
+                        }
                     }
                 }
+
+
+            }.onError { error ->
+                AppLogger.e(
+                    tag = TAG,
+                    "Fetching user detail failed: ${error.toErrorMessage()}"
+                )
             }
-
-
-        }.onError { error ->
-            AppLogger.e(
-                tag = TAG,
-                "Fetching user detail failed: ${error.toErrorMessage()}"
-            )
-        }
 
     }
 

@@ -141,12 +141,14 @@ fun HomeScreen(navController: NavController) {
                                 .padding(horizontal = MaterialTheme.dimens.small2)
                                 .align(alignment = Alignment.CenterVertically)
                         ) {
-                            Text(
-                                text = stringResource(state.greetingMsg),
-                                style = MaterialTheme.typography.labelSmall.copy(
-                                    color = MaterialTheme.appColors.primaryTextColor
+                            state.greetingMsg?.let {
+                                Text(
+                                    text = stringResource(it),
+                                    style = MaterialTheme.typography.labelSmall.copy(
+                                        color = MaterialTheme.appColors.primaryTextColor
+                                    )
                                 )
-                            )
+                            }
                             Text(
                                 text = state.fullName,
                                 style = MaterialTheme.typography.titleSmall

@@ -9,7 +9,7 @@ data class HomeScreenState(
     val isRefreshing: Boolean = false,
     val showSwipeView: Boolean = false,
 
-    val greetingMsg: StringResource = SharedRes.Strings.goodMorning,
+    val greetingMsg: StringResource? = null,
     val fullName: String = "",
     val firstName: String = "",
     val lastName: String = "",
@@ -21,6 +21,6 @@ data class HomeScreenState(
     val isBankingServiceLoading: Boolean = false,
     val isQuickServiceLoading: Boolean = false,
 
-    val bankingServicesList : List<BankingServiceDetail> = listOf(),
-    val quickServicesList : List<QuickServiceDetail> = listOf()
+    val bankingServicesList: List<BankingServiceDetail> = listOf(),
+    val quickServicesList: List<QuickServiceDetail> = listOf()
 )

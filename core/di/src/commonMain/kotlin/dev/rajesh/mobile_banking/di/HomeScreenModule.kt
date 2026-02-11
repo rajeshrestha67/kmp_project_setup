@@ -10,22 +10,32 @@ import dev.rajesh.mobile_banking.home.domain.repository.BankingServicesRepositor
 import dev.rajesh.mobile_banking.home.domain.repository.QuickServiceRepository
 import dev.rajesh.mobile_banking.home.domain.usecase.FetchBankingServiceUseCase
 import dev.rajesh.mobile_banking.home.domain.usecase.FetchQuickServicesUseCase
+import dev.rajesh.mobile_banking.home.domain.usecase.GetGreetingUseCase
 import dev.rajesh.mobile_banking.home.presentation.HomeScreenViewModel
 import dev.rajesh.mobile_banking.user.domain.usecase.FetchUserDetailUseCase
 import io.ktor.client.HttpClient
 import org.koin.android.annotation.KoinViewModel
 import org.koin.core.annotation.Factory
 import org.koin.core.annotation.Module
+import kotlin.time.Clock
+import kotlin.time.ExperimentalTime
 
+@OptIn(ExperimentalTime::class)
 @Module
 class HomeScreenModule {
+
 
     @KoinViewModel
     fun homeScreenViewModel(
         fetchUserDetailUseCase: FetchUserDetailUseCase,
         fetchBankingServiceUseCase: FetchBankingServiceUseCase,
         fetchQuickServicesUseCase: FetchQuickServicesUseCase,
-    ) = HomeScreenViewModel(fetchUserDetailUseCase, fetchBankingServiceUseCase,fetchQuickServicesUseCase)
+    ) = HomeScreenViewModel(
+        fetchUserDetailUseCase,
+        fetchBankingServiceUseCase,
+        fetchQuickServicesUseCase,
+        GetGreetingUseCase(Clock.System)
+    )
 
 
     @Factory(binds = [BankingServiceRemoteDataSource::class])

@@ -18,10 +18,11 @@ object DateUtils {
         return finalTime
     }
 
-    fun getGreetingForCurrentTime(): StringResource {
-        val now = Clock.System.now()
+    fun getGreetingForCurrentTime(clock: Clock = Clock.System): StringResource {
+        val now = clock.now()
         val localTime = now.toLocalDateTime(TimeZone.currentSystemDefault()).time
 
+        print("local time hour: ${localTime.hour}")
         return when (localTime.hour) {
             in 5..11 -> SharedRes.Strings.goodMorning
             in 12..16 -> SharedRes.Strings.goodAfternoon

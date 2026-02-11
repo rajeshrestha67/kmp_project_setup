@@ -43,12 +43,19 @@ Generate shared resources
 
 
 kover commands
-================
+=========================
 ////to verify kover
 =========================
-./gradlew koververify      
-
+./gradlew koververify
 
 //////to generate html report
-==============================
+=========================
 ./gradlew koverHtmlReport
+
+========================
+/////to generate report for specific module only
+./gradlew :feature:auth:login:koverHtmlReport
+
+========================
+////////to verify kover for specific module only
+./gradlew :feature:home:koverVerify
