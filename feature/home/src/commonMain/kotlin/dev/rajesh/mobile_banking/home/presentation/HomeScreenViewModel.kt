@@ -117,7 +117,11 @@ class HomeScreenViewModel(
 
         }.onError { error ->
             AppLogger.i(TAG, "Fetch Banking Services Error: ${error.toErrorMessage()}")
-
+            _state.update {
+                it.copy(
+                    isBankingServiceLoading = false
+                )
+            }
         }
     }
 
