@@ -8,27 +8,7 @@ import kotlin.String
 
 class FakeBankingServiceRepository : BankingServicesRepository {
 
-    var services: List<BankingServiceDetail> = listOf(
-        BankingServiceDetail(
-            name = "Bank Transfer",
-            uniqueIdentifier = "bank_transfer",
-            type = "Dashboard",
-            status = "Active",
-            imageUrl = "some_url",
-            appOrder = 1,
-            new = false
-        ),
-        BankingServiceDetail(
-            name = "Load Wallet",
-            uniqueIdentifier = "load_wallet",
-            type = "Dashboard",
-            status = "Active",
-            imageUrl = "some_url",
-            appOrder = 2,
-            new = false
-        )
-
-    )
+    var services = fakeBankingService()
 
     var shouldReturnError = false
     var fetchCalled = false

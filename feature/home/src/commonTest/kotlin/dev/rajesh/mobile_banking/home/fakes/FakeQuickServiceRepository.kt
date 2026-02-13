@@ -9,27 +9,8 @@ import kotlin.Int
 
 class FakeQuickServiceRepository : QuickServiceRepository {
 
-    var quickServices: List<QuickServiceDetail> = listOf(
-        QuickServiceDetail(
-            id = 1,
-            name = "Top Up",
-            imageUrl = "Some Url",
-            uniqueIdentifier = "top_up",
-            isNew = false,
-            appOrder = 1,
-            services = emptyList()
-        ),
-        QuickServiceDetail(
-            id = 2,
-            name = "NEA",
-            imageUrl = "Some Url",
-            uniqueIdentifier = "nea",
-            isNew = false,
-            appOrder = 2,
-            services = emptyList()
-        ),
+    var quickServices = fakeQuickServices()
 
-        )
 
     var shouldReturnError = false
     var fetchCalled = false

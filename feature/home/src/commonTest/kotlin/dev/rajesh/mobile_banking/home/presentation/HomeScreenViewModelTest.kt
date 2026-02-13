@@ -7,12 +7,14 @@ import dev.rajesh.mobile_banking.home.fakes.FakeBankingServiceRepository
 import dev.rajesh.mobile_banking.home.fakes.FakeClock
 import dev.rajesh.mobile_banking.home.fakes.FakeQuickServiceRepository
 import dev.rajesh.mobile_banking.home.fakes.FakeUserDetailRepository
+import dev.rajesh.mobile_banking.home.fakes.fakeBankingService
+import dev.rajesh.mobile_banking.home.fakes.fakeQuickServices
 import dev.rajesh.mobile_banking.res.SharedRes
 import dev.rajesh.mobile_banking.user.domain.usecase.FetchUserDetailUseCase
 import io.kotest.matchers.shouldBe
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.resetMain
@@ -87,6 +89,15 @@ class HomeScreenViewModelTest {
         )
     }
 
+    private fun createHomeViewModel() {
+        homeScreenViewModel = HomeScreenViewModel(
+            userDetailUseCase = fetchUserDetailUseCase,
+            fetchBankingServiceUseCase = fetchBankingServiceUseCase,
+            fetchQuickServicesUseCase = fetchQuickServicesUseCase,
+            greetingUseCase = GetGreetingUseCase(Clock.System)
+        )
+    }
+
     @OptIn(ExperimentalTime::class, ExperimentalCoroutinesApi::class)
     @Test
     fun getGreetingsForHour_morning_should_return_good_morning() = runTest {
@@ -140,12 +151,7 @@ class HomeScreenViewModelTest {
     @Test
     fun init_should_load_user_details_from_api() = runTest {
         fakeBankingServiceRepository.shouldReturnError = false
-        homeScreenViewModel = HomeScreenViewModel(
-            userDetailUseCase = fetchUserDetailUseCase,
-            fetchBankingServiceUseCase = fetchBankingServiceUseCase,
-            fetchQuickServicesUseCase = fetchQuickServicesUseCase,
-            greetingUseCase = GetGreetingUseCase(Clock.System)
-        )
+        createHomeViewModel()
         fetchUserDetailUseCase.invoke(true)
         advanceUntilIdle()
         val state = homeScreenViewModel.state.value
@@ -167,12 +173,8 @@ class HomeScreenViewModelTest {
     fun empty_bank_service_List() = runTest {
         fakeBankingServiceRepository.services = emptyList()
 
-        homeScreenViewModel = HomeScreenViewModel(
-            userDetailUseCase = fetchUserDetailUseCase,
-            fetchBankingServiceUseCase = fetchBankingServiceUseCase,
-            fetchQuickServicesUseCase = fetchQuickServicesUseCase,
-            greetingUseCase = GetGreetingUseCase(Clock.System)
-        )
+        createHomeViewModel()
+
         advanceUntilIdle()
 
         val state = homeScreenViewModel.state.value
@@ -197,12 +199,8 @@ class HomeScreenViewModelTest {
     fun load_banking_services_fails() = runTest {
         fakeBankingServiceRepository.shouldReturnError = true
 
-        homeScreenViewModel = HomeScreenViewModel(
-            userDetailUseCase = fetchUserDetailUseCase,
-            fetchBankingServiceUseCase = fetchBankingServiceUseCase,
-            fetchQuickServicesUseCase = fetchQuickServicesUseCase,
-            greetingUseCase = GetGreetingUseCase(Clock.System)
-        )
+        createHomeViewModel()
+
         advanceUntilIdle()
         val state = homeScreenViewModel.state.value
 
@@ -220,12 +218,8 @@ class HomeScreenViewModelTest {
     fun empty_quick_service_List() = runTest {
         fakeQuickServiceRepository.quickServices = emptyList()
 
-        homeScreenViewModel = HomeScreenViewModel(
-            userDetailUseCase = fetchUserDetailUseCase,
-            fetchBankingServiceUseCase = fetchBankingServiceUseCase,
-            fetchQuickServicesUseCase = fetchQuickServicesUseCase,
-            greetingUseCase = GetGreetingUseCase(Clock.System)
-        )
+        createHomeViewModel()
+
         advanceUntilIdle()
 
         val state = homeScreenViewModel.state.value
@@ -248,14 +242,8 @@ class HomeScreenViewModelTest {
     fun quick_service_load_fails() = runTest {
         fakeQuickServiceRepository.shouldReturnError = true
 
-        homeScreenViewModel = HomeScreenViewModel(
-            userDetailUseCase = fetchUserDetailUseCase,
-            fetchBankingServiceUseCase = fetchBankingServiceUseCase,
-            fetchQuickServicesUseCase = fetchQuickServicesUseCase,
-            greetingUseCase = GetGreetingUseCase(Clock.System)
-        )
+        createHomeViewModel()
 
-        // Execute coroutine
         advanceUntilIdle()
 
         val state = homeScreenViewModel.state.value
@@ -263,6 +251,38 @@ class HomeScreenViewModelTest {
         state.isQuickServiceLoading shouldBe false
         state.quickServicesList shouldBe emptyList()
 
+    }
+
+    @Test
+    fun onAction_banking_service_clicked_should_emit_action() = runTest {
+        val service = fakeBankingService().firstOrNull()
+        if (service != null) {
+            homeScreenViewModel.onAction(HomeScreenActions.OnBankingServiceClicked(service))
+
+            val emitted = homeScreenViewModel.actions.first()
+            emitted shouldBe HomeScreenActions.OnBankingServiceClicked(service)
+        }
+    }
+
+    @Test
+    fun onAction_quick_service_clicked_should_emit_action() = runTest {
+        val service = fakeQuickServices().firstOrNull()
+        if (service != null) {
+            homeScreenViewModel.onAction(HomeScreenActions.OnQuickServiceClicked(service))
+            val emitted = homeScreenViewModel.actions.first()
+            emitted shouldBe HomeScreenActions.OnQuickServiceClicked(service)
+        }
+    }
+
+    @Test
+    fun onAction_qr_click_emits_action() = runTest {
+        homeScreenViewModel.onAction(
+            HomeScreenActions.OnQrScannerClicked
+        )
+
+        val emitted = homeScreenViewModel.actions.first()
+
+        emitted shouldBe HomeScreenActions.OnQrScannerClicked
     }
 
 

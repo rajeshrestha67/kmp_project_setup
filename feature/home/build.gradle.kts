@@ -5,17 +5,18 @@ plugins {
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.jetbrains.kotlin.serialization)
     alias(libs.plugins.kover)
+    alias (libs.plugins.mokkery)
 }
 
 
-allprojects{
-    kover{
-        reports{
-            verify{
+allprojects {
+    kover {
+        reports {
+            verify {
                 rule { minBound(80) }
             }
-            filters{
-                excludes{
+            filters {
+                excludes {
                     //generated classes and resources
                     packages("*.generated.*")
 
@@ -143,6 +144,7 @@ kotlin {
                 implementation(libs.coroutine.test)
                 implementation(libs.ktor.client.mock)
                 implementation(libs.kotlinx.datetime)
+                implementation(libs.mokkery)
             }
         }
 
@@ -153,6 +155,7 @@ kotlin {
                 // dependencies declared in commonMain.
             }
         }
+
 
         getByName("androidDeviceTest") {
             dependencies {
@@ -171,6 +174,9 @@ kotlin {
                 // KMP dependencies declared in commonMain.
             }
         }
+
+
+
     }
 
 }
