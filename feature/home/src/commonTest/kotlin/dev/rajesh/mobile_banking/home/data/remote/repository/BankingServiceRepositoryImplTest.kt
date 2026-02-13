@@ -1,4 +1,4 @@
-package dev.rajesh.mobile_banking.home.data.remote.datasource
+package dev.rajesh.mobile_banking.home.data.remote.repository
 
 import dev.mokkery.answering.returns
 import dev.mokkery.everySuspend
@@ -15,7 +15,7 @@ import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 
 
-class BankingServiceRemoteDataSourceImplTest {
+class BankingServiceRepositoryImplTest {
 
     private val remoteDataSource: BankingServiceRemoteDataSource = mock()
 

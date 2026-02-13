@@ -36,7 +36,7 @@ fun ServiceDTO.toService(): Service {
         service = service,
         status = status,
         labelName = labelName,
-        labelSize = labelSize,
+        labelSize = labelSize.orEmpty(),
         labelSample = labelSample,
         labelPrefix = labelPrefix,
         instructions = instructions,
@@ -50,11 +50,12 @@ fun ServiceDTO.toService(): Service {
         serviceCategoryName = serviceCategoryName,
         webView = webView,
         isNew = isNew,
+        cashBackView = cashBackView.orEmpty(),
         appOrder = appOrder,
         isSmsMode = isSmsMode,
         ticketStatus = ticketStatus,
-        labelMaxLength = labelMaxLength,
-        labelMinLength = labelMinLength,
-        priceRange = priceRange
+        labelMaxLength = labelMaxLength.orEmpty(),
+        labelMinLength = labelMinLength.orEmpty(),
+        priceRange = priceRange.orEmpty()
     )
 }

@@ -26,7 +26,7 @@ data class Service(
     val service: String,
     val status: String,
     val labelName: String,
-    val labelSize: String?,
+    val labelSize: String?=null,
     val labelSample: String,
     val labelPrefix: String,
     val instructions: String,
@@ -40,10 +40,11 @@ data class Service(
     val serviceCategoryName: String,
     val webView: Boolean,
     val isNew: Boolean,
+    val cashBackView : String?=null,
     val appOrder: Int,
     val isSmsMode: Boolean,
     val ticketStatus: Boolean,
-    val labelMaxLength: String?,
-    val labelMinLength: String?,
-    val priceRange: String?
+    val labelMaxLength: String?=null,
+    val labelMinLength: String?=null,
+    val priceRange: String?=null
 )
