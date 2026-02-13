@@ -10,13 +10,14 @@ import dev.rajesh.mobile_banking.networkhelper.map
 
 class QuickServiceRepositoryImpl(
     private val quickServiceRemoteDataSource: QuickServicesRemoteDataSource
-) : QuickServiceRepository{
+) : QuickServiceRepository {
     override suspend fun fetchQuickServices(): ApiResult<List<QuickServiceDetail>, DataError> {
         return quickServiceRemoteDataSource
             .getQuickServices()
-            .map { dto->
-                dto.details.map { it.toQuickServiceDetail()
-                }
+            .map { dto ->
+                dto.details
+                    ?.map { it.toQuickServiceDetail() }
+                    ?: emptyList()
             }
     }
 }

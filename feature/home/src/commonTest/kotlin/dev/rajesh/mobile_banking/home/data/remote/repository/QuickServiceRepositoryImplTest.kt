@@ -34,7 +34,7 @@ class QuickServiceRepositoryImplTest {
         val result = repository.fetchQuickServices()
         when (result) {
             is ApiResult.Success -> {
-                val expectedList = dto.details.map { it.toQuickServiceDetail() }
+                val expectedList = dto.details?.map { it.toQuickServiceDetail() } ?: emptyList()
                 result.data shouldBe expectedList
             }
 

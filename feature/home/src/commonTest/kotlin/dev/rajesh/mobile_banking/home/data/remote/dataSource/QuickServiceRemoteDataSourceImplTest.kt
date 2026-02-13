@@ -82,7 +82,7 @@ class QuickServiceRemoteDataSourceImplTest : KoinTest {
         println(result)
 
         require(result is ApiResult.Success)
-        assertTrue(result.data.details.isNotEmpty())
+        assertTrue(result.data.details?.isNotEmpty() ?: false)
     }
 
 

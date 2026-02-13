@@ -4,21 +4,21 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class BankingServiceDTO(
-    val status: String,
-    val code: String,
-    val message: String,
-    val details: List<BankingServiceDetailDTO>,
+    val status: String? = null,
+    val code: String? = null,
+    val message: String? = null,
+    val details: List<BankingServiceDetailDTO>? = null,
 //    val detail: Any,
 //    val packages: Any
 )
 
 @Serializable
 data class BankingServiceDetailDTO(
-    val name: String,
-    val uniqueIdentifier: String,
-    val type: String,
-    val status: String,
-    val imageUrl: String,
-    val appOrder: Int,
-    val new: Boolean
+    val name: String? = null,
+    val uniqueIdentifier: String? = null,
+    val type: String? = null,
+    val status: String? = null,
+    val imageUrl: String? = null,
+    val appOrder: Int? = null,
+    val new: Boolean? = null
 )

@@ -83,7 +83,7 @@ class BankingServiceRemoteDataSourceImplTest : KoinTest {
     fun fetchBankingService_returns_success_when_api_responds_ok() = runTest {
         val result = dataSource.fetchBankingService()
         require(result is ApiResult.Success)
-        assertTrue(result.data.details.isNotEmpty())
+        assertTrue(result.data.details?.isNotEmpty() ?: false)
     }
 
     @Test

@@ -2,11 +2,6 @@ package dev.rajesh.mobile_banking.home.domain.model
 
 import kotlinx.serialization.Serializable
 
-//@Serializable
-//data class QuickServices(
-//    val details: List<QuickServiceDetail>
-//)
-
 @Serializable
 data class QuickServiceDetail(
     val id: Int,
@@ -26,7 +21,7 @@ data class Service(
     val service: String,
     val status: String,
     val labelName: String,
-    val labelSize: String?=null,
+    val labelSize: String,
     val labelSample: String,
     val labelPrefix: String,
     val instructions: String,
@@ -40,11 +35,11 @@ data class Service(
     val serviceCategoryName: String,
     val webView: Boolean,
     val isNew: Boolean,
-    val cashBackView : String?=null,
+    val cashBackView : String,
     val appOrder: Int,
     val isSmsMode: Boolean,
     val ticketStatus: Boolean,
-    val labelMaxLength: String?=null,
-    val labelMinLength: String?=null,
-    val priceRange: String?=null
+    val labelMaxLength: String,
+    val labelMinLength: String,
+    val priceRange: String
 )

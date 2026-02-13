@@ -9,20 +9,20 @@ import dev.rajesh.mobile_banking.networkhelper.Constants
 
 fun BankingServiceDetailDTO.toBankingService(): BankingServiceDetail {
     return BankingServiceDetail(
-        name = name,
-        uniqueIdentifier = uniqueIdentifier,
-        type = type,
-        status = status,
+        name = name.orEmpty(),
+        uniqueIdentifier = uniqueIdentifier.orEmpty(),
+        type = type.orEmpty(),
+        status = status.orEmpty(),
         imageUrl = "${Constants.baseUrl}/$imageUrl",
-        appOrder = appOrder,
-        new = new
+        appOrder = appOrder ?: 0,
+        new = new ?: false
 
     )
 }
 
 //BankingServiceResponseDTO
 fun BankingServiceDTO.toBankingServiceList(): List<BankingServiceDetail> {
-    return details.map {
+    return details?.map {
         it.toBankingService()
-    }
+    } ?: emptyList()
 }

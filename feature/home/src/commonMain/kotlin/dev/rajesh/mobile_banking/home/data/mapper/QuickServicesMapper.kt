@@ -7,53 +7,46 @@ import dev.rajesh.mobile_banking.home.domain.model.QuickServiceDetail
 import dev.rajesh.mobile_banking.home.domain.model.Service
 import dev.rajesh.mobile_banking.networkhelper.Constants
 
-
-//fun QuickServicesResponseDTO.toQuickServiceList(): QuickServices {
-//    return QuickServices(
-//        details = details.map { it.toQuickServiceDetail() }
-//    )
-//}
-
 fun QuickServiceDetailDTO.toQuickServiceDetail(): QuickServiceDetail {
     return QuickServiceDetail(
-        id = id,
-        name = name,
+        id = id ?: 0,
+        name = name.orEmpty(),
         imageUrl = "${Constants.baseUrl}/${imageUrl}",
-        uniqueIdentifier = uniqueIdentifier,
-        isNew = isNew,
-        appOrder = appOrder,
-        services = services.map {
+        uniqueIdentifier = uniqueIdentifier.orEmpty(),
+        isNew = isNew ?: false,
+        appOrder = appOrder ?: 0,
+        services = services?.map {
             it.toService()
-        }
+        } ?: emptyList()
     )
 }
 
 fun ServiceDTO.toService(): Service {
     return Service(
-        id = id,
-        url = url,
-        uniqueIdentifier = uniqueIdentifier,
-        service = service,
-        status = status,
-        labelName = labelName,
+        id = id ?: 0,
+        url = url.orEmpty(),
+        uniqueIdentifier = uniqueIdentifier.orEmpty(),
+        service = service.orEmpty(),
+        status = status.orEmpty(),
+        labelName = labelName.orEmpty(),
         labelSize = labelSize.orEmpty(),
-        labelSample = labelSample,
-        labelPrefix = labelPrefix,
-        instructions = instructions,
-        fixedlabelSize = fixedlabelSize,
-        priceInput = priceInput,
-        notificationUrl = notificationUrl,
-        minValue = minValue,
-        maxValue = maxValue,
-        icon = icon,
-        categoryId = categoryId,
-        serviceCategoryName = serviceCategoryName,
-        webView = webView,
-        isNew = isNew,
+        labelSample = labelSample.orEmpty(),
+        labelPrefix = labelPrefix.orEmpty(),
+        instructions = instructions.orEmpty(),
+        fixedlabelSize = fixedlabelSize ?: false,
+        priceInput = priceInput ?: false,
+        notificationUrl = notificationUrl.orEmpty(),
+        minValue = minValue ?: 0.0,
+        maxValue = maxValue ?: 0.0,
+        icon = icon.orEmpty(),
+        categoryId = categoryId ?: 0,
+        serviceCategoryName = serviceCategoryName.orEmpty(),
+        webView = webView ?: false,
+        isNew = isNew ?: false,
         cashBackView = cashBackView.orEmpty(),
-        appOrder = appOrder,
-        isSmsMode = isSmsMode,
-        ticketStatus = ticketStatus,
+        appOrder = appOrder ?: 0,
+        isSmsMode = isSmsMode ?: false,
+        ticketStatus = ticketStatus ?: false,
         labelMaxLength = labelMaxLength.orEmpty(),
         labelMinLength = labelMinLength.orEmpty(),
         priceRange = priceRange.orEmpty()

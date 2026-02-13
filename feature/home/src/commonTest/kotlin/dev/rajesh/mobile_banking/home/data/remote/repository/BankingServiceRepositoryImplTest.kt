@@ -41,7 +41,7 @@ class BankingServiceRepositoryImplTest {
         //verify
         when (result) {
             is ApiResult.Success -> {
-                val expectedList = dto.details.map { it.toBankingService() }
+                val expectedList = dto.details?.map { it.toBankingService() }
                 result.data shouldBe expectedList
             }
 

@@ -15,9 +15,9 @@ class BankingServiceRepositoryImpl(
         return bankingServiceRemoteDataSource
             .fetchBankingService()
             .map { bankingServiceDTO ->
-                bankingServiceDTO.details.map {
-                    it.toBankingService()
-                }
+                bankingServiceDTO.details
+                    ?.map { it.toBankingService() }
+                    ?:emptyList()
             }
     }
 }
