@@ -3,13 +3,16 @@ package dev.rajesh.mobile_banking.home.data.remote.repository
 import dev.mokkery.answering.returns
 import dev.mokkery.everySuspend
 import dev.mokkery.mock
-import dev.rajesh.mobile_banking.home.data.mapper.toBankingService
 import dev.rajesh.mobile_banking.home.data.remote.BankingServiceRemoteDataSource
 import dev.rajesh.mobile_banking.home.data.remote.dto.BankingServiceDTO
 import dev.rajesh.mobile_banking.home.data.remote.dto.BankingServiceDetailDTO
 import dev.rajesh.mobile_banking.home.data.repository.BankingServiceRepositoryImpl
+import dev.rajesh.mobile_banking.home.domain.model.BankingServiceDetail
+import dev.rajesh.mobile_banking.model.network.DataError
 import dev.rajesh.mobile_banking.networkhelper.ApiResult
+import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.shouldBe
+import io.kotest.matchers.types.shouldBeInstanceOf
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
@@ -24,7 +27,8 @@ class BankingServiceRepositoryImplTest {
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun fetch_banking_service_returns_mapped_list_on_success() = runTest {
+    fun fetchBankServices_returns_mapped_domain_models_when_datasource_succeeds() = runTest {
+        //Arrange
         val dto = BankingServiceDTO(
             status = "success",
             message = "Banking service fetch successfully",
@@ -35,18 +39,50 @@ class BankingServiceRepositoryImplTest {
         //mock behaviour
         everySuspend { remoteDataSource.fetchBankingService() } returns ApiResult.Success(dto)
 
-        //execute
+        //Act
         val result = repository.fetchBankingServices()
 
-        //verify
-        when (result) {
-            is ApiResult.Success -> {
-                val expectedList = dto.details?.map { it.toBankingService() }
-                result.data shouldBe expectedList
-            }
+        //Assert
+        result.shouldBeInstanceOf<ApiResult.Success<List<BankingServiceDetail>>>()
 
-            is ApiResult.Error -> throw AssertionError("Expected success, got error: ${result.error}")
-        }
+        val data = result.data
+        data shouldHaveSize 2
+
+        data[0].name shouldBe "Bank Transfer"
+        data[0].uniqueIdentifier shouldBe "bank_transfer"
+
+//        verifySuspend(exactly = 1) {
+//            remoteDataSource.fetchBankingService()
+//        }
+
+    }
+
+    @Test
+    fun fetchBankingServices_should_return_error_when_DataSource_fails() = runTest {
+        everySuspend { remoteDataSource.fetchBankingService() } returns ApiResult.Error(DataError.NetworkError.DataUnknown)
+
+        val result = repository.fetchBankingServices()
+        result shouldBe ApiResult.Error(DataError.NetworkError.DataUnknown)
+    }
+
+    @Test
+    fun fetchBankingServices_returns_empty_list_when_DataSource_returns_empty_list() = runTest {
+        val emptyList = emptyList<BankingServiceDetailDTO>()
+
+        val dto = BankingServiceDTO(
+            status = "success",
+            message = "Banking service fetch successfully",
+            code = "M001",
+            details = emptyList
+        )
+        everySuspend { remoteDataSource.fetchBankingService() } returns ApiResult.Success(dto)
+
+        //Act
+        val result = repository.fetchBankingServices()
+
+        //Assert
+        result.shouldBeInstanceOf<ApiResult.Success<List<BankingServiceDetail>>>()
+        result.data shouldBe emptyList()
     }
 
     fun prepareMockResponse() = listOf(

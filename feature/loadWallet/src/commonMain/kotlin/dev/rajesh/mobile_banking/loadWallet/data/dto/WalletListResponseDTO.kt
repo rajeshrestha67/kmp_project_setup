@@ -5,32 +5,32 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class WalletListResponseDTO(
-    val status: String,
-    val code: String,
-    val message: String,
-    val details: List<WalletDetailDTO>
+    val status: String? = null,
+    val code: String? = null,
+    val message: String? = null,
+    val details: List<WalletDetailDTO>? = null
 )
 
 @Serializable
 data class WalletDetailDTO(
-    val id: Int,
-    val name: String,
-    val descOneFieldName: String,
-    val descOneFieldType: String,
-    val descOneFixedLength: Boolean,
-    val descOneLength: Int?,
-    val descOneMinLength: Int?,
-    val descOneMaxLength: Int?,
-    val descTwoFieldName: String,
-    val descTwoFieldType: String,
-    val descTwoFixedLength: Boolean,
-    val descTwoLength: String?,
-    val descTwoMinLength: Int,
-    val descTwoMaxLength: Int,
-    val icon: String,
-    val accountHead: String,
-    val accountNumber: String,
-    val minAmount: Double,
-    val maxAmount: String?,
-    val status: String
+    val id: Int? = null,
+    val name: String? = null,
+    val descOneFieldName: String? = null,
+    val descOneFieldType: String? = null,
+    val descOneFixedLength: Boolean? = null,
+    val descOneLength: Int? = null,
+    val descOneMinLength: Int? = null,
+    val descOneMaxLength: Int? = null,
+    val descTwoFieldName: String? = null,
+    val descTwoFieldType: String? = null,
+    val descTwoFixedLength: Boolean? = null,
+    val descTwoLength: String? = null,
+    val descTwoMinLength: Int? = null,
+    val descTwoMaxLength: Int? = null,
+    val icon: String? = null,
+    val accountHead: String? = null,
+    val accountNumber: String? = null,
+    val minAmount: Double? = null,
+    val maxAmount: Double? = null,
+    val status: String? = null
 )

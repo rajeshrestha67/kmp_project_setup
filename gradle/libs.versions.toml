@@ -57,7 +57,7 @@ coroutine-test = "1.10.2"
 koin-test = "4.1.1"
 kotest-version = "6.0.3"
 ktor-mock ="3.3.3"
-mokkery = "3.1.1"
+mokkery = "3.2.0"
 
 
 
@@ -143,13 +143,16 @@ ucrop = { module = "com.github.yalantis:ucrop", version.ref = "ucrop" }
 #test
 coroutine-test ={module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutine-test"}
 koin-test = { module = "io.insert-koin:koin-test", version.ref = "koin-test" }
-kotest-assertions = { group = "io.kotest", name = "kotest-assertions-core", version.ref = "kotest-version" }
+#kotest-assertions = { group = "io.kotest", name = "kotest-assertions-core", version.ref = "kotest-version" }
+kotest-assertions = { module = "io.kotest:kotest-assertions-core", version.ref = "kotest-version" }
+
 kotest-framework = { group = "io.kotest", name = "kotest-framework-engine", version.ref = "kotest-version" }
 kotest-property = { group = "io.kotest", name = "kotest-property", version.ref = "kotest-version" }
 ktor-client-mock = { module = "io.ktor:ktor-client-mock", version.ref = "ktor-mock" }
 
 mokkery-gradle = { group = "dev.mokkery", name = "mokkery-gradle", version.ref = "mokkery" }
-mokkery = { group = "dev.mokkery", name = "mokkery-runtime", version.ref = "mokkery" }
+#mokkery = { group = "dev.mokkery", name = "mokkery-runtime", version.ref = "mokkery" }
+mokkery = { module = "dev.mokkery:mokkery-runtime", version.ref = "mokkery" }
 
 
 

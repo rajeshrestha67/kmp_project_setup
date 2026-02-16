@@ -3,13 +3,15 @@ package dev.rajesh.mobile_banking.home.data.remote.repository
 import dev.mokkery.answering.returns
 import dev.mokkery.everySuspend
 import dev.mokkery.mock
-import dev.rajesh.mobile_banking.home.data.mapper.toQuickServiceDetail
 import dev.rajesh.mobile_banking.home.data.remote.QuickServicesRemoteDataSource
 import dev.rajesh.mobile_banking.home.data.remote.dto.QuickServiceDetailDTO
 import dev.rajesh.mobile_banking.home.data.remote.dto.QuickServicesResponseDTO
 import dev.rajesh.mobile_banking.home.data.repository.QuickServiceRepositoryImpl
+import dev.rajesh.mobile_banking.home.domain.model.QuickServiceDetail
+import dev.rajesh.mobile_banking.model.network.DataError
 import dev.rajesh.mobile_banking.networkhelper.ApiResult
 import io.kotest.matchers.shouldBe
+import io.kotest.matchers.types.shouldBeInstanceOf
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 
@@ -32,15 +34,38 @@ class QuickServiceRepositoryImplTest {
         everySuspend { remoteDataSource.getQuickServices() } returns ApiResult.Success(dto)
 
         val result = repository.fetchQuickServices()
-        when (result) {
-            is ApiResult.Success -> {
-                val expectedList = dto.details?.map { it.toQuickServiceDetail() } ?: emptyList()
-                result.data shouldBe expectedList
-            }
+        result.shouldBeInstanceOf<ApiResult.Success<List<QuickServiceDetail>>>()
 
-            is ApiResult.Error -> throw AssertionError("Expected success, got error: ${result.error}")
-        }
+        val data = result.data
+        //data shouldHaveSize 2
 
+        data[0].id shouldBe 1
+        data[0].uniqueIdentifier shouldBe "topup"
+    }
+
+    @Test
+    fun fetch_quick_service_returns_error_when_DataSource_fails() = runTest {
+        everySuspend { remoteDataSource.getQuickServices() } returns ApiResult.Error(DataError.NetworkError.DataUnknown)
+
+        val result = repository.fetchQuickServices()
+        result shouldBe ApiResult.Error(DataError.NetworkError.DataUnknown)
+    }
+
+    @Test
+    fun fetch_quick_service_returns_empty_list_when_DataSource_returns_empty_list() = runTest {
+        val emptyList = emptyList<QuickServiceDetailDTO>()
+        val dto = QuickServicesResponseDTO(
+            status = "success",
+            message = "Quick service fetch successfully",
+            code = "M001",
+            details = emptyList
+        )
+        everySuspend { remoteDataSource.getQuickServices() } returns ApiResult.Success(dto)
+
+        val result = repository.fetchQuickServices()
+        result.shouldBeInstanceOf<ApiResult.Success<List<QuickServiceDetail>>>()
+
+        result.data shouldBe emptyList()
     }
 
 

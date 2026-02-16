@@ -28,6 +28,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -43,11 +44,7 @@ class LoadWalletViewModel(
     val TAG = "LoadWalletViewModel"
 
     private val _state = MutableStateFlow(LoadWalletScreenState())
-    val state = _state.stateIn(
-        scope = viewModelScope,
-        started = SharingStarted.WhileSubscribed(5000),
-        initialValue = LoadWalletScreenState()
-    )
+    val state = _state.asStateFlow()
 
     val selectedAccount: StateFlow<AccountDetail?> = selectedAccountStore.selectedAccount
 

@@ -7,8 +7,7 @@ import dev.rajesh.mobile_banking.loadWallet.data.dto.WalletValidationResponseDTO
 import dev.rajesh.mobile_banking.loadWallet.presentation.model.WalletLoadRequest
 import dev.rajesh.mobile_banking.model.network.DataError
 import dev.rajesh.mobile_banking.networkhelper.ApiResult
-
-sealed interface WalletRemoteDataSource {
+ interface WalletRemoteDataSource {
     suspend fun getWalletList(): ApiResult<WalletListResponseDTO, DataError>
 
     suspend fun validateWallet(

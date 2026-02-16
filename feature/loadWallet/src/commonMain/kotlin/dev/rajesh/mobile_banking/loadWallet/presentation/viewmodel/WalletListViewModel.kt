@@ -10,6 +10,7 @@ import dev.rajesh.mobile_banking.networkhelper.onError
 import dev.rajesh.mobile_banking.networkhelper.onSuccess
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -23,11 +24,7 @@ class WalletListViewModel(
     }
 
     private val _state = MutableStateFlow(WalletListScreenState())
-    val state = _state.stateIn(
-        scope = viewModelScope,
-        started = SharingStarted.WhileSubscribed(5000),
-        initialValue = WalletListScreenState()
-    )
+    val state = _state.asStateFlow()
 
     init {
         getWalletList()

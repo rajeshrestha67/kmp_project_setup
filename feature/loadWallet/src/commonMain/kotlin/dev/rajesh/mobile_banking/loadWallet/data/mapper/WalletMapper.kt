@@ -12,30 +12,30 @@ import dev.rajesh.mobile_banking.networkhelper.Constants
 
 
 fun WalletListResponseDTO.toWalletList(): List<WalletDetail> {
-    return details.map {
+    return details?.map {
         WalletDetail(
-            id = it.id,
-            name = it.name,
-            descOneFieldName = it.descOneFieldName,
-            descOneFieldType = it.descOneFieldType,
-            descOneFixedLength = it.descOneFixedLength,
-            descOneLength = it.descOneLength,
-            descOneMinLength = it.descOneMinLength,
-            descOneMaxLength = it.descOneMaxLength,
-            descTwoFieldName = it.descTwoFieldName,
-            descTwoFieldType = it.descTwoFieldType,
-            descTwoFixedLength = it.descTwoFixedLength,
-            descTwoLength = it.descTwoLength,
-            descTwoMinLength = it.descTwoMinLength,
-            descTwoMaxLength = it.descTwoMaxLength,
+            id = it.id ?: 0,
+            name = it.name.orEmpty(),
+            descOneFieldName = it.descOneFieldName.orEmpty(),
+            descOneFieldType = it.descOneFieldType.orEmpty(),
+            descOneFixedLength = it.descOneFixedLength ?: false,
+            descOneLength = it.descOneLength ?: 0,
+            descOneMinLength = it.descOneMinLength ?: 0,
+            descOneMaxLength = it.descOneMaxLength ?: 0,
+            descTwoFieldName = it.descTwoFieldName.orEmpty(),
+            descTwoFieldType = it.descTwoFieldType.orEmpty(),
+            descTwoFixedLength = it.descTwoFixedLength ?: false,
+            descTwoLength = it.descTwoLength.orEmpty(),
+            descTwoMinLength = it.descTwoMinLength ?: 0,
+            descTwoMaxLength = it.descTwoMaxLength ?: 0,
             icon = "${Constants.baseUrl}/mbank/serviceIcon/${it.icon}",
-            accountHead = it.accountHead,
-            accountNumber = it.accountNumber,
-            minAmount = it.minAmount,
-            maxAmount = it.maxAmount,
-            status = it.status
+            accountHead = it.accountHead.orEmpty(),
+            accountNumber = it.accountNumber.orEmpty(),
+            minAmount = it.minAmount ?: 0.0,
+            maxAmount = it.maxAmount ?: 0.0,
+            status = it.status.orEmpty()
         )
-    }
+    } ?: emptyList()
 }
 
 fun WalletValidationDetailDTO.toWalletValidationDetail(): WalletValidationDetail {
