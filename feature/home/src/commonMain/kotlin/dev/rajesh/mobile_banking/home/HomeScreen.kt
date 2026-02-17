@@ -412,7 +412,9 @@ fun LazyListScope.bankingServiceList(
                         .padding(MaterialTheme.dimens.small3),
                     horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimens.small2)
                 ) {
-                    items(bankingServicesList) { service ->
+                    items(
+                        bankingServicesList,
+                        key = { service -> service.uniqueIdentifier }) { service -> //adding key to avoid recomposition
                         BankServiceCard(
                             service,
                             onClick = { item ->
@@ -498,7 +500,10 @@ fun LazyListScope.quickServices(
                 verticalArrangement = Arrangement.spacedBy(space),
                 userScrollEnabled = false,
             ) {
-                items(servicesList) { serviceItem ->
+                items(
+                    servicesList,
+                    key = { service -> service.uniqueIdentifier } //adding key to avoid unnecessary recomposition
+                ) { serviceItem ->
                     QuickServiceItem(serviceItem, onClick = { serviceItem ->
                         AppLogger.i("HomeScreen", "quick service Clicked: ${serviceItem.name}")
                     })
