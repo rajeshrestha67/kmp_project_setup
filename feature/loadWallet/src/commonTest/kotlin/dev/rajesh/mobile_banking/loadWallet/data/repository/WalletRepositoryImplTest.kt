@@ -1,4 +1,4 @@
-package dev.rajesh.mobile_banking.loadWallet.data.remote.repository
+package dev.rajesh.mobile_banking.loadWallet.data.repository
 
 import dev.mokkery.answering.returns
 import dev.mokkery.everySuspend

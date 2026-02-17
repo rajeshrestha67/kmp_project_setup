@@ -1,4 +1,4 @@
-package dev.rajesh.mobile_banking.home.data.remote.repository
+package dev.rajesh.mobile_banking.home.data.repository
 
 import dev.mokkery.answering.returns
 import dev.mokkery.everySuspend
