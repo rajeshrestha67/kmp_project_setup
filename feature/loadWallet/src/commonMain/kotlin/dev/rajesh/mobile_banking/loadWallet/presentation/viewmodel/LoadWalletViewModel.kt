@@ -181,7 +181,7 @@ class LoadWalletViewModel(
         }
     }
 
-    private fun fetchCharge(walletValidationDetail: WalletValidationDetail) =
+     fun fetchCharge(walletValidationDetail: WalletValidationDetail) =
         viewModelScope.launch {
             getWalletServiceChargeUseCase(
                 amount = _state.value.amount,

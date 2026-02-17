@@ -6,8 +6,10 @@ import dev.rajesh.mobile_banking.loadWallet.data.dto.WalletLoadDetailsDTO
 import dev.rajesh.mobile_banking.loadWallet.data.dto.WalletLoadResponseDTO
 import dev.rajesh.mobile_banking.loadWallet.data.dto.WalletValidationDetailDTO
 import dev.rajesh.mobile_banking.loadWallet.data.dto.WalletValidationResponseDTO
+import dev.rajesh.mobile_banking.loadWallet.domain.model.WalletChargeDetail
 import dev.rajesh.mobile_banking.loadWallet.domain.model.WalletDetail
 import dev.rajesh.mobile_banking.loadWallet.domain.model.WalletLoadDetails
+import dev.rajesh.mobile_banking.loadWallet.domain.model.WalletValidationDetail
 
 
 fun fakeWalletList(): List<WalletDetail> = listOf(
@@ -126,6 +128,13 @@ fun fakeWalletCharge() = WalletChargeResponseDTO(
     status = "success"
 )
 
+fun fakeWalletChargeDetail() = WalletChargeDetail(
+    code = "M0000",
+    details = 10.0,
+    message = "Charge fetched successfully",
+    status = "success"
+)
+
 fun fakeLoadWalletSuccessResponse() = WalletLoadResponseDTO(
     status = "success",
     message = "Successfully transferred to wallet",
@@ -141,6 +150,14 @@ fun fakeLoadWalletSuccessResponse() = WalletLoadResponseDTO(
         descOneFieldValue = "9840173991",
         accountNumber = "00155555"
     )
+)
+
+fun fakeWalletValidationDetail() = WalletValidationDetail(
+    message = "Wallet validated successfully",
+    status = "success",
+    customerName = "John Doe",
+    customerProfileImageUrl = "https://example.com/profile.jpg",
+    validationIdentifier = "123456"
 )
 
 fun fakeWalletLoadSuccessDetails() = WalletLoadDetails(

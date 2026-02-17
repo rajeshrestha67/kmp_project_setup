@@ -15,6 +15,10 @@ class FakeWalletRepository : WalletRepository {
     val errorMessage = "Something went wrong"
     var walletList = fakeWalletList()
 
+    var errorOnValidateWallet = false
+    var errorOnServiceCharge = false
+
+
     override suspend fun getWalletList(): ApiResult<List<WalletDetail>, DataError> {
         if (errorOnWalletFetchWalletList) {
             return ApiResult.Error(DataError.NetworkError.Custom(errorMessage))
@@ -28,7 +32,11 @@ class FakeWalletRepository : WalletRepository {
         walletUsername: String,
         amount: String
     ): ApiResult<WalletValidationDetail, DataError> {
-        TODO("Not yet implemented")
+        return if (errorOnValidateWallet) {
+            ApiResult.Error(DataError.NetworkError.Custom(errorMessage))
+        } else {
+            ApiResult.Success(fakeWalletValidationDetail())
+        }
     }
 
     override suspend fun getWalletCharge(
@@ -36,7 +44,11 @@ class FakeWalletRepository : WalletRepository {
         serviceChargeOf: String,
         associatedId: String
     ): ApiResult<WalletChargeDetail, DataError> {
-        TODO("Not yet implemented")
+        return if (errorOnServiceCharge) {
+            ApiResult.Error(DataError.NetworkError.Custom(errorMessage))
+        } else {
+            ApiResult.Success(fakeWalletChargeDetail())
+        }
     }
 
     override suspend fun walletLoad(walletLoadRequest: WalletLoadRequest): ApiResult<WalletLoadDetails, DataError> {
