@@ -12,11 +12,12 @@ import dev.rajesh.mobile_banking.networkhelper.ApiResult
 class FakeWalletRepository : WalletRepository {
 
     var errorOnWalletFetchWalletList = false
+    val errorMessage = "Something went wrong"
     var walletList = fakeWalletList()
 
     override suspend fun getWalletList(): ApiResult<List<WalletDetail>, DataError> {
         if (errorOnWalletFetchWalletList) {
-            return ApiResult.Error(DataError.NetworkError.DataUnknown)
+            return ApiResult.Error(DataError.NetworkError.Custom(errorMessage))
         } else {
             return ApiResult.Success(walletList)
         }

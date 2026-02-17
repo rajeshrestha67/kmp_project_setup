@@ -7,6 +7,7 @@ import dev.rajesh.mobile_banking.loadWallet.data.dto.WalletLoadResponseDTO
 import dev.rajesh.mobile_banking.loadWallet.data.dto.WalletValidationDetailDTO
 import dev.rajesh.mobile_banking.loadWallet.data.dto.WalletValidationResponseDTO
 import dev.rajesh.mobile_banking.loadWallet.domain.model.WalletDetail
+import dev.rajesh.mobile_banking.loadWallet.domain.model.WalletLoadDetails
 
 
 fun fakeWalletList(): List<WalletDetail> = listOf(
@@ -106,7 +107,7 @@ fun fakeWalletListResponse(): List<WalletDetailDTO> = listOf(
 
 fun fakeValidationResponse() = WalletValidationResponseDTO(
     status = "success",
-    message = "Quick service fetch successfully",
+    message = "Wallet validated successfully",
     code = "M001",
     detail = WalletValidationDetailDTO(
         message = "Wallet validated successfully",
@@ -140,4 +141,17 @@ fun fakeLoadWalletSuccessResponse() = WalletLoadResponseDTO(
         descOneFieldValue = "9840173991",
         accountNumber = "00155555"
     )
+)
+
+fun fakeWalletLoadSuccessDetails() = WalletLoadDetails(
+    descOneFieldName = "Wallet ID",
+    amount = "1111",
+    walletIcon = "1542352527067.png",
+    walletName = " eSewa ",
+    descTwoFieldValue = " test remarks",
+    descTwoFieldName = " Remarks ",
+    transactionIdentifier = "903941143070366",
+    descOneFieldValue = "9840173991",
+    accountNumber = "00155555",
+    message = "Successfully transferred to wallet"
 )

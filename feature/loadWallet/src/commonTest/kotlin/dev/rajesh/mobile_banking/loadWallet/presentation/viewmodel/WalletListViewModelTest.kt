@@ -50,4 +50,20 @@ class WalletListViewModelTest {
         state.isLoading shouldBe false
         state.errorMessage shouldBe null
     }
+
+    @Test
+    fun fetchWalletList_should_show_error_when_api_fails() = runTest {
+        //Arrange
+        walletRepository.errorOnWalletFetchWalletList = true
+
+        //Act
+        walletViewModel = WalletListViewModel(getWalletListUseCase = getWalletListUseCase)
+        advanceUntilIdle()
+        val state = walletViewModel.state.value
+
+        //Assert
+        state.walletList shouldBe emptyList()
+        state.isLoading shouldBe false
+        state.errorMessage shouldBe walletRepository.errorMessage
+    }
 }
