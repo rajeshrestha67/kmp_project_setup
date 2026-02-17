@@ -33,6 +33,7 @@ allprojects {
 
 kotlin {
 
+
     // Target declarations - add or remove as needed below. These define
     // which platforms this KMP module supports.
     // See: https://kotlinlang.org/docs/multiplatform-discover-project.html#targets
@@ -40,6 +41,11 @@ kotlin {
         namespace = "dev.rajesh.mobile_banking.loadWallet"
         compileSdk = 36
         minSdk = 26
+
+        compilerOptions {
+            jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_11)
+        }
+
 
         withHostTestBuilder {
         }
