@@ -2,6 +2,8 @@ package dev.rajesh.mobile_banking.di
 
 import android.content.Context
 import dev.rajesh.mobile_banking.components.PlatformMessage
+import dev.rajesh.mobile_banking.download.platform.AndroidIFileDownloader
+import dev.rajesh.mobile_banking.download.platform.IFileDownloader
 import dev.rajesh.mobile_banking.qrscanner.domain.qrDecoder.QrDecoder
 import dev.rajesh.mobile_banking.qrscanner.domain.qrDecoder.QrDecoderFactory
 import org.koin.core.annotation.Factory
@@ -27,5 +29,10 @@ actual class PlatformModule actual constructor() : KoinComponent {
     @Factory
     actual fun provideQrDecoder(factory: QrDecoderFactory): QrDecoder =
         factory.create()
+
+
+    @Single(binds = [IFileDownloader::class])
+    actual fun provideFileDownloader() : IFileDownloader= AndroidIFileDownloader(context)
+
 
 }

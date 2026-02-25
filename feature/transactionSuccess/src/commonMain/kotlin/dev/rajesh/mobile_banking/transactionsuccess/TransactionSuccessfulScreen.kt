@@ -1,5 +1,6 @@
 package dev.rajesh.mobile_banking.transactionsuccess
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -27,9 +28,11 @@ import androidx.compose.ui.unit.dp
 import dev.rajesh.mobile_banking.components.appColors
 import dev.rajesh.mobile_banking.components.button.AppButton
 import dev.rajesh.mobile_banking.components.dimens
+import dev.rajesh.mobile_banking.download.viewModel.DownloadViewModel
 import dev.rajesh.mobile_banking.transactionsuccess.component.SuccessLottie
 import dev.rajesh.mobile_banking.transactionsuccess.component.TransactionDataRow
 import dev.rajesh.mobile_banking.transactionsuccess.model.TransactionData
+import org.koin.compose.viewmodel.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -37,6 +40,11 @@ fun TransactionSuccessFulScreen(
     data: TransactionData,
     goToDashboardClicked: () -> Unit
 ) {
+    val downloadViewModel: DownloadViewModel = koinViewModel()
+
+    val receiptUrl =
+        "https://www.adobe.com/support/products/enterprise/knowledgecenter/media/c4611_sample_explain.pdf"
+    val fileName = "receipt.pdf"
 
     Scaffold(
         modifier = Modifier.fillMaxWidth(),
@@ -96,7 +104,10 @@ fun TransactionSuccessFulScreen(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 8.dp),
+                    .padding(horizontal = 8.dp)
+                    .clickable {
+                        downloadViewModel.download(url = receiptUrl, fileName = fileName)
+                    },
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.End
             ) {

@@ -1,6 +1,8 @@
 package dev.rajesh.mobile_banking.di
 
 import dev.rajesh.mobile_banking.components.PlatformMessage
+import dev.rajesh.mobile_banking.download.platform.IFileDownloader
+import dev.rajesh.mobile_banking.download.platform.IosFileDownloader
 import dev.rajesh.mobile_banking.qrscanner.domain.qrDecoder.QrDecoder
 import dev.rajesh.mobile_banking.qrscanner.domain.qrDecoder.QrDecoderFactory
 import org.koin.core.annotation.Factory
@@ -15,10 +17,13 @@ actual class PlatformModule {
     }
 
     @Factory
-    actual  fun provideQrDecoderFactory(): QrDecoderFactory =
+    actual fun provideQrDecoderFactory(): QrDecoderFactory =
         QrDecoderFactory()
 
     @Factory
     actual fun provideQrDecoder(factory: QrDecoderFactory): QrDecoder =
         factory.create()
+
+    @Single
+    actual fun provideFileDownloader(): IFileDownloader = IosFileDownloader()
 }

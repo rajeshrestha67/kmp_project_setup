@@ -2,9 +2,6 @@ plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidKotlinMultiplatformLibrary)
     alias(libs.plugins.android.lint)
-    alias(libs.plugins.composeCompiler)
-    alias(libs.plugins.composeMultiplatform)
-    alias(libs.plugins.jetbrains.kotlin.serialization)
 }
 
 kotlin {
@@ -13,9 +10,9 @@ kotlin {
     // which platforms this KMP module supports.
     // See: https://kotlinlang.org/docs/multiplatform-discover-project.html#targets
     androidLibrary {
-        namespace = "dev.rajesh.mobile_banking.transactionsuccess"
+        namespace = "dev.rajesh.mobile_banking.download"
         compileSdk = 36
-        minSdk = 26
+        minSdk = 24
 
         withHostTestBuilder {
         }
@@ -34,7 +31,7 @@ kotlin {
     // A step-by-step guide on how to include this library in an XCode
     // project can be found here:
     // https://developer.android.com/kotlin/multiplatform/migrate
-    val xcfName = "feature:transactionSuccessKit"
+    val xcfName = "feature:downloadKit"
 
     iosX64 {
         binaries.framework {
@@ -64,32 +61,9 @@ kotlin {
             dependencies {
                 implementation(libs.kotlin.stdlib)
                 // Add KMP dependencies here
-                implementation(compose.runtime)
-                implementation(compose.foundation)
-                implementation(compose.material3)
-                implementation(compose.components.uiToolingPreview)
-
-                implementation(libs.androidx.lifecycle.viewmodelCompose)
-                implementation(libs.androidx.lifecycle.runtimeCompose)
-                implementation(compose.materialIconsExtended)
-                implementation(libs.jetbrians.material3)
-
-                implementation(libs.org.jetbrains.navigation)
-
-                implementation(libs.coil.compose)
-                implementation(libs.coil.compose.core)
-                implementation(libs.coil.mp)
-                implementation(libs.coil.network.ktor3)
-                implementation(libs.kotlinx.serialization.json)
+                implementation(libs.kotlinx.coroutine)
                 implementation(libs.koin.compose.viewmodel)
-                implementation(compose.components.resources)
                 implementation(projects.core.logger)
-                implementation(projects.core.ui.res)
-                implementation(projects.core.ui.components)
-                implementation(projects.core.utils)
-                implementation(libs.compottie)
-                implementation(projects.feature.download)
-
 
             }
         }
@@ -105,7 +79,7 @@ kotlin {
                 // Add Android-specific dependencies here. Note that this source set depends on
                 // commonMain by default and will correctly pull the Android artifacts of any KMP
                 // dependencies declared in commonMain.
-
+                implementation(libs.coroutines.android)
             }
         }
 

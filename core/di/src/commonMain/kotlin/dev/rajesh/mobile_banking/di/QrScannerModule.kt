@@ -7,7 +7,6 @@ import dev.rajesh.mobile_banking.qrscanner.data.remote.QPayRemoteDataSource
 import dev.rajesh.mobile_banking.qrscanner.data.remote.QPayRemoteDataSourceImpl
 import dev.rajesh.mobile_banking.qrscanner.data.repository.QPayRepositoryImpl
 import dev.rajesh.mobile_banking.qrscanner.domain.qrDecoder.QrDecoder
-import dev.rajesh.mobile_banking.qrscanner.domain.qrDecoder.QrDecoderFactory
 import dev.rajesh.mobile_banking.qrscanner.domain.repository.QPayRepository
 import dev.rajesh.mobile_banking.qrscanner.domain.usecases.GetQPayMerchantDetailUseCase
 import dev.rajesh.mobile_banking.qrscanner.presentation.viewmodel.QrScannerViewModel

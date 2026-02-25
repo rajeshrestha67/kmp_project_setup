@@ -28,7 +28,8 @@ fun initKoin(config: KoinAppDeclaration? = null) {
             OtpVerificationModule().module,
             //FavouriteAccountsModule().module,
             WalletModule().module,
-            QrScannerModule().module
+            QrScannerModule().module,
+            DownloadModule().module
         )
     }
 }
