@@ -27,6 +27,7 @@ class DownloadModule {
 
     @KoinViewModel
     fun provideDownloadViewModel(
-        downloadFileUseCase: DownloadFileUseCase
-    ) = DownloadViewModel(downloadFileUseCase)
+        downloadFileUseCase: DownloadFileUseCase,
+        fileDownloader: IFileDownloader
+    ) = DownloadViewModel(downloadFileUseCase, fileDownloader)
 }

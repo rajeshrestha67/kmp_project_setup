@@ -9,6 +9,7 @@ import platform.Foundation.NSURLRequest
 import platform.Foundation.NSURLSession
 import platform.Foundation.NSUserDomainMask
 import platform.Foundation.downloadTaskWithRequest
+import platform.UIKit.UIApplication
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 
@@ -51,5 +52,9 @@ class IosFileDownloader : IFileDownloader {
             }
             task.resume()
         }
+    }
+
+    override fun openFile(filePath: String) {
+
     }
 }

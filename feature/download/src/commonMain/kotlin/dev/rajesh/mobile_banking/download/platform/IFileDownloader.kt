@@ -6,4 +6,6 @@ interface IFileDownloader {
         fileName: String,
         mimeType: String? = null
     ): Result<String>
+
+    fun openFile(filePath: String)
 }
