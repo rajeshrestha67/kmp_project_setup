@@ -1,9 +1,12 @@
 package dev.rajesh.datastore
 
 import android.content.Context
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.PreferenceDataStoreFactory
+import androidx.datastore.preferences.core.Preferences
 import dev.rajesh.datastore.token.local.TokenDataStore
 import dev.rajesh.datastore.userData.datastore.UserDetailDataStore
-import dev.rajesh.datastore.userData.repository.UserDetailLocalDataSource
+import okio.Path.Companion.toPath
 import org.koin.mp.KoinPlatform.getKoin
 
 actual class DataStoreFactory {
@@ -13,6 +16,14 @@ actual class DataStoreFactory {
         return context.filesDir.resolve(
             "$jsonPath.json",
         ).absolutePath
+    }
+
+    actual fun createDataStore(): DataStore<Preferences> {
+        return PreferenceDataStoreFactory.createWithPath(
+            produceFile = {
+                context.filesDir.resolve(DATASTORE_FILE_NAME).absolutePath.toPath()
+            }
+        )
     }
 
     actual fun getTokenDataStore(jsonPath: String): TokenDataStore {

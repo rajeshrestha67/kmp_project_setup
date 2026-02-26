@@ -1,6 +1,9 @@
 package dev.rajesh.mobile_banking.di
 
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
 import dev.rajesh.datastore.DataStoreFactory
+import dev.rajesh.datastore.manager.DataStoreManager
 import dev.rajesh.datastore.token.local.TokenDataStore
 import dev.rajesh.datastore.token.repository.TokenRepository
 import dev.rajesh.datastore.token.repository.TokenRepositoryImpl
@@ -15,8 +18,14 @@ import org.koin.core.annotation.Single
 @Module
 class DataStoreModule {
 
+//    @Single
+//    fun getDataStoreFactory(): DataStoreFactory = DataStoreFactory()
+
+
     @Single
-    fun getDataStoreFactory(): DataStoreFactory = DataStoreFactory()
+    fun provideDataStoreManager(dataStore: DataStore<Preferences>): DataStoreManager {
+        return DataStoreManager(dataStore)
+    }
 
     //token
 

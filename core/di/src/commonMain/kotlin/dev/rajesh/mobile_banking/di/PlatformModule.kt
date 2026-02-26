@@ -1,5 +1,8 @@
 package dev.rajesh.mobile_banking.di
 
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
+import dev.rajesh.datastore.DataStoreFactory
 import dev.rajesh.mobile_banking.components.PlatformMessage
 import dev.rajesh.mobile_banking.download.platform.IFileDownloader
 import dev.rajesh.mobile_banking.qrscanner.domain.qrDecoder.QrDecoder
@@ -22,4 +25,12 @@ expect class PlatformModule() {
 
     @Single
     fun provideFileDownloader(): IFileDownloader
+
+    @Single
+    fun getDataStoreFactory(): DataStoreFactory
+
+    @Single
+    fun provideDataStore(factory: DataStoreFactory): DataStore<Preferences>
+
+
 }

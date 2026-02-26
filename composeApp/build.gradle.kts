@@ -97,6 +97,7 @@ kotlin {
 
 
             implementation(projects.feature.auth.login)
+            implementation(projects.feature.splashscreen)
             implementation(projects.feature.dashboard)
             implementation(projects.feature.home)
             implementation(projects.feature.banking)

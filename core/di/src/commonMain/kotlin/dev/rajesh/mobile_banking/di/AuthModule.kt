@@ -1,5 +1,6 @@
 package dev.rajesh.mobile_banking.di
 
+import dev.rajesh.datastore.manager.DataStoreManager
 import dev.rajesh.datastore.token.repository.TokenRepository
 import dev.rajesh.mobile_banking.domain.form.MobileNumberValidateUseCase
 import dev.rajesh.mobile_banking.domain.form.PasswordValidateUseCase
@@ -48,6 +49,6 @@ class AuthModule {
     ) = LoginViewModel(
         loginUseCase = loginUseCase,
         mobileNumberValidateUseCase = mobileNumberValidateUseCase,
-        passwordValidateUseCase = passwordValidateUseCase,
+        passwordValidateUseCase = passwordValidateUseCase
     )
 }

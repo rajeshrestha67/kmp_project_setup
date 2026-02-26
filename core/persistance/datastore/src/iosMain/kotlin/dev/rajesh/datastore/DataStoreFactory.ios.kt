@@ -1,8 +1,12 @@
 package dev.rajesh.datastore
 
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.PreferenceDataStoreFactory
+import androidx.datastore.preferences.core.Preferences
 import dev.rajesh.datastore.token.local.TokenDataStore
 import dev.rajesh.datastore.userData.datastore.UserDetailDataStore
 import kotlinx.cinterop.ExperimentalForeignApi
+import okio.Path.Companion.toPath
 import platform.Foundation.NSDocumentDirectory
 import platform.Foundation.NSFileManager
 import platform.Foundation.NSURL
@@ -20,6 +24,23 @@ actual class DataStoreFactory {
             error = null,
         )
         return requireNotNull(documentDirectory).path!!
+    }
+
+    @OptIn(ExperimentalForeignApi::class)
+    actual fun createDataStore(): DataStore<Preferences> {
+        return PreferenceDataStoreFactory.createWithPath(
+            produceFile = {
+                val directory = NSFileManager.defaultManager.URLForDirectory(
+                    directory = NSDocumentDirectory,
+                    inDomain = NSUserDomainMask,
+                    appropriateForURL = null,
+                    create = false,
+                    error = null
+                )
+                val pathString = directory?.path + "/$DATASTORE_FILE_NAME"
+                pathString.toPath()
+            }
+        )
     }
 
     actual fun getSystemPath(jsonPath: String): String {
@@ -41,6 +62,8 @@ actual class DataStoreFactory {
             }
         )
     }
+
+
 
 
 }

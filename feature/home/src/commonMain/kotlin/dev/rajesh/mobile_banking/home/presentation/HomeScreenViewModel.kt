@@ -2,6 +2,8 @@ package dev.rajesh.mobile_banking.home.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dev.rajesh.datastore.manager.DataStoreKeys
+import dev.rajesh.datastore.manager.DataStoreManager
 import dev.rajesh.mobile_banking.home.domain.model.BankingServiceDetail
 import dev.rajesh.mobile_banking.home.domain.model.QuickServiceDetail
 import dev.rajesh.mobile_banking.home.domain.usecase.FetchBankingServiceUseCase
@@ -15,6 +17,7 @@ import dev.rajesh.mobile_banking.user.domain.usecase.FetchUserDetailUseCase
 import dev.rajesh.mobile_banking.utils.DateUtils
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
@@ -51,6 +54,7 @@ class HomeScreenViewModel(
         fetchBankingService()
         fetchQuickServices()
     }
+
 
     @OptIn(ExperimentalTime::class)
     private fun updateGreeting() {

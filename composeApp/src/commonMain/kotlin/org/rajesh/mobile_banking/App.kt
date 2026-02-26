@@ -17,20 +17,22 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.viewmodel.koinViewModel
 import org.rajesh.mobile_banking.graph.dashboardScreenBuilder
 import org.rajesh.mobile_banking.graph.loginScreenBuilder
+import org.rajesh.mobile_banking.graph.onBoardingBuilder
 import org.rajesh.mobile_banking.route.AppRoute
 
 @Composable
 @Preview
-fun App() {
+fun App(hasShownOnBoarding: Boolean) {
+
     val theme = ThemeMode.get(2)
     AppTheme(selectedThemeMode = theme) {
-        AppScreen()
+        AppScreen(hasShownOnBoarding)
     }
 
 }
 
 @Composable
-fun AppScreen() {
+fun AppScreen(hasShownOnBoarding: Boolean) {
     val navController = rememberNavController()
     val pushNotificationViewModel: PushNotificationViewModel = koinViewModel()
 
@@ -52,8 +54,9 @@ fun AppScreen() {
     AnimatedNavHost(
         modifier = Modifier.fillMaxSize(),
         navController = navController,
-        startDestination = AppRoute.LoginRoute
+        startDestination = if (hasShownOnBoarding) AppRoute.LoginRoute else AppRoute.OnBoardingRoute
     ) {
+        onBoardingBuilder(navController)
         loginScreenBuilder(navController)
         dashboardScreenBuilder(navController)
     }
