@@ -12,3 +12,5 @@ actual val GALLERY_PERMISSION: String
 
 actual val GALLERY_PERMISSION_LIMITED: String
     get() = ""
+actual val PUSH_NOTIFICATION: String
+    get() = ""

@@ -29,7 +29,8 @@ fun initKoin(config: KoinAppDeclaration? = null) {
             //FavouriteAccountsModule().module,
             WalletModule().module,
             QrScannerModule().module,
-            DownloadModule().module
+            DownloadModule().module,
+            PushNotificationModule().module
         )
     }
 }

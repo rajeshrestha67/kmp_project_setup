@@ -18,3 +18,9 @@ actual val GALLERY_PERMISSION_LIMITED: String
     } else {
         ""
     }
+actual val PUSH_NOTIFICATION: String
+    get() = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+        android.Manifest.permission.POST_NOTIFICATIONS
+    } else {
+        ""
+    }

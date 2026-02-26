@@ -58,6 +58,10 @@ koin-test = "4.1.1"
 kotest-version = "6.0.3"
 ktor-mock ="3.3.3"
 
+kmpNotifier = "1.2.1"
+googleServices = "4.4.0"
+firebaseMessaging = "24.0.0"
+
 
 
 [libraries]
@@ -141,6 +145,9 @@ mlkit-barcode-scanning = { group = "com.google.mlkit", name = "barcode-scanning"
 #implementation("com.github.yalantis:ucrop:2.2.8")
 ucrop = { module = "com.github.yalantis:ucrop", version.ref = "ucrop" }
 
+kmpNotifier = { module = "io.github.mirzemehdi:kmpnotifier", version.ref = "kmpNotifier" }
+firebase-messaging = { module = "com.google.firebase:firebase-messaging", version.ref = "firebaseMessaging" }
+
 #test
 coroutine-test ={module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutine-test"}
 koin-test = { module = "io.insert-koin:koin-test", version.ref = "koin-test" }
@@ -163,5 +170,7 @@ composeHotReload = { id = "org.jetbrains.compose.hot-reload", version.ref = "com
 jetbrains-kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 androidx-room = { id = "androidx.room", version.ref = "room" }
 kover = { id = "org.jetbrains.kotlinx.kover", version.ref = "kover" }
+googleServices = { id = "com.google.gms.google-services", version.ref = "googleServices" }
+
 
 

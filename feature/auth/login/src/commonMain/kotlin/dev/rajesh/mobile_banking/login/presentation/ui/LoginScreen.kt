@@ -34,9 +34,12 @@ import dev.rajesh.mobile_banking.components.PlatformMessage
 import dev.rajesh.mobile_banking.components.button.AppButton
 import dev.rajesh.mobile_banking.components.dimens
 import dev.rajesh.mobile_banking.components.hideKeyboardOnTap
+import dev.rajesh.mobile_banking.components.permissions.PUSH_NOTIFICATION
+import dev.rajesh.mobile_banking.components.permissions.rememberRequestPermission
 import dev.rajesh.mobile_banking.components.textField.FormValidate
 import dev.rajesh.mobile_banking.components.textField.MobileTextField
 import dev.rajesh.mobile_banking.components.textField.PasswordTextField
+import dev.rajesh.mobile_banking.logger.AppLogger
 import dev.rajesh.mobile_banking.login.presentation.state.LoginEffect
 import dev.rajesh.mobile_banking.login.presentation.viewModel.LoginViewModel
 import dev.rajesh.mobile_banking.login.presentation.state.LoginScreenAction
@@ -79,6 +82,28 @@ fun LoginScreenContent(
     val keyboardController = LocalSoftwareKeyboardController.current
     LaunchedEffect(Unit) {
         focusRequester.requestFocus()
+    }
+
+    val onPermission = rememberRequestPermission(
+        permissions = listOf(
+            PUSH_NOTIFICATION
+        ),
+        onGranted = { permission ->
+            AppLogger.i(TAG, "Permission granted: $permission")
+        },
+        onDenied = { permission ->
+            AppLogger.i(TAG, "Permission Denied: $permission")
+        },
+        onPermanentlyDenied = { permission ->
+            AppLogger.i(TAG, "Permission Permanently Denied: $permission")
+        },
+        onAllGranted = {
+            AppLogger.i(TAG, "All Permission Granted")
+        }
+    )
+
+    LaunchedEffect(Unit) {
+        onPermission()
     }
 
     Scaffold(

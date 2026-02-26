@@ -9,4 +9,5 @@ plugins {
     alias(libs.plugins.kotlinAndroid) apply false
     alias(libs.plugins.androidKotlinMultiplatformLibrary) apply false
     alias(libs.plugins.android.lint) apply false
+    alias(libs.plugins.googleServices) apply false
 }

@@ -8,6 +8,7 @@ plugins {
     alias(libs.plugins.jetbrains.kotlin.serialization)
 //    id("org.jetbrains.kotlinx.kover") version "0.8.0"
     alias(libs.plugins.kover)
+    alias(libs.plugins.googleServices)
 }
 
 allprojects{
@@ -59,6 +60,8 @@ kotlin {
             implementation(libs.androidx.core.splashscreen)
             //implementation(projects.core.di)
             implementation(libs.androidx.activity)
+            implementation(libs.firebase.messaging)
+
         }
         commonMain.dependencies {
             implementation(compose.runtime)
@@ -84,9 +87,13 @@ kotlin {
             implementation(projects.core.domain)
             implementation(projects.core.logger)
             implementation(projects.core.persistance.datastore)
+            implementation(projects.core.notification)
 
+            //implementation(libs.kmpNotifier)
+            api(libs.kmpNotifier) // Use 'api' so it's exported to iOS
             implementation(libs.koin.compose.viewmodel)
             implementation(compose.components.resources)
+
 
 
             implementation(projects.feature.auth.login)

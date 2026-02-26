@@ -4,4 +4,5 @@ expect val READ_CONTACT_PERMISSION: String
 expect val CAMERA_PERMISSION: String
 expect val GALLERY_PERMISSION: String
 expect val GALLERY_PERMISSION_LIMITED: String
+expect val PUSH_NOTIFICATION: String
 
