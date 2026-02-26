@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "423627006143",
+    "project_id": "mobile-banking-kmp",
+    "storage_bucket": "mobile-banking-kmp.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:423627006143:android:319bfe3391ebc80d58660a",
+        "android_client_info": {
+          "package_name": "org.rajesh.mobile_banking"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAEPA5H6HJAdXOo83hHJYJGAHJinAwYBkg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
