@@ -3,7 +3,10 @@ package dev.rajesh.mobile_banking.user.data.mapper
 import dev.rajesh.datastore.userData.model.AccountDetailLocal
 import dev.rajesh.datastore.userData.model.QrLocal
 import dev.rajesh.datastore.userData.model.UserDetailsLocal
+import dev.rajesh.mobile_banking.database.models.AccountDetailEntity
+import dev.rajesh.mobile_banking.database.models.QrEntity
 import dev.rajesh.mobile_banking.database.models.UserDetailsEntity
+import dev.rajesh.mobile_banking.database.relations.UserWithAccounts
 import dev.rajesh.mobile_banking.user.data.remote.dto.AccountDetailDTO
 import dev.rajesh.mobile_banking.user.data.remote.dto.QrDTO
 import dev.rajesh.mobile_banking.user.data.remote.dto.UserDetailsDTO
@@ -90,81 +93,150 @@ fun QrDTO.toQr(): Qr {
 }
 
 
-
 //domain -> Entity (Room)
 
-fun UserDetails.toEntity(): UserDetailsEntity{
+fun UserDetails.toEntity(): UserDetailsEntity {
     return UserDetailsEntity(
-        addressOne= addressOne,
-        addressTwo= addressTwo,
-        alertType= alertType,
-        appVerification= appVerification,
-        bank= bank,
-        bankBranch= bankBranch,
-        bankBranchCode= bankBranchCode,
-        bankCode= bankCode,
-        bankTransferOtp= bankTransferOtp,
-        beneficiaryFlag= beneficiaryFlag,
-        chatId= chatId,
-        city= city,
-        deviceToken= deviceToken,
-        email= email,
-        firebaseToken= firebaseToken,
-        firstName= firstName,
-        fullName= fullName,
-        gender= gender,
-        isEtellerEnabled= isEtellerEnabled,
-        isNpsEnabled= isNpsEnabled,
-        lastName= lastName,
-        middleName= middleName,
-        mobileBanking= mobileBanking,
-        mobileNumber= mobileNumber,
-        oauthTokenCount= oauthTokenCount,
-        otpString= otpString,
-        registered= registered,
-        smsService= smsService,
-        socketPrefix= socketPrefix,
-        socketURl= socketURl,
-        state= state,
-        unseenNotificationCount= unseenNotificationCount
+        addressOne = addressOne,
+        addressTwo = addressTwo,
+        alertType = alertType,
+        appVerification = appVerification,
+        bank = bank,
+        bankBranch = bankBranch,
+        bankBranchCode = bankBranchCode,
+        bankCode = bankCode,
+        bankTransferOtp = bankTransferOtp,
+        beneficiaryFlag = beneficiaryFlag,
+        chatId = chatId,
+        city = city,
+        deviceToken = deviceToken,
+        email = email,
+        firebaseToken = firebaseToken,
+        firstName = firstName,
+        fullName = fullName,
+        gender = gender,
+        isEtellerEnabled = isEtellerEnabled,
+        isNpsEnabled = isNpsEnabled,
+        lastName = lastName,
+        middleName = middleName,
+        mobileBanking = mobileBanking,
+        mobileNumber = mobileNumber,
+        oauthTokenCount = oauthTokenCount,
+        otpString = otpString,
+        registered = registered,
+        smsService = smsService,
+        socketPrefix = socketPrefix,
+        socketURl = socketURl,
+        state = state,
+        unseenNotificationCount = unseenNotificationCount
     )
 }
 
 //Entity (Room) -> Domain
-fun UserDetailsEntity.toDomain(): UserDetails{
+fun UserWithAccounts.toDomain(): UserDetails {
     return UserDetails(
-        addressOne= this.addressOne,
-        addressTwo= this.addressTwo,
-        alertType= this.alertType,
-        appVerification= this.appVerification,
-        bank= this.bank,
-        bankBranch= this.bankBranch,
-        bankBranchCode= this.bankBranchCode,
-        bankCode= this.bankCode,
-        bankTransferOtp= this.bankTransferOtp,
-        beneficiaryFlag= this.beneficiaryFlag,
-        chatId= this.chatId,
-        city= this.city,
-        deviceToken= this.deviceToken,
-        email= this.email,
-        firebaseToken= this.firebaseToken,
-        firstName= this.firstName,
-        fullName= this.fullName,
-        gender= this.gender,
-        isEtellerEnabled=this. isEtellerEnabled,
-        isNpsEnabled= this.isNpsEnabled,
-        lastName= this.lastName,
-        middleName= this.middleName,
-        mobileBanking= this.mobileBanking,
-        mobileNumber= this.mobileNumber,
-        oauthTokenCount= this.oauthTokenCount,
-        otpString= this.otpString,
-        registered= this.registered,
-        smsService= this.smsService,
-        socketPrefix= this.socketPrefix,
-        socketURl= this.socketURl,
-        state= this.state,
-        unseenNotificationCount= this.unseenNotificationCount
+        addressOne = this.user.addressOne,
+        addressTwo = this.user.addressTwo,
+        alertType = this.user.alertType,
+        appVerification = this.user.appVerification,
+        bank = this.user.bank,
+        bankBranch = this.user.bankBranch,
+        bankBranchCode = this.user.bankBranchCode,
+        bankCode = this.user.bankCode,
+        bankTransferOtp = this.user.bankTransferOtp,
+        beneficiaryFlag = this.user.beneficiaryFlag,
+        chatId = this.user.chatId,
+        city = this.user.city,
+        deviceToken = this.user.deviceToken,
+        email = this.user.email,
+        firebaseToken = this.user.firebaseToken,
+        firstName = this.user.firstName,
+        fullName = this.user.fullName,
+        gender = this.user.gender,
+        isEtellerEnabled = this.user.isEtellerEnabled,
+        isNpsEnabled = this.user.isNpsEnabled,
+        lastName = this.user.lastName,
+        middleName = this.user.middleName,
+        mobileBanking = this.user.mobileBanking,
+        mobileNumber = this.user.mobileNumber,
+        oauthTokenCount = this.user.oauthTokenCount,
+        otpString = this.user.otpString,
+        registered = this.user.registered,
+        smsService = this.user.smsService,
+        socketPrefix = this.user.socketPrefix,
+        socketURl = this.user.socketURl,
+        state = this.user.state,
+        unseenNotificationCount = this.user.unseenNotificationCount,
+        accountDetail = this.accountDetails.map { it.toDomain() },
+        qr = this.qrList.map { it.toDomain() }
     )
 }
+
+fun AccountDetail.toEntity(mobileNumber: String): AccountDetailEntity {
+    return AccountDetailEntity(
+        interestRate = interestRate,
+        accountType = accountType,
+        branchName = branchName,
+        accruedInterest = accruedInterest,
+        accountNumber = accountNumber,
+        accountHolderName = accountHolderName,
+        availableBalance = availableBalance,
+        branchCode = branchCode,
+        mainCode = mainCode,
+        minimumBalance = minimumBalance,
+        clientCode = clientCode,
+        actualBalance = actualBalance,
+        mobileBanking = mobileBanking,
+        sms = sms,
+        currency = currency,
+        id = id,
+        primary = primary,
+        mobileNumber = mobileNumber
+    )
+}
+
+fun AccountDetailEntity.toDomain(): AccountDetail {
+    return AccountDetail(
+        interestRate = interestRate,
+        accountType = accountType,
+        branchName = branchName,
+        accruedInterest = accruedInterest,
+        accountNumber = accountNumber,
+        accountHolderName = accountHolderName,
+        availableBalance = availableBalance,
+        branchCode = branchCode,
+        mainCode = mainCode,
+        minimumBalance = minimumBalance,
+        clientCode = clientCode,
+        actualBalance = actualBalance,
+        mobileBanking = mobileBanking,
+        sms = sms,
+        currency = currency,
+        id = id,
+        primary = primary,
+    )
+}
+
+fun Qr.toEntity (mobileNumber: String) : QrEntity {
+    return QrEntity(
+        mobileNumber = mobileNumber,
+        active = this.active,
+        code = this.code,
+        imageUrl = this.imageUrl,
+        label = this.label,
+        sortOrder =this. sortOrder,
+    )
+}
+
+fun QrEntity.toDomain() : Qr{
+    return Qr(
+        active = this.active,
+        code = this.code,
+        imageUrl = this.imageUrl,
+        label = this.label,
+        sortOrder =this. sortOrder,
+    )
+}
+
+
 

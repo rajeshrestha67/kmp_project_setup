@@ -2,6 +2,7 @@ package dev.rajesh.mobile_banking.user.data.repository
 
 import dev.rajesh.datastore.userData.repository.UserDetailLocalDataSource
 import dev.rajesh.mobile_banking.database.dao.UserDetailsDao
+import dev.rajesh.mobile_banking.database.relations.UserWithAccounts
 import dev.rajesh.mobile_banking.logger.AppLogger
 import dev.rajesh.mobile_banking.model.network.DataError
 import dev.rajesh.mobile_banking.networkhelper.ApiResult
@@ -22,14 +23,13 @@ class UserDetailRepositoryImpl(
     private val userDetailDao: UserDetailsDao
 ) : UserDetailRepository {
     override suspend fun fetchUserDetail(forceFetch: Boolean): ApiResult<UserDetails, DataError> {
-//        if (!forceFetch) {
-//            val localUser = userDetailDao.getAll().firstOrNull()?.firstOrNull()
-//            if (localUser != null) {
-//                return ApiResult.Success(localUser.toDomain())
-//            }
-//        }
-        val localUser = userDetailDao.getAll().firstOrNull()?.firstOrNull()
-        AppLogger.e("localUser", "${localUser}")
+        if (!forceFetch) {
+            val localUser: UserWithAccounts? = userDetailDao.getUserWithAccounts().firstOrNull()
+            if (localUser != null) {
+                AppLogger.e("localUser", "${localUser}")
+                return ApiResult.Success(localUser.toDomain())
+            }
+        }
 
         return userDetailRemoteDataSource
             .fetchUserDetail()
@@ -38,8 +38,18 @@ class UserDetailRepositoryImpl(
                 user
             }.onSuccess { data ->
                 userDetailLocalDataSource.saveUserDetailsToDS(data.toUserDetailsLocal())
-                userDetailDao.deleteAll()
-                userDetailDao.insert(data.toEntity())
+
+                /**
+                 * save to DB
+                 */
+
+                userDetailDao.deleteAllUsers()
+                userDetailDao.deleteAllAccounts()
+                userDetailDao.deleteAllQrs()
+
+                userDetailDao.insertUser(data.toEntity())
+                userDetailDao.insertAccounts(data.accountDetail.map { it.toEntity(data.mobileNumber) })
+                userDetailDao.insertQrs(data.qr.map { it.toEntity(data.mobileNumber) })
             }
     }
 
