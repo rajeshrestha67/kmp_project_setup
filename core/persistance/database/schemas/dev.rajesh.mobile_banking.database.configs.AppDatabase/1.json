@@ -1,0 +1,217 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 1,
+    "identityHash": "812e0b66aa2a2296903b5d085926986a",
+    "entities": [
+      {
+        "tableName": "UserDetailsEntity",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`addressOne` TEXT NOT NULL, `addressTwo` TEXT NOT NULL, `alertType` INTEGER NOT NULL, `appVerification` INTEGER NOT NULL, `bank` TEXT NOT NULL, `bankBranch` TEXT NOT NULL, `bankBranchCode` TEXT NOT NULL, `bankCode` TEXT NOT NULL, `bankTransferOtp` INTEGER NOT NULL, `beneficiaryFlag` INTEGER NOT NULL, `chatId` TEXT NOT NULL, `city` TEXT NOT NULL, `deviceToken` TEXT NOT NULL, `email` TEXT NOT NULL, `firebaseToken` INTEGER NOT NULL, `firstName` TEXT NOT NULL, `fullName` TEXT NOT NULL, `gender` TEXT NOT NULL, `isEtellerEnabled` TEXT NOT NULL, `isNpsEnabled` TEXT NOT NULL, `lastName` TEXT NOT NULL, `middleName` TEXT NOT NULL, `mobileBanking` INTEGER NOT NULL, `mobileNumber` TEXT NOT NULL, `oauthTokenCount` INTEGER NOT NULL, `otpString` TEXT NOT NULL, `registered` INTEGER NOT NULL, `smsService` INTEGER NOT NULL, `socketPrefix` TEXT NOT NULL, `socketURl` TEXT NOT NULL, `state` TEXT NOT NULL, `unseenNotificationCount` INTEGER NOT NULL, PRIMARY KEY(`mobileNumber`))",
+        "fields": [
+          {
+            "fieldPath": "addressOne",
+            "columnName": "addressOne",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "addressTwo",
+            "columnName": "addressTwo",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "alertType",
+            "columnName": "alertType",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "appVerification",
+            "columnName": "appVerification",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "bank",
+            "columnName": "bank",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "bankBranch",
+            "columnName": "bankBranch",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "bankBranchCode",
+            "columnName": "bankBranchCode",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "bankCode",
+            "columnName": "bankCode",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "bankTransferOtp",
+            "columnName": "bankTransferOtp",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "beneficiaryFlag",
+            "columnName": "beneficiaryFlag",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "chatId",
+            "columnName": "chatId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "city",
+            "columnName": "city",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "deviceToken",
+            "columnName": "deviceToken",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "email",
+            "columnName": "email",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "firebaseToken",
+            "columnName": "firebaseToken",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "firstName",
+            "columnName": "firstName",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "fullName",
+            "columnName": "fullName",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "gender",
+            "columnName": "gender",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "isEtellerEnabled",
+            "columnName": "isEtellerEnabled",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "isNpsEnabled",
+            "columnName": "isNpsEnabled",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "lastName",
+            "columnName": "lastName",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "middleName",
+            "columnName": "middleName",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "mobileBanking",
+            "columnName": "mobileBanking",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "mobileNumber",
+            "columnName": "mobileNumber",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "oauthTokenCount",
+            "columnName": "oauthTokenCount",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "otpString",
+            "columnName": "otpString",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "registered",
+            "columnName": "registered",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "smsService",
+            "columnName": "smsService",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "socketPrefix",
+            "columnName": "socketPrefix",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "socketURl",
+            "columnName": "socketURl",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "state",
+            "columnName": "state",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "unseenNotificationCount",
+            "columnName": "unseenNotificationCount",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "mobileNumber"
+          ]
+        }
+      }
+    ],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '812e0b66aa2a2296903b5d085926986a')"
+    ]
+  }
+}
