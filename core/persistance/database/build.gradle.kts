@@ -1,12 +1,14 @@
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidKotlinMultiplatformLibrary)
+    alias(libs.plugins.android.lint)
+
     alias(libs.plugins.composeCompiler)
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.jetbrains.kotlin.serialization)
-    alias(libs.plugins.kover)
+    alias(libs.plugins.ksp)
+    alias(libs.plugins.room)
 }
-kover{}
 
 kotlin {
 
@@ -14,9 +16,9 @@ kotlin {
     // which platforms this KMP module supports.
     // See: https://kotlinlang.org/docs/multiplatform-discover-project.html#targets
     androidLibrary {
-        namespace = "dev.rajesh.mobile_banking.user"
+        namespace = "dev.rajesh.mobile_banking.database"
         compileSdk = 36
-        minSdk = 26
+        minSdk = 24
 
         withHostTestBuilder {
         }
@@ -35,7 +37,7 @@ kotlin {
     // A step-by-step guide on how to include this library in an XCode
     // project can be found here:
     // https://developer.android.com/kotlin/multiplatform/migrate
-    val xcfName = "feature:userKit"
+    val xcfName = "core:persistance:databaseKit"
 
     iosX64 {
         binaries.framework {
@@ -65,38 +67,24 @@ kotlin {
             dependencies {
                 implementation(libs.kotlin.stdlib)
                 // Add KMP dependencies here
+
                 implementation(compose.runtime)
                 implementation(compose.foundation)
-                implementation(compose.material3)
-                implementation(compose.components.uiToolingPreview)
 
-                implementation(libs.androidx.lifecycle.viewmodelCompose)
-                implementation(libs.androidx.lifecycle.runtimeCompose)
-                implementation(compose.materialIconsExtended)
-                implementation(libs.jetbrians.material3)
+                //Room
+                api(libs.androidx.room.runtime)
+                implementation(libs.androidx.sqlite.bundled)
 
-                implementation(libs.org.jetbrains.navigation)
+                implementation(libs.koin.core)
+                implementation(libs.koin.compose)
+                implementation(libs.koin.annotations)
 
-                implementation(libs.coil.compose)
-                implementation(libs.coil.compose.core)
-                implementation(libs.coil.mp)
-                implementation(libs.coil.network.ktor3)
+                //implementation(libs.coroutines.android)
+
                 implementation(libs.kotlinx.serialization.json)
-
-                implementation(projects.core.domain)
-                implementation(projects.core.model)
-                implementation(projects.core.persistance.datastore)
-                implementation(projects.core.persistance.database)
-
-                implementation(projects.core.networkHelper)
-
-                implementation(projects.core.ui.res)
-                implementation(projects.core.ui.components)
                 implementation(projects.core.logger)
-                implementation(libs.koin.compose.viewmodel)
-                implementation(compose.components.resources)
-            }
 
+            }
         }
 
         commonTest {
@@ -132,4 +120,35 @@ kotlin {
         }
     }
 
+}
+
+room {
+    schemaDirectory("$projectDir/schemas")
+}
+ksp {
+    arg("room.generateKotlin", "true")
+}
+
+dependencies {
+    val roomCompiler = libs.androidx.room.compiler
+    val koinCompiler = libs.koin.ksp.compiler
+
+//    ksp(roomCompiler)
+//    ksp(koinCompiler)
+
+    // 1. Process Metadata (Common code)
+//    add("kspCommonMainMetadata", roomCompiler)
+    add("kspCommonMainMetadata", koinCompiler)
+
+    // 2. Process Android
+    add("kspAndroid", roomCompiler)
+    add("kspAndroid", koinCompiler)
+
+    // 3. Process iOS Targets
+    // iOS
+    val iosTargets = listOf("IosX64", "IosArm64", "IosSimulatorArm64")
+    iosTargets.forEach { target ->
+        add("ksp$target", roomCompiler)
+        add("ksp$target", koinCompiler)
+    }
 }

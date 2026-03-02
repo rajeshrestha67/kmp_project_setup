@@ -7,5 +7,6 @@ interface UserDetailLocalDataSource {
 
     val userDetailsLocalFlow: Flow<UserDetailsLocal>
 
-    suspend fun saveUserDetails(userDetailsLocal: UserDetailsLocal)
+    suspend fun saveUserDetailsToDS(userDetailsLocal: UserDetailsLocal)
+
 }

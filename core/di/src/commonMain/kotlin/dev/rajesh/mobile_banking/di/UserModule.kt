@@ -1,6 +1,7 @@
 package dev.rajesh.mobile_banking.di
 
 import dev.rajesh.datastore.userData.repository.UserDetailLocalDataSource
+import dev.rajesh.mobile_banking.database.dao.UserDetailsDao
 import dev.rajesh.mobile_banking.user.data.remote.UserDetailRemoteDataSourceImpl
 import dev.rajesh.mobile_banking.user.data.remote.UserDetailRemoteDataSource
 import dev.rajesh.mobile_banking.user.data.repository.UserDetailRepositoryImpl
@@ -14,13 +15,19 @@ import org.koin.core.annotation.Module
 class UserModule {
 
     @Factory(binds = [UserDetailRemoteDataSource::class])
-    fun getRemoteUserDetailDataSource(httpClient: HttpClient) = UserDetailRemoteDataSourceImpl(httpClient)
+    fun getRemoteUserDetailDataSource(httpClient: HttpClient) =
+        UserDetailRemoteDataSourceImpl(httpClient)
 
     @Factory(binds = [UserDetailRepository::class])
     fun getUserDetailRepository(
         userDetailRemoteDataSource: UserDetailRemoteDataSource,
-        userDetailLocalDataSource: UserDetailLocalDataSource
-    ) = UserDetailRepositoryImpl(userDetailRemoteDataSource, userDetailLocalDataSource)
+        userDetailLocalDataSource: UserDetailLocalDataSource,
+        userDetailsDao: UserDetailsDao,
+    ) = UserDetailRepositoryImpl(
+        userDetailRemoteDataSource,
+        userDetailLocalDataSource,
+        userDetailsDao
+    )
 
 
     @Factory

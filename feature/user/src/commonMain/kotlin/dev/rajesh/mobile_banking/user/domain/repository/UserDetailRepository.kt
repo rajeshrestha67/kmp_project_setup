@@ -5,7 +5,7 @@ import dev.rajesh.mobile_banking.model.network.DataError
 import dev.rajesh.mobile_banking.networkhelper.ApiResult
 
 interface UserDetailRepository {
-    suspend fun fetchUserDetail(): ApiResult<UserDetails, DataError>
+    suspend fun fetchUserDetail(forceFetch: Boolean): ApiResult<UserDetails, DataError>
 
     suspend fun fetchUserDetailFromDS(): UserDetails?
 }

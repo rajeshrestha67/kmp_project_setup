@@ -9,7 +9,7 @@ class UserDetailLocalDataSourceImpl(
 ) : UserDetailLocalDataSource {
     override val userDetailsLocalFlow: Flow<UserDetailsLocal> = userDetailsDataStore.userDetailFlow
 
-    override suspend fun saveUserDetails(userDetailsLocal: UserDetailsLocal) {
+    override suspend fun saveUserDetailsToDS(userDetailsLocal: UserDetailsLocal) {
         userDetailsDataStore.update(userDetailsLocal)
     }
 }

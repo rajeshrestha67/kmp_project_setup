@@ -47,7 +47,8 @@ class FakeUserDetailRepository : UserDetailRepository {
 
     val shouldReturnError = false
 
-    override suspend fun fetchUserDetail(): ApiResult<UserDetails, DataError> {
+    //need to implement test cases for data fetch from database
+    override suspend fun fetchUserDetail(forceFetch: Boolean): ApiResult<UserDetails, DataError> {
         if (!shouldReturnError) {
             return ApiResult.Success(userFromApi)
         } else {

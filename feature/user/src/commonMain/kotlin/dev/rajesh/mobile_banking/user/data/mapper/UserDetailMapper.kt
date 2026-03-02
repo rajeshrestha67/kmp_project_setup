@@ -3,6 +3,7 @@ package dev.rajesh.mobile_banking.user.data.mapper
 import dev.rajesh.datastore.userData.model.AccountDetailLocal
 import dev.rajesh.datastore.userData.model.QrLocal
 import dev.rajesh.datastore.userData.model.UserDetailsLocal
+import dev.rajesh.mobile_banking.database.models.UserDetailsEntity
 import dev.rajesh.mobile_banking.user.data.remote.dto.AccountDetailDTO
 import dev.rajesh.mobile_banking.user.data.remote.dto.QrDTO
 import dev.rajesh.mobile_banking.user.data.remote.dto.UserDetailsDTO
@@ -85,6 +86,85 @@ fun QrDTO.toQr(): Qr {
         imageUrl = imageUrl.orEmpty(),
         label = label.orEmpty(),
         sortOrder = sortOrder ?: 0
+    )
+}
+
+
+
+//domain -> Entity (Room)
+
+fun UserDetails.toEntity(): UserDetailsEntity{
+    return UserDetailsEntity(
+        addressOne= addressOne,
+        addressTwo= addressTwo,
+        alertType= alertType,
+        appVerification= appVerification,
+        bank= bank,
+        bankBranch= bankBranch,
+        bankBranchCode= bankBranchCode,
+        bankCode= bankCode,
+        bankTransferOtp= bankTransferOtp,
+        beneficiaryFlag= beneficiaryFlag,
+        chatId= chatId,
+        city= city,
+        deviceToken= deviceToken,
+        email= email,
+        firebaseToken= firebaseToken,
+        firstName= firstName,
+        fullName= fullName,
+        gender= gender,
+        isEtellerEnabled= isEtellerEnabled,
+        isNpsEnabled= isNpsEnabled,
+        lastName= lastName,
+        middleName= middleName,
+        mobileBanking= mobileBanking,
+        mobileNumber= mobileNumber,
+        oauthTokenCount= oauthTokenCount,
+        otpString= otpString,
+        registered= registered,
+        smsService= smsService,
+        socketPrefix= socketPrefix,
+        socketURl= socketURl,
+        state= state,
+        unseenNotificationCount= unseenNotificationCount
+    )
+}
+
+//Entity (Room) -> Domain
+fun UserDetailsEntity.toDomain(): UserDetails{
+    return UserDetails(
+        addressOne= this.addressOne,
+        addressTwo= this.addressTwo,
+        alertType= this.alertType,
+        appVerification= this.appVerification,
+        bank= this.bank,
+        bankBranch= this.bankBranch,
+        bankBranchCode= this.bankBranchCode,
+        bankCode= this.bankCode,
+        bankTransferOtp= this.bankTransferOtp,
+        beneficiaryFlag= this.beneficiaryFlag,
+        chatId= this.chatId,
+        city= this.city,
+        deviceToken= this.deviceToken,
+        email= this.email,
+        firebaseToken= this.firebaseToken,
+        firstName= this.firstName,
+        fullName= this.fullName,
+        gender= this.gender,
+        isEtellerEnabled=this. isEtellerEnabled,
+        isNpsEnabled= this.isNpsEnabled,
+        lastName= this.lastName,
+        middleName= this.middleName,
+        mobileBanking= this.mobileBanking,
+        mobileNumber= this.mobileNumber,
+        oauthTokenCount= this.oauthTokenCount,
+        otpString= this.otpString,
+        registered= this.registered,
+        smsService= this.smsService,
+        socketPrefix= this.socketPrefix,
+        socketURl= this.socketURl,
+        state= this.state,
+        unseenNotificationCount= this.unseenNotificationCount
     )
 }
 

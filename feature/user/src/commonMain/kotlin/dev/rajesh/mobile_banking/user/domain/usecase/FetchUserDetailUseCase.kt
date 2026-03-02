@@ -10,17 +10,7 @@ class FetchUserDetailUseCase(
 ) {
 
     suspend operator fun invoke(force: Boolean = false): ApiResult<UserDetails, DataError> {
-        if (force) {
-            return userDetailRepository.fetchUserDetail()
-        } else {
-            val user = userDetailRepository.fetchUserDetailFromDS()
-            return if (user == null || force) {
-                userDetailRepository.fetchUserDetail()
-            } else {
-                ApiResult.Success(user)
-            }
-        }
-
+        return userDetailRepository.fetchUserDetail(force)
     }
 
 }

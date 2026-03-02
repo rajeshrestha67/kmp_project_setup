@@ -33,13 +33,16 @@ fun MainViewController() = ComposeUIViewController {
         }
     }
 
-    if (showSplashScreen) {
-        SplashScreenView()
-    } else {
-        App(
-            hasShownOnBoarding = navigateToOnBoarding
-        )
-    }
+//    if (showSplashScreen) {
+//        SplashScreenView()
+//    } else {
+//        App(
+//            hasShownOnBoarding = navigateToOnBoarding
+//        )
+//    }
+    App(
+        hasShownOnBoarding = navigateToOnBoarding
+    )
 }
 
 @Composable

@@ -39,7 +39,7 @@ composeHotReload = "1.0.0-beta05"
 
 kotlinx-coroutine = "1.10.2"
 
-room = "2.8.4"
+room = "2.7.0"
 sqlite = "2.6.2"
 
 datetime = "0.7.1"
@@ -126,9 +126,9 @@ kotlinx-coroutine = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutine
 coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlinx-coroutine" }
 
 
-androidx-sqlite-bundled = { module = "androidx.sqlite:sqlite-bundled", version.ref = "sqlite" }
 androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
 androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
+androidx-sqlite-bundled = { module = "androidx.sqlite:sqlite-bundled", version.ref = "sqlite" }
 
 #datetime
 kotlinx-datetime = { group = "org.jetbrains.kotlinx", name = "kotlinx-datetime", version.ref = "datetime" }
@@ -168,7 +168,7 @@ android-lint = { id = "com.android.lint", version.ref = "agp" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 composeHotReload = { id = "org.jetbrains.compose.hot-reload", version.ref = "composeHotReload" }
 jetbrains-kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
-androidx-room = { id = "androidx.room", version.ref = "room" }
+room = { id = "androidx.room", version.ref = "room" }
 kover = { id = "org.jetbrains.kotlinx.kover", version.ref = "kover" }
 googleServices = { id = "com.google.gms.google-services", version.ref = "googleServices" }
 
