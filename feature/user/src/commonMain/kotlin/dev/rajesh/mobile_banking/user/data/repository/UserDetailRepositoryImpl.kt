@@ -7,6 +7,7 @@ import dev.rajesh.mobile_banking.logger.AppLogger
 import dev.rajesh.mobile_banking.model.network.DataError
 import dev.rajesh.mobile_banking.networkhelper.ApiResult
 import dev.rajesh.mobile_banking.networkhelper.map
+import dev.rajesh.mobile_banking.networkhelper.onError
 import dev.rajesh.mobile_banking.networkhelper.onSuccess
 import dev.rajesh.mobile_banking.user.data.mapper.toDomain
 import dev.rajesh.mobile_banking.user.data.mapper.toEntity
@@ -15,7 +16,9 @@ import dev.rajesh.mobile_banking.user.data.mapper.toUserDetailsLocal
 import dev.rajesh.mobile_banking.user.data.remote.UserDetailRemoteDataSource
 import dev.rajesh.mobile_banking.user.domain.model.UserDetails
 import dev.rajesh.mobile_banking.user.domain.repository.UserDetailRepository
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.flow.flow
 
 /**
  * Note: UserDetailLocalDataSource is not used since RoomDb is implemented
@@ -25,36 +28,38 @@ class UserDetailRepositoryImpl(
     private val userDetailLocalDataSource: UserDetailLocalDataSource,
     private val userDetailDao: UserDetailsDao
 ) : UserDetailRepository {
-    override suspend fun fetchUserDetail(forceFetch: Boolean): ApiResult<UserDetails, DataError> {
-        if (!forceFetch) {
-            val localUser: UserWithAccounts? = userDetailDao.getUserWithAccounts().firstOrNull()
-            if (localUser != null) {
-                AppLogger.e("localUser", "${localUser}")
-                return ApiResult.Success(localUser.toDomain())
+    override suspend fun fetchUserDetail(forceFetch: Boolean): Flow<ApiResult<UserDetails, DataError>> =
+        flow {
+            if (!forceFetch) {
+                val localUser: UserWithAccounts? = userDetailDao.getUserWithAccounts().firstOrNull()
+                if (localUser != null) {
+                    AppLogger.e("localUser", "${localUser}")
+                    emit(ApiResult.Success(localUser.toDomain()))
+                }
             }
+
+            userDetailRemoteDataSource
+                .fetchUserDetail().onSuccess { data ->
+                    val user = data.details.toUserDetails()
+                    userDetailLocalDataSource.saveUserDetailsToDS(user.toUserDetailsLocal())
+
+                    /**
+                     * save to DB
+                     */
+
+                    userDetailDao.deleteAllUsers()
+                    userDetailDao.deleteAllAccounts()
+                    userDetailDao.deleteAllQrs()
+
+                    userDetailDao.insertUser(user.toEntity())
+                    userDetailDao.insertAccounts(user.accountDetail.map { it.toEntity(user.mobileNumber) })
+                    userDetailDao.insertQrs(user.qr.map { it.toEntity(user.mobileNumber) })
+                    emit(ApiResult.Success(user))
+                }
+                .onError {
+                    emit(ApiResult.Error(it))
+                }
         }
-
-        return userDetailRemoteDataSource
-            .fetchUserDetail()
-            .map { dto ->
-                val user = dto.details.toUserDetails()
-                user
-            }.onSuccess { data ->
-                userDetailLocalDataSource.saveUserDetailsToDS(data.toUserDetailsLocal())
-
-                /**
-                 * save to DB
-                 */
-
-                userDetailDao.deleteAllUsers()
-                userDetailDao.deleteAllAccounts()
-                userDetailDao.deleteAllQrs()
-
-                userDetailDao.insertUser(data.toEntity())
-                userDetailDao.insertAccounts(data.accountDetail.map { it.toEntity(data.mobileNumber) })
-                userDetailDao.insertQrs(data.qr.map { it.toEntity(data.mobileNumber) })
-            }
-    }
 
     override suspend fun fetchUserDetailFromDS(): UserDetails? {
         val userDetails = userDetailLocalDataSource.userDetailsLocalFlow.firstOrNull()

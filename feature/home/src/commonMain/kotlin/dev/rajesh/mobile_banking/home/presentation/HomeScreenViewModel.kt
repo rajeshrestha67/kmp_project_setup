@@ -76,37 +76,39 @@ class HomeScreenViewModel(
             )
         }
 
-        userDetailUseCase(true)
-            .onSuccess { userDetail ->
-                _state.update {
-                    it.copy(
-                        fullName = userDetail.fullName,
-                        firstName = userDetail.firstName,
-                        lastName = userDetail.lastName,
-                        isRefreshing = false
-                    )
-                }
-                userDetail.accountDetail.forEach { account ->
-                    if (account.primary.equals("true", ignoreCase = true)) {
-                        _state.update {
-                            it.copy(
-                                actualBalance = account.actualBalance,
-                                availableBalance = account.availableBalance,
-                                accountNumber = account.accountNumber,
-                                accountName = account.accountType
-                            )
+        userDetailUseCase(true).collect { result ->
+            when(result){
+                is ApiResult.Success->{
+                    val userDetail = result.data
+                    _state.update {
+                        it.copy(
+                            fullName = userDetail.fullName,
+                            firstName = userDetail.firstName,
+                            lastName = userDetail.lastName,
+                            isRefreshing = false
+                        )
+                    }
+                    userDetail.accountDetail.forEach { account ->
+                        if (account.primary.equals("true", ignoreCase = true)) {
+                            _state.update {
+                                it.copy(
+                                    actualBalance = account.actualBalance,
+                                    availableBalance = account.availableBalance,
+                                    accountNumber = account.accountNumber,
+                                    accountName = account.accountType
+                                )
+                            }
                         }
                     }
                 }
-
-
-            }.onError { error ->
-                AppLogger.e(
-                    tag = TAG,
-                    "Fetching user detail failed: ${error.toErrorMessage()}"
-                )
+                is ApiResult.Error->{
+                    AppLogger.e(
+                        tag = TAG,
+                        "Fetching user detail failed: ${result.error}"
+                    )
+                }
             }
-
+        }
     }
 
     private fun fetchBankingService() = viewModelScope.launch {

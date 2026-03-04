@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dev.rajesh.mobile_banking.logger.AppLogger
 import dev.rajesh.mobile_banking.model.network.toErrorMessage
+import dev.rajesh.mobile_banking.networkhelper.ApiResult
 import dev.rajesh.mobile_banking.networkhelper.onError
 import dev.rajesh.mobile_banking.networkhelper.onSuccess
 import dev.rajesh.mobile_banking.user.domain.usecase.FetchUserDetailUseCase
@@ -35,19 +36,25 @@ class MenuScreenViewModel(
 
 
     private fun fetchUserDetails() = viewModelScope.launch {
-        userDetailUseCase().onSuccess { userDetails ->
-            _state.update {
-                it.copy(
-                    fullName = userDetails.firstName,
-                    lastName = userDetails.lastName
-                )
-            }
+        userDetailUseCase(true).collect { result ->
+            when (result) {
+                is ApiResult.Success -> {
+                    val userDetail = result.data
+                    _state.update {
+                        it.copy(
+                            fullName = userDetail.firstName,
+                            lastName = userDetail.lastName
+                        )
+                    }
+                }
 
-        }.onError { error ->
-            AppLogger.e(
-                tag = TAG,
-                "Fetching user detail failed: ${error.toErrorMessage()}"
-            )
+                is ApiResult.Error -> {
+                    AppLogger.e(
+                        tag = TAG,
+                        "Fetching user detail failed: ${result.error}"
+                    )
+                }
+            }
         }
     }
 }

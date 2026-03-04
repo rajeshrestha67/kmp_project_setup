@@ -2,7 +2,9 @@ package dev.rajesh.mobile_banking.useraccounts.presentation.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dev.rajesh.mobile_banking.logger.AppLogger
 import dev.rajesh.mobile_banking.model.network.toErrorMessage
+import dev.rajesh.mobile_banking.networkhelper.ApiResult
 import dev.rajesh.mobile_banking.networkhelper.onError
 import dev.rajesh.mobile_banking.networkhelper.onSuccess
 import dev.rajesh.mobile_banking.user.domain.usecase.FetchUserDetailUseCase
@@ -33,27 +35,39 @@ class AccountSelectionViewModel(
                 it.copy(isLoading = true)
             }
 
-            fetchUserDetailUseCase(false).onSuccess { userDetails ->
-                val accounts = userDetails.accountDetail
-                val selected = selectedAccountStore.selectedAccount.value ?: accounts.firstOrNull()
-                selected?.let {
-                    selectedAccountStore.set(it)
-                }
+            fetchUserDetailUseCase(true).collect { result ->
+                when (result) {
+                    is ApiResult.Success -> {
+                        val userDetail = result.data
+                        val accounts = userDetail.accountDetail
+                        val selected =
+                            selectedAccountStore.selectedAccount.value ?: accounts.firstOrNull()
+                        selected?.let {
+                            selectedAccountStore.set(it)
+                        }
 
-                _state.update {
-                    it.copy(
-                        accounts = accounts,
-                        selectedAccount = selected,
-                        isLoading = false
-                    )
-                }
+                        _state.update {
+                            it.copy(
+                                accounts = accounts,
+                                selectedAccount = selected,
+                                isLoading = false
+                            )
+                        }
+                    }
 
-            }.onError { error ->
-                _state.update {
-                    it.copy(
-                        isLoading = false,
-                        error = error.toErrorMessage()
-                    )
+                    is ApiResult.Error -> {
+                        AppLogger.e(
+                            tag = "AccountSelectionViewModel",
+                            "Fetching user detail failed: ${result.error}"
+                        )
+
+                        _state.update {
+                            it.copy(
+                                isLoading = false,
+                                error = result.error.toErrorMessage()
+                            )
+                        }
+                    }
                 }
             }
 
