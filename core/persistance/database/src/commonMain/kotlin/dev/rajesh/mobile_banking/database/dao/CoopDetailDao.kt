@@ -3,7 +3,7 @@ package dev.rajesh.mobile_banking.database.dao
 import androidx.room.Dao
 import androidx.room.Query
 import androidx.room.Upsert
-import dev.rajesh.mobile_banking.database.models.CoopDetailEntity
+import dev.rajesh.mobile_banking.database.models.coop.CoopDetailEntity
 import kotlinx.coroutines.flow.Flow
 
 @Dao

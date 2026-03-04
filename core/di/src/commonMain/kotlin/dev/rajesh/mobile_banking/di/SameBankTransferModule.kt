@@ -7,6 +7,7 @@ import dev.rajesh.mobile_banking.banktransfer.sameBankTransfer.domain.repository
 import dev.rajesh.mobile_banking.banktransfer.sameBankTransfer.domain.usecases.AccountValidationUseCase
 import dev.rajesh.mobile_banking.banktransfer.sameBankTransfer.domain.usecases.FundTransferUseCase
 import dev.rajesh.mobile_banking.banktransfer.sameBankTransfer.presentation.viewmodel.SameBankTransferViewModel
+import dev.rajesh.mobile_banking.database.dao.CoopBranchDetailDao
 import dev.rajesh.mobile_banking.domain.form.RequiredValidationUseCase
 import dev.rajesh.mobile_banking.useraccounts.presentation.state.SelectedAccountStore
 import io.ktor.client.HttpClient
@@ -48,8 +49,9 @@ class SameBankTransferModule {
 
     @Factory(binds = [FundTransferRepository::class])
     fun provideFundTransferRepository(
-        fundTransferRemoteDataSource: FundTransferRemoteDataSource
-    ) = FundTransferRepositoryImpl(fundTransferRemoteDataSource)
+        fundTransferRemoteDataSource: FundTransferRemoteDataSource,
+        coopBranchDetailDao: CoopBranchDetailDao
+    ) = FundTransferRepositoryImpl(fundTransferRemoteDataSource, coopBranchDetailDao)
 
     @Factory
     fun provideFundTransferUseCase(

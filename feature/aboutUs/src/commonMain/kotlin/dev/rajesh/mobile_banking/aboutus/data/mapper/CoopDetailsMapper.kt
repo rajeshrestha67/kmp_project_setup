@@ -2,7 +2,7 @@ package dev.rajesh.mobile_banking.aboutus.data.mapper
 
 import dev.rajesh.mobile_banking.aboutus.data.dto.CoopDetailResponseDTO
 import dev.rajesh.mobile_banking.aboutus.domain.model.CoopDetail
-import dev.rajesh.mobile_banking.database.models.CoopDetailEntity
+import dev.rajesh.mobile_banking.database.models.coop.CoopDetailEntity
 
 fun CoopDetailResponseDTO.toCoopDetail(): CoopDetail {
     return CoopDetail(

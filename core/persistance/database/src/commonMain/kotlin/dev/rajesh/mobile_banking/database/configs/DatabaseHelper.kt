@@ -7,6 +7,7 @@ import kotlinx.coroutines.IO
 
 fun RoomDatabase.Builder<AppDatabase>.configureCommon(): RoomDatabase.Builder<AppDatabase> {
     return this.addMigrations(MIGRATION_1_2)
+        .addMigrations(MIGRATION_2_3)
         //.fallbackToDestructiveMigrationOnDowngrade()
         .setDriver(BundledSQLiteDriver())
         .setQueryCoroutineContext(Dispatchers.IO)

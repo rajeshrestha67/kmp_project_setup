@@ -7,7 +7,7 @@ import dev.rajesh.mobile_banking.aboutus.data.remote.CoopDetailRemoteDataSource
 import dev.rajesh.mobile_banking.aboutus.domain.model.CoopDetail
 import dev.rajesh.mobile_banking.aboutus.domain.repository.CoopDetailRepository
 import dev.rajesh.mobile_banking.database.dao.CoopDetailDao
-import dev.rajesh.mobile_banking.database.models.CoopDetailEntity
+import dev.rajesh.mobile_banking.database.models.coop.CoopDetailEntity
 import dev.rajesh.mobile_banking.logger.AppLogger
 import dev.rajesh.mobile_banking.model.network.DataError
 import dev.rajesh.mobile_banking.networkhelper.ApiResult
