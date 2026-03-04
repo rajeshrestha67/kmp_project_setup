@@ -1,10 +1,12 @@
 package dev.rajesh.mobile_banking.home.presentation
 
+import dev.rajesh.mobile_banking.aboutus.domain.usecase.FetchCoopDetailsUseCase
 import dev.rajesh.mobile_banking.home.domain.usecase.FetchBankingServiceUseCase
 import dev.rajesh.mobile_banking.home.domain.usecase.FetchQuickServicesUseCase
 import dev.rajesh.mobile_banking.home.domain.usecase.GetGreetingUseCase
 import dev.rajesh.mobile_banking.home.fakes.FakeBankingServiceRepository
 import dev.rajesh.mobile_banking.home.fakes.FakeClock
+import dev.rajesh.mobile_banking.home.fakes.FakeCoopDetailRepository
 import dev.rajesh.mobile_banking.home.fakes.FakeQuickServiceRepository
 import dev.rajesh.mobile_banking.home.fakes.FakeUserDetailRepository
 import dev.rajesh.mobile_banking.res.SharedRes
@@ -35,10 +37,13 @@ class HomeScreenViewModelTest {
     private lateinit var fakeUserDetailRepository: FakeUserDetailRepository
     private lateinit var fakeBankingServiceRepository: FakeBankingServiceRepository
     private lateinit var fakeQuickServiceRepository: FakeQuickServiceRepository
+    private lateinit var fakeCoopDetailRepository: FakeCoopDetailRepository
 
     private lateinit var fetchUserDetailUseCase: FetchUserDetailUseCase
     private lateinit var fetchBankingServiceUseCase: FetchBankingServiceUseCase
     private lateinit var fetchQuickServicesUseCase: FetchQuickServicesUseCase
+
+    private lateinit var fetchCoopDetailUseCase: FetchCoopDetailsUseCase
 
 
     private lateinit var homeScreenViewModel: HomeScreenViewModel
@@ -50,16 +55,19 @@ class HomeScreenViewModelTest {
         fakeUserDetailRepository = FakeUserDetailRepository()
         fakeBankingServiceRepository = FakeBankingServiceRepository()
         fakeQuickServiceRepository = FakeQuickServiceRepository()
+        fakeCoopDetailRepository= FakeCoopDetailRepository()
 
         fetchUserDetailUseCase = FetchUserDetailUseCase(fakeUserDetailRepository)
         fetchBankingServiceUseCase = FetchBankingServiceUseCase(fakeBankingServiceRepository)
         fetchQuickServicesUseCase = FetchQuickServicesUseCase(fakeQuickServiceRepository)
+        fetchCoopDetailUseCase = FetchCoopDetailsUseCase(fakeCoopDetailRepository)
 
         homeScreenViewModel = HomeScreenViewModel(
             userDetailUseCase = fetchUserDetailUseCase,
             fetchBankingServiceUseCase = fetchBankingServiceUseCase,
             fetchQuickServicesUseCase = fetchQuickServicesUseCase,
-            greetingUseCase = GetGreetingUseCase(Clock.System)
+            greetingUseCase = GetGreetingUseCase(Clock.System),
+            fetchCoopDetailsUseCase =  fetchCoopDetailUseCase
         )
         testDispatcher.scheduler.advanceUntilIdle()
 
@@ -83,7 +91,8 @@ class HomeScreenViewModelTest {
             userDetailUseCase = fetchUserDetailUseCase,
             fetchBankingServiceUseCase = fetchBankingServiceUseCase,
             fetchQuickServicesUseCase = fetchQuickServicesUseCase,
-            greetingUseCase = greetingUseCase
+            greetingUseCase = greetingUseCase,
+            fetchCoopDetailsUseCase =  fetchCoopDetailUseCase
         )
     }
 
@@ -144,7 +153,8 @@ class HomeScreenViewModelTest {
             userDetailUseCase = fetchUserDetailUseCase,
             fetchBankingServiceUseCase = fetchBankingServiceUseCase,
             fetchQuickServicesUseCase = fetchQuickServicesUseCase,
-            greetingUseCase = GetGreetingUseCase(Clock.System)
+            greetingUseCase = GetGreetingUseCase(Clock.System),
+            fetchCoopDetailsUseCase =  fetchCoopDetailUseCase
         )
         fetchUserDetailUseCase.invoke(true)
         advanceUntilIdle()
@@ -171,7 +181,8 @@ class HomeScreenViewModelTest {
             userDetailUseCase = fetchUserDetailUseCase,
             fetchBankingServiceUseCase = fetchBankingServiceUseCase,
             fetchQuickServicesUseCase = fetchQuickServicesUseCase,
-            greetingUseCase = GetGreetingUseCase(Clock.System)
+            greetingUseCase = GetGreetingUseCase(Clock.System),
+            fetchCoopDetailsUseCase =  fetchCoopDetailUseCase
         )
         advanceUntilIdle()
 
@@ -201,7 +212,8 @@ class HomeScreenViewModelTest {
             userDetailUseCase = fetchUserDetailUseCase,
             fetchBankingServiceUseCase = fetchBankingServiceUseCase,
             fetchQuickServicesUseCase = fetchQuickServicesUseCase,
-            greetingUseCase = GetGreetingUseCase(Clock.System)
+            greetingUseCase = GetGreetingUseCase(Clock.System),
+            fetchCoopDetailsUseCase =  fetchCoopDetailUseCase
         )
         advanceUntilIdle()
         val state = homeScreenViewModel.state.value
@@ -224,7 +236,8 @@ class HomeScreenViewModelTest {
             userDetailUseCase = fetchUserDetailUseCase,
             fetchBankingServiceUseCase = fetchBankingServiceUseCase,
             fetchQuickServicesUseCase = fetchQuickServicesUseCase,
-            greetingUseCase = GetGreetingUseCase(Clock.System)
+            greetingUseCase = GetGreetingUseCase(Clock.System),
+            fetchCoopDetailsUseCase =  fetchCoopDetailUseCase
         )
         advanceUntilIdle()
 
@@ -252,7 +265,8 @@ class HomeScreenViewModelTest {
             userDetailUseCase = fetchUserDetailUseCase,
             fetchBankingServiceUseCase = fetchBankingServiceUseCase,
             fetchQuickServicesUseCase = fetchQuickServicesUseCase,
-            greetingUseCase = GetGreetingUseCase(Clock.System)
+            greetingUseCase = GetGreetingUseCase(Clock.System),
+            fetchCoopDetailsUseCase =  fetchCoopDetailUseCase
         )
 
         // Execute coroutine

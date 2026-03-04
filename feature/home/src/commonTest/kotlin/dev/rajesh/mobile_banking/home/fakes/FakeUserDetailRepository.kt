@@ -5,6 +5,8 @@ import dev.rajesh.mobile_banking.networkhelper.ApiResult
 import dev.rajesh.mobile_banking.user.domain.model.AccountDetail
 import dev.rajesh.mobile_banking.user.domain.model.UserDetails
 import dev.rajesh.mobile_banking.user.domain.repository.UserDetailRepository
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 
 class FakeUserDetailRepository : UserDetailRepository {
 
@@ -48,13 +50,14 @@ class FakeUserDetailRepository : UserDetailRepository {
     val shouldReturnError = false
 
     //need to implement test cases for data fetch from database
-    override suspend fun fetchUserDetail(forceFetch: Boolean): ApiResult<UserDetails, DataError> {
-        if (!shouldReturnError) {
-            return ApiResult.Success(userFromApi)
-        } else {
-            return ApiResult.Error(DataError.NetworkError.DataUnknown)
+    override suspend fun fetchUserDetail(forceFetch: Boolean): Flow<ApiResult<UserDetails, DataError>> =
+        flow {
+            if (!shouldReturnError) {
+                emit(ApiResult.Success(userFromApi))
+            } else {
+                emit(ApiResult.Error(DataError.NetworkError.DataUnknown))
+            }
         }
-    }
 
     override suspend fun fetchUserDetailFromDS(): UserDetails? {
         return userInDS
