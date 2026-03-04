@@ -1,5 +1,6 @@
 package dev.rajesh.mobile_banking.di
 
+import dev.rajesh.mobile_banking.aboutus.domain.usecase.FetchCoopDetailsUseCase
 import dev.rajesh.mobile_banking.home.data.remote.BankingServiceRemoteDataSource
 import dev.rajesh.mobile_banking.home.data.remote.BankingServiceRemoteDataSourceImpl
 import dev.rajesh.mobile_banking.home.data.remote.QuickServicesRemoteDataSource
@@ -30,11 +31,13 @@ class HomeScreenModule {
         fetchUserDetailUseCase: FetchUserDetailUseCase,
         fetchBankingServiceUseCase: FetchBankingServiceUseCase,
         fetchQuickServicesUseCase: FetchQuickServicesUseCase,
+        fetchCoopDetailUseCase: FetchCoopDetailsUseCase
     ) = HomeScreenViewModel(
         fetchUserDetailUseCase,
         fetchBankingServiceUseCase,
         fetchQuickServicesUseCase,
-        GetGreetingUseCase(Clock.System)
+        GetGreetingUseCase(Clock.System),
+        fetchCoopDetailUseCase
     )
 
 

@@ -17,6 +17,9 @@ import dev.rajesh.mobile_banking.user.domain.model.UserDetails
 import dev.rajesh.mobile_banking.user.domain.repository.UserDetailRepository
 import kotlinx.coroutines.flow.firstOrNull
 
+/**
+ * Note: UserDetailLocalDataSource is not used since RoomDb is implemented
+ */
 class UserDetailRepositoryImpl(
     private val userDetailRemoteDataSource: UserDetailRemoteDataSource,
     private val userDetailLocalDataSource: UserDetailLocalDataSource,

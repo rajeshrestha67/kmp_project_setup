@@ -4,10 +4,12 @@ import androidx.room.ConstructedBy
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.RoomDatabaseConstructor
+import dev.rajesh.mobile_banking.database.dao.CoopDetailDao
 import dev.rajesh.mobile_banking.database.dao.UserDetailsDao
-import dev.rajesh.mobile_banking.database.models.AccountDetailEntity
-import dev.rajesh.mobile_banking.database.models.QrEntity
-import dev.rajesh.mobile_banking.database.models.UserDetailsEntity
+import dev.rajesh.mobile_banking.database.models.CoopDetailEntity
+import dev.rajesh.mobile_banking.database.models.userDetail.AccountDetailEntity
+import dev.rajesh.mobile_banking.database.models.userDetail.QrEntity
+import dev.rajesh.mobile_banking.database.models.userDetail.UserDetailsEntity
 
 const val DB_NAME = "app_database.db"
 
@@ -16,13 +18,15 @@ const val DB_NAME = "app_database.db"
         [
             UserDetailsEntity::class,
             AccountDetailEntity::class,
-            QrEntity::class
+            QrEntity::class,
+            CoopDetailEntity::class
         ],
     version = 1
 )
 @ConstructedBy(AppDatabaseConstructor::class)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun userDetailsDao(): UserDetailsDao
+    abstract fun coopDetailsDao(): CoopDetailDao
 }
 
 //@Suppress("KotlinNoActualForExpect")

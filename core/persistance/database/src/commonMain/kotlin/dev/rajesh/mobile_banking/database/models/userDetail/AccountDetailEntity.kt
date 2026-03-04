@@ -1,4 +1,4 @@
-package dev.rajesh.mobile_banking.database.models
+package dev.rajesh.mobile_banking.database.models.userDetail
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

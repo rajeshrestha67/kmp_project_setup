@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dev.rajesh.datastore.manager.DataStoreKeys
 import dev.rajesh.datastore.manager.DataStoreManager
+import dev.rajesh.mobile_banking.aboutus.domain.usecase.FetchCoopDetailsUseCase
 import dev.rajesh.mobile_banking.home.domain.model.BankingServiceDetail
 import dev.rajesh.mobile_banking.home.domain.model.QuickServiceDetail
 import dev.rajesh.mobile_banking.home.domain.usecase.FetchBankingServiceUseCase
@@ -11,6 +12,7 @@ import dev.rajesh.mobile_banking.home.domain.usecase.FetchQuickServicesUseCase
 import dev.rajesh.mobile_banking.home.domain.usecase.GetGreetingUseCase
 import dev.rajesh.mobile_banking.logger.AppLogger
 import dev.rajesh.mobile_banking.model.network.toErrorMessage
+import dev.rajesh.mobile_banking.networkhelper.Constants
 import dev.rajesh.mobile_banking.networkhelper.onError
 import dev.rajesh.mobile_banking.networkhelper.onSuccess
 import dev.rajesh.mobile_banking.user.domain.usecase.FetchUserDetailUseCase
@@ -34,7 +36,8 @@ class HomeScreenViewModel(
     private val userDetailUseCase: FetchUserDetailUseCase,
     private val fetchBankingServiceUseCase: FetchBankingServiceUseCase,
     private val fetchQuickServicesUseCase: FetchQuickServicesUseCase,
-    private val greetingUseCase: GetGreetingUseCase
+    private val greetingUseCase: GetGreetingUseCase,
+    private val fetchCoopDetailsUseCase: FetchCoopDetailsUseCase
 ) : ViewModel() {
 
     companion object {
@@ -53,6 +56,7 @@ class HomeScreenViewModel(
         fetchUserDetails(isRefreshing = false)
         fetchBankingService()
         fetchQuickServices()
+        fetchCoopDetails()
     }
 
 
@@ -176,6 +180,16 @@ class HomeScreenViewModel(
     fun emit(action: HomeScreenActions) {
         viewModelScope.launch {
             _actions.send(action)
+        }
+    }
+
+    private fun fetchCoopDetails() {
+        viewModelScope.launch {
+            fetchCoopDetailsUseCase(Constants.clientId).onSuccess { coopDetail ->
+
+            }.onError { error ->
+
+            }
         }
     }
 

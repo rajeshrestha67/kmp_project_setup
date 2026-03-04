@@ -1,0 +1,31 @@
+package dev.rajesh.mobile_banking.aboutus.domain.model
+
+data class CoopDetail(
+    val id: Int = 0,
+    val created: String = "",
+    val lastModified: String = "",
+    val version: Int = 0,
+    val contactNumber: String = "",
+    val facebookUrl: String = "",
+    val registerUrl: String = "",
+    val email: String = "",
+    val web: String = "",
+    val address: String = "",
+    val splashScreenImageUrl: String = "",
+    val appPrimaryColor: String = "",
+    val showInterestRate: Boolean = false,
+    val showChatSetting: Boolean = false,
+    val showForceAppUpdate: Boolean = false,
+    val fundTransferViaMobileNumber: Boolean = false,
+    val showAnimationForDigitalDakshina: Boolean = false,
+    val showSyncAllAccounts: String = "",
+    val isRemitHubEnabled: Boolean = false,
+    val isDynamicQrEnabled: Boolean = false,
+    val bankId: String = "",
+    val bankName: String = "",
+    val ibankHost: String = "",
+    val ibankingPrimaryColor: String = "",
+    val ibankingSecondaryColor: String = "",
+    val ibankingTertiaryColor: String = "",
+    val new: Boolean
+)

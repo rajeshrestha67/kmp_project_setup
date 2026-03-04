@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "ac941126632d2779757195e061030ebf",
+    "identityHash": "f2d431c4eb581557785c8e58a8ec7865",
     "entities": [
       {
         "tableName": "UserDetailsEntity",
@@ -381,11 +381,191 @@
             "id"
           ]
         }
+      },
+      {
+        "tableName": "CoopDetailEntity",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `clientId` TEXT NOT NULL, `created` TEXT NOT NULL, `lastModified` TEXT NOT NULL, `version` INTEGER NOT NULL, `contactNumber` TEXT NOT NULL, `facebookUrl` TEXT NOT NULL, `registerUrl` TEXT NOT NULL, `email` TEXT NOT NULL, `web` TEXT NOT NULL, `address` TEXT NOT NULL, `splashScreenImageUrl` TEXT NOT NULL, `appPrimaryColor` TEXT NOT NULL, `showInterestRate` INTEGER NOT NULL, `showChatSetting` INTEGER NOT NULL, `showForceAppUpdate` INTEGER NOT NULL, `fundTransferViaMobileNumber` INTEGER NOT NULL, `showAnimationForDigitalDakshina` INTEGER NOT NULL, `showSyncAllAccounts` TEXT NOT NULL, `isRemitHubEnabled` INTEGER NOT NULL, `isDynamicQrEnabled` INTEGER NOT NULL, `bankId` TEXT NOT NULL, `bankName` TEXT NOT NULL, `ibankHost` TEXT NOT NULL, `ibankingPrimaryColor` TEXT NOT NULL, `ibankingSecondaryColor` TEXT NOT NULL, `ibankingTertiaryColor` TEXT NOT NULL, `new` INTEGER NOT NULL, PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "clientId",
+            "columnName": "clientId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "created",
+            "columnName": "created",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "lastModified",
+            "columnName": "lastModified",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "version",
+            "columnName": "version",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "contactNumber",
+            "columnName": "contactNumber",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "facebookUrl",
+            "columnName": "facebookUrl",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "registerUrl",
+            "columnName": "registerUrl",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "email",
+            "columnName": "email",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "web",
+            "columnName": "web",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "address",
+            "columnName": "address",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "splashScreenImageUrl",
+            "columnName": "splashScreenImageUrl",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "appPrimaryColor",
+            "columnName": "appPrimaryColor",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "showInterestRate",
+            "columnName": "showInterestRate",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "showChatSetting",
+            "columnName": "showChatSetting",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "showForceAppUpdate",
+            "columnName": "showForceAppUpdate",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "fundTransferViaMobileNumber",
+            "columnName": "fundTransferViaMobileNumber",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "showAnimationForDigitalDakshina",
+            "columnName": "showAnimationForDigitalDakshina",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "showSyncAllAccounts",
+            "columnName": "showSyncAllAccounts",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "isRemitHubEnabled",
+            "columnName": "isRemitHubEnabled",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "isDynamicQrEnabled",
+            "columnName": "isDynamicQrEnabled",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "bankId",
+            "columnName": "bankId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "bankName",
+            "columnName": "bankName",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "ibankHost",
+            "columnName": "ibankHost",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "ibankingPrimaryColor",
+            "columnName": "ibankingPrimaryColor",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "ibankingSecondaryColor",
+            "columnName": "ibankingSecondaryColor",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "ibankingTertiaryColor",
+            "columnName": "ibankingTertiaryColor",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "new",
+            "columnName": "new",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "id"
+          ]
+        }
       }
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'ac941126632d2779757195e061030ebf')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'f2d431c4eb581557785c8e58a8ec7865')"
     ]
   }
 }

@@ -99,6 +99,7 @@ kotlin {
                 implementation(projects.feature.loadWallet)
                 implementation(projects.feature.qrScanner)
                 implementation(projects.feature.download)
+                implementation(projects.feature.aboutUs)
 
 
             }

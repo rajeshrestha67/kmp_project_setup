@@ -32,7 +32,8 @@ fun initKoin(config: KoinAppDeclaration? = null) {
             WalletModule().module,
             QrScannerModule().module,
             DownloadModule().module,
-            PushNotificationModule().module
+            PushNotificationModule().module,
+            CoopDetailModule().module
         )
     }
 }
