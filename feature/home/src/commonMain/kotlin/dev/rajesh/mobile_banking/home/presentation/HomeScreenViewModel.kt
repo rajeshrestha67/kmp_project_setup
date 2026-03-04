@@ -12,6 +12,7 @@ import dev.rajesh.mobile_banking.home.domain.usecase.FetchQuickServicesUseCase
 import dev.rajesh.mobile_banking.home.domain.usecase.GetGreetingUseCase
 import dev.rajesh.mobile_banking.logger.AppLogger
 import dev.rajesh.mobile_banking.model.network.toErrorMessage
+import dev.rajesh.mobile_banking.networkhelper.ApiResult
 import dev.rajesh.mobile_banking.networkhelper.Constants
 import dev.rajesh.mobile_banking.networkhelper.onError
 import dev.rajesh.mobile_banking.networkhelper.onSuccess
@@ -185,10 +186,16 @@ class HomeScreenViewModel(
 
     private fun fetchCoopDetails() {
         viewModelScope.launch {
-            fetchCoopDetailsUseCase(Constants.clientId).onSuccess { coopDetail ->
+            fetchCoopDetailsUseCase(Constants.clientId).collect { result ->
+                when (result) {
+                    is ApiResult.Success -> {
 
-            }.onError { error ->
+                    }
 
+                    is ApiResult.Error -> {
+
+                    }
+                }
             }
         }
     }

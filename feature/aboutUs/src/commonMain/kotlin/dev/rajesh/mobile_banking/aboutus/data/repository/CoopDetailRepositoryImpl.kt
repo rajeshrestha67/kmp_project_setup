@@ -12,15 +12,19 @@ import dev.rajesh.mobile_banking.logger.AppLogger
 import dev.rajesh.mobile_banking.model.network.DataError
 import dev.rajesh.mobile_banking.networkhelper.ApiResult
 import dev.rajesh.mobile_banking.networkhelper.map
+import dev.rajesh.mobile_banking.networkhelper.onError
 import dev.rajesh.mobile_banking.networkhelper.onSuccess
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.flow.flow
 
 class CoopDetailRepositoryImpl(
     private val coopDetailRemoteDataSource: CoopDetailRemoteDataSource,
     private val coopDetailsDao: CoopDetailDao
 ) : CoopDetailRepository {
     override suspend fun getCoopDetail(
-        clientId: String): ApiResult<CoopDetail, DataError> {
+        clientId: String
+    ): Flow<ApiResult<CoopDetail, DataError>> = flow {
 
         val coopDetailFromDB: CoopDetailEntity? =
             coopDetailsDao.getCoopDetailByClientId(clientId).firstOrNull()
@@ -30,15 +34,18 @@ class CoopDetailRepositoryImpl(
                 "CoopDetailRepositoryImpl",
                 "getCoopDetail: coopDetailFromDB = $coopDetailFromDB"
             )
-            return ApiResult.Success(coopDetailFromDB.toDomain())
+            emit(ApiResult.Success(coopDetailFromDB.toDomain()))
         }
 
-        return coopDetailRemoteDataSource.getCoopDetails(clientId)
-            .map { coopDetailResponseDTO ->
-                coopDetailResponseDTO.toCoopDetail()
-            }.onSuccess { data ->
+        coopDetailRemoteDataSource.getCoopDetails(clientId)
+            .onSuccess { dto ->
+                val coopDetail = dto.toCoopDetail()
                 coopDetailsDao.deleteCoopById(clientId)
-                coopDetailsDao.saveCoopDetail(data.toEntity(clientId))
+                coopDetailsDao.saveCoopDetail(coopDetail.toEntity(clientId))
+                emit(ApiResult.Success(coopDetail))
+            }
+            .onError {
+                emit(ApiResult.Error(it))
             }
     }
 }
