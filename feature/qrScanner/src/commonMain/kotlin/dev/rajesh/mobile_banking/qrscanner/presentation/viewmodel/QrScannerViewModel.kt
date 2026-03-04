@@ -8,6 +8,7 @@ import dev.rajesh.mobile_banking.loadWallet.domain.usecase.GetWalletListUseCase
 import dev.rajesh.mobile_banking.logger.AppLogger
 import dev.rajesh.mobile_banking.model.ErrorData
 import dev.rajesh.mobile_banking.model.network.toErrorMessage
+import dev.rajesh.mobile_banking.networkhelper.ApiResult
 import dev.rajesh.mobile_banking.networkhelper.onError
 import dev.rajesh.mobile_banking.networkhelper.onSuccess
 import dev.rajesh.mobile_banking.qrscanner.domain.model.AccountDetails
@@ -167,26 +168,31 @@ class QrScannerViewModel(
         _state.update {
             it.copy(isFetchingCoopBranchList = true)
         }
-        fetchCoopBranchUseCase.invoke()
-            .onSuccess { branches ->
-                _state.update {
-                    it.copy(isFetchingCoopBranchList = false)
-                }
-                val branch = branches.find {
-                    it.branchCode.equals(accountDetails.branchCode, ignoreCase = false)
-                }
-                _effect.send(
-                    QrNavigationEffect.ToSameBankTransfer(
-                        accountDetails = accountDetails,
-                        branch = branch
+
+        fetchCoopBranchUseCase().collect { result ->
+            when (result) {
+                is ApiResult.Success -> {
+                    _state.update {
+                        it.copy(isFetchingCoopBranchList = false)
+                    }
+                    val branch = result.data.find {
+                        it.branchCode.equals(accountDetails.branchCode, ignoreCase = false)
+                    }
+                    _effect.send(
+                        QrNavigationEffect.ToSameBankTransfer(
+                            accountDetails = accountDetails,
+                            branch = branch
+                        )
                     )
-                )
-            }
-            .onError {
-                _state.update {
-                    it.copy(isFetchingCoopBranchList = false)
+                }
+
+                is ApiResult.Error -> {
+                    _state.update {
+                        it.copy(isFetchingCoopBranchList = false)
+                    }
                 }
             }
+        }
     }
 
     private fun getWalletList(resultData: QPayMerchantDetail) = viewModelScope.launch {

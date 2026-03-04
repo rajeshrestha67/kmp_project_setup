@@ -7,10 +7,11 @@ import dev.rajesh.mobile_banking.banktransfer.sameBankTransfer.domain.model.requ
 import dev.rajesh.mobile_banking.banktransfer.sameBankTransfer.domain.model.request.FundTransferRequest
 import dev.rajesh.mobile_banking.model.network.DataError
 import dev.rajesh.mobile_banking.networkhelper.ApiResult
+import kotlinx.coroutines.flow.Flow
 
 interface FundTransferRepository {
 
-    suspend fun fetchCoopBranches(): ApiResult<List<CoopBranchDetail>, DataError>
+    suspend fun fetchCoopBranches(): Flow<ApiResult<List<CoopBranchDetail>, DataError>>
 
     suspend fun validateAccount(
         accountValidationRequest: AccountValidationRequest

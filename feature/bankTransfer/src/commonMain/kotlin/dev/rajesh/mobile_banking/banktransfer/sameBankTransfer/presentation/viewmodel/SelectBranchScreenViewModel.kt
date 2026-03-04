@@ -8,6 +8,7 @@ import dev.rajesh.mobile_banking.banktransfer.sameBankTransfer.presentation.stat
 import dev.rajesh.mobile_banking.banktransfer.sameBankTransfer.presentation.state.SelectBranchScreenState
 import dev.rajesh.mobile_banking.logger.AppLogger
 import dev.rajesh.mobile_banking.model.network.toErrorMessage
+import dev.rajesh.mobile_banking.networkhelper.ApiResult
 import dev.rajesh.mobile_banking.networkhelper.onError
 import dev.rajesh.mobile_banking.networkhelper.onSuccess
 import kotlinx.coroutines.channels.Channel
@@ -48,15 +49,21 @@ class SelectBranchScreenViewModel(
             )
         }
 
-        fetchCoopBranchUseCase().onSuccess { coopBranches ->
-            _state.update {
-                it.copy(
-                    coopBranches = coopBranches
-                )
-            }
+        fetchCoopBranchUseCase().collect { result ->
+            when (result) {
+                is ApiResult.Success -> {
+                    _state.update {
+                        it.copy(
+                            coopBranches = result.data
+                        )
+                    }
+                }
 
-        }.onError { error ->
-            AppLogger.e(tag = TAG, "Fetching coop branches failed: ${error.toErrorMessage()}")
+                is ApiResult.Error -> {
+                    AppLogger.e(tag = TAG, "Fetching coop branches failed: ${result.error}")
+
+                }
+            }
         }
     }
 }

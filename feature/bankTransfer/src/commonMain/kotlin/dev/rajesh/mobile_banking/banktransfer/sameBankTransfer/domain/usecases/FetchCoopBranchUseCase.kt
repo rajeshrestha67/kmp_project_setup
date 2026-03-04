@@ -4,12 +4,13 @@ import dev.rajesh.mobile_banking.banktransfer.sameBankTransfer.domain.model.Coop
 import dev.rajesh.mobile_banking.banktransfer.sameBankTransfer.domain.repository.FundTransferRepository
 import dev.rajesh.mobile_banking.model.network.DataError
 import dev.rajesh.mobile_banking.networkhelper.ApiResult
+import kotlinx.coroutines.flow.Flow
 
 class FetchCoopBranchUseCase(
     private val fundTransferRepository: FundTransferRepository
 ) {
 
-    suspend operator fun invoke(): ApiResult<List<CoopBranchDetail>, DataError> {
+    suspend operator fun invoke(): Flow<ApiResult<List<CoopBranchDetail>, DataError>> {
         return fundTransferRepository.fetchCoopBranches()
     }
 }
