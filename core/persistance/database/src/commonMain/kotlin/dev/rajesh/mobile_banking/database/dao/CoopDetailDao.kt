@@ -16,8 +16,8 @@ interface CoopDetailDao {
     fun getCoopDetailByClientId(clientId: String): Flow<CoopDetailEntity?>
 
     @Query("DELETE FROM CoopDetailEntity")
-    fun deleteAllCoop()
+    suspend fun deleteAllCoop()
 
     @Query("DELETE FROM CoopDetailEntity WHERE clientId = :clientId")
-    fun deleteCoopById(clientId: String)
+    suspend fun deleteCoopById(clientId: String)
 }

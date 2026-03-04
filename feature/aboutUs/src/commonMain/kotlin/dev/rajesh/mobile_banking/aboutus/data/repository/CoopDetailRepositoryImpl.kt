@@ -37,7 +37,7 @@ class CoopDetailRepositoryImpl(
             .map { coopDetailResponseDTO ->
                 coopDetailResponseDTO.toCoopDetail()
             }.onSuccess { data ->
-                //coopDetailsDao.deleteCoopById(clientId)
+                coopDetailsDao.deleteCoopById(clientId)
                 coopDetailsDao.saveCoopDetail(data.toEntity(clientId))
             }
     }

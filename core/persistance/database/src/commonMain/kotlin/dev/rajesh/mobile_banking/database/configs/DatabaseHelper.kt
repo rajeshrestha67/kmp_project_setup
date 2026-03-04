@@ -1,0 +1,13 @@
+package dev.rajesh.mobile_banking.database.configs
+
+import androidx.room.RoomDatabase
+import androidx.sqlite.driver.bundled.BundledSQLiteDriver
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.IO
+
+fun RoomDatabase.Builder<AppDatabase>.configureCommon(): RoomDatabase.Builder<AppDatabase> {
+    return this.addMigrations(MIGRATION_1_2)
+        //.fallbackToDestructiveMigrationOnDowngrade()
+        .setDriver(BundledSQLiteDriver())
+        .setQueryCoroutineContext(Dispatchers.IO)
+}

@@ -12,7 +12,7 @@ actual class DatabaseFactory(private val context: Context) {
         return Room.databaseBuilder<AppDatabase>(
             context = appContext,
             name = DB_NAME,
-        )
+        ).configureCommon()
     }
 }
 

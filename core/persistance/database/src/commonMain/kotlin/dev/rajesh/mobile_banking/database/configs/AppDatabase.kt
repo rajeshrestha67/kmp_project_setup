@@ -21,7 +21,7 @@ const val DB_NAME = "app_database.db"
             QrEntity::class,
             CoopDetailEntity::class
         ],
-    version = 1
+    version = 2
 )
 @ConstructedBy(AppDatabaseConstructor::class)
 abstract class AppDatabase : RoomDatabase() {

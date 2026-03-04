@@ -12,8 +12,9 @@ actual class DatabaseFactory {
         val dbFilePath = documentDirectory() + "/$DB_NAME"
         return Room.databaseBuilder<AppDatabase>(
             name = dbFilePath,
-            factory =  { AppDatabaseConstructor.initialize() }
-        ).setDriver(androidx.sqlite.driver.bundled.BundledSQLiteDriver())
+            factory = { AppDatabaseConstructor.initialize() }
+        ).configureCommon()
+        //.setDriver(androidx.sqlite.driver.bundled.BundledSQLiteDriver())
     }
 }
 
