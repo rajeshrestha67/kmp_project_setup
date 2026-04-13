@@ -31,6 +31,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil3.compose.AsyncImage
 import dev.rajesh.datastore.manager.DataStoreManager
+import dev.rajesh.mobile_banking.components.InstitutionBrandingController
 import dev.rajesh.mobile_banking.components.PlatformMessage
 import dev.rajesh.mobile_banking.components.button.AppButton
 import dev.rajesh.mobile_banking.components.dimens
@@ -130,7 +131,7 @@ fun LoginScreenContent(
                         .height(
                             150.dp
                         ),
-                    model = SharedRes.getRes("drawable/bank_banner.png"),
+                    model = InstitutionBrandingController.current.resolveBankBannerUri(),
                     contentDescription = "bank_banner",
                     contentScale = ContentScale.FillWidth
                 )

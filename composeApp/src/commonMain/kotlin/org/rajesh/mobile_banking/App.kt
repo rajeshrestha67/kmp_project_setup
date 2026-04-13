@@ -10,6 +10,7 @@ import com.mmk.kmpnotifier.notification.NotifierManager
 import com.mmk.kmpnotifier.notification.PayloadData
 import dev.rajesh.mobile_banking.components.AnimatedNavHost
 import dev.rajesh.mobile_banking.components.AppTheme
+import dev.rajesh.mobile_banking.components.InstitutionBrandingController
 import dev.rajesh.mobile_banking.logger.AppLogger
 import dev.rajesh.mobile_banking.notification.PushNotificationViewModel
 import dev.rajesh.mobile_banking.res.theme.ThemeMode
@@ -25,7 +26,10 @@ import org.rajesh.mobile_banking.route.AppRoute
 fun App(hasShownOnBoarding: Boolean) {
 
     val theme = ThemeMode.get(2)
-    AppTheme(selectedThemeMode = theme) {
+    AppTheme(
+        selectedThemeMode = theme,
+        institutionBranding = InstitutionBrandingController.current,
+    ) {
         AppScreen(hasShownOnBoarding)
     }
 

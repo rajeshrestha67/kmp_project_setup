@@ -132,6 +132,38 @@ android {
         versionName = "1.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
+    buildFeatures {
+        buildConfig = true
+    }
+    // White-label: add flavors here for app id, name, colors, banner URI.
+    // OAuth client id/secret on Android still come from :core:oauthNative JNI;
+    // swap secrets_jni.cpp or add matching productFlavors to oauthNative + networkHelper
+    // and missingDimensionStrategy on every KMP module that depends on networkHelper.
+    flavorDimensions += "institution"
+    productFlavors {
+        create("institutionDefault") {
+            dimension = "institution"
+            isDefault = true
+            resValue("string", "app_name", "Mobile Banking")
+            buildConfigField("String", "APP_DISPLAY_NAME", "\"Mobile Banking\"")
+            buildConfigField("long", "BRAND_PRIMARY_ARGB", "0xFF1f839aL")
+            buildConfigField("long", "BRAND_SECONDARY_ARGB", "0xFF57624aL")
+            buildConfigField("long", "BRAND_ACCENT_ARGB", "0xFF386663L")
+            buildConfigField("String", "BANK_BANNER_URI", "\"\"")
+            buildConfigField("boolean", "USE_CUSTOM_BRAND_THEME", "true")
+        }
+        create("institutionSecondary") {
+            dimension = "institution"
+            applicationIdSuffix = ".secondary"
+            resValue("string", "app_name", "Secondary Bank")
+            buildConfigField("String", "APP_DISPLAY_NAME", "\"Secondary Bank\"")
+            buildConfigField("long", "BRAND_PRIMARY_ARGB", "0xFF1565C0L")
+            buildConfigField("long", "BRAND_SECONDARY_ARGB", "0xFF0D47A1L")
+            buildConfigField("long", "BRAND_ACCENT_ARGB", "0xFFFF6F00L")
+            buildConfigField("String", "BANK_BANNER_URI", "\"\"")
+            buildConfigField("boolean", "USE_CUSTOM_BRAND_THEME", "true")
+        }
+    }
     packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"

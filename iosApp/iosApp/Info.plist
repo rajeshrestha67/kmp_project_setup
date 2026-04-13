@@ -14,5 +14,22 @@
         <key>NSPhotoLibraryUsageDescription</key>
         <string>Photo access is required to select images.</string>
 
+        <key>MBK_CLIENT_ID</key>
+        <string>$(MBK_CLIENT_ID)</string>
+        <key>MBK_CLIENT_SECRET</key>
+        <string>$(MBK_CLIENT_SECRET)</string>
+        <key>MBK_APP_DISPLAY_NAME</key>
+        <string>$(MBK_APP_DISPLAY_NAME)</string>
+        <key>MBK_BRAND_PRIMARY</key>
+        <string>$(MBK_BRAND_PRIMARY)</string>
+        <key>MBK_BRAND_SECONDARY</key>
+        <string>$(MBK_BRAND_SECONDARY)</string>
+        <key>MBK_BRAND_ACCENT</key>
+        <string>$(MBK_BRAND_ACCENT)</string>
+        <key>MBK_BANK_BANNER_URI</key>
+        <string>$(MBK_BANK_BANNER_URI)</string>
+        <key>MBK_USE_CUSTOM_THEME</key>
+        <string>$(MBK_USE_CUSTOM_THEME)</string>
+
     </dict>
 </plist>

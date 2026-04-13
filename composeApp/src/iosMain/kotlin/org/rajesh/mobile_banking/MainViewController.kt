@@ -19,6 +19,10 @@ import dev.rajesh.mobile_banking.splashscreen.viewModel.OnBoardingViewModel
 import org.koin.compose.viewmodel.koinViewModel
 
 fun MainViewController() = ComposeUIViewController {
+    remember(Unit) {
+        installIosInstitutionBrandingFromMainBundle()
+        true
+    }
     var showSplashScreen by remember { mutableStateOf(true) }
     var navigateToOnBoarding by remember { mutableStateOf(true) }
     val viewModel: OnBoardingViewModel = koinViewModel()

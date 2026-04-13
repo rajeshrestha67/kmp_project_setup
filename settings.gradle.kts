@@ -39,6 +39,7 @@ include(":core:crypto")
 include(":core:logger")
 
 include(":core:networkHelper")
+include(":core:oauthNative")
 
 
 include(":feature:auth:login")

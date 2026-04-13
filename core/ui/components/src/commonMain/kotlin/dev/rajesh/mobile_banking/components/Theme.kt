@@ -93,6 +93,7 @@ private val darkScheme = darkColorScheme(
 @Composable
 fun AppTheme(
     selectedThemeMode: ThemeMode = ThemeMode.SYSTEM,
+    institutionBranding: InstitutionBranding = InstitutionBranding.FALLBACK,
     content: @Composable() () -> Unit
 ) {
     val systemInDarkTheme = isSystemInDarkTheme()
@@ -103,8 +104,34 @@ fun AppTheme(
         ThemeMode.SYSTEM -> systemInDarkTheme
     }
 
-    val colorScheme = if (darkTheme) darkScheme else lightScheme
-    val appColorsPalette = if (darkTheme) darkPalette else lightPalette
+    val colorScheme = if (institutionBranding.useCustomBrandPalette) {
+        val primary = institutionBranding.primaryColor()
+        val secondary = institutionBranding.secondaryColor()
+        val tertiary = institutionBranding.accentColor()
+        if (darkTheme) {
+            darkScheme.copy(primary = primary, secondary = secondary, tertiary = tertiary)
+        } else {
+            lightScheme.copy(primary = primary, secondary = secondary, tertiary = tertiary)
+        }
+    } else {
+        if (darkTheme) darkScheme else lightScheme
+    }
+
+    val appColorsPalette = if (institutionBranding.useCustomBrandPalette) {
+        if (darkTheme) {
+            darkPalette.copy(
+                primaryColor = institutionBranding.primaryColor(),
+                navigationBarSelectedColor = institutionBranding.primaryColor(),
+            )
+        } else {
+            lightPalette.copy(
+                primaryColor = institutionBranding.primaryColor(),
+                navigationBarSelectedColor = institutionBranding.primaryColor(),
+            )
+        }
+    } else {
+        if (darkTheme) darkPalette else lightPalette
+    }
 
     ChangeStatusBarColor(
         darkIcons = !darkTheme

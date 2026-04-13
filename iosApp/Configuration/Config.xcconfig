@@ -5,3 +5,13 @@ PRODUCT_BUNDLE_IDENTIFIER=org.rajesh.mobile_banking.mobilebanking$(TEAM_ID)
 
 CURRENT_PROJECT_VERSION=1
 MARKETING_VERSION=1.0
+
+// White-label / institution (override per Xcode configuration or duplicate this file per bank)
+MBK_CLIENT_ID = JGUPGKBN2M
+MBK_CLIENT_SECRET = 205249
+MBK_APP_DISPLAY_NAME = Mobile Banking
+MBK_BRAND_PRIMARY = 0xFF1f839a
+MBK_BRAND_SECONDARY = 0xFF57624a
+MBK_BRAND_ACCENT = 0xFF386663
+MBK_BANK_BANNER_URI =
+MBK_USE_CUSTOM_THEME = true

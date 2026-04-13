@@ -9,6 +9,7 @@ class MobileBankingApp: Application() {
 
     override fun onCreate() {
         super.onCreate()
+        installAndroidInstitutionBrandingFromBuildConfig()
         androidKoinInit(this@MobileBankingApp)
 
         NotifierManager.initialize(
