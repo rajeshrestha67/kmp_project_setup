@@ -8,5 +8,4 @@ object Constants {
     const val clientSecret = "205249"
 
     const val baseUrl = "https://mbank.com.np"
-
 }
