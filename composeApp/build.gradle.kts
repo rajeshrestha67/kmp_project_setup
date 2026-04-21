@@ -138,8 +138,29 @@ android {
         }
     }
     buildTypes {
+        val keystorePath = System.getenv("KEYSTORE_PATH")
+        val keystorePassword = System.getenv("KEYSTORE_PASSWORD")
+        val keyAlias = System.getenv("KEY_ALIAS")
+        val keyPassword = System.getenv("KEY_PASSWORD")
+
+        if (!keystorePath.isNullOrBlank() &&
+            !keystorePassword.isNullOrBlank() &&
+            !keyAlias.isNullOrBlank() &&
+            !keyPassword.isNullOrBlank()
+        ) {
+            signingConfigs.create("ciRelease") {
+                storeFile = rootProject.file(keystorePath)
+                storePassword = keystorePassword
+                this.keyAlias = keyAlias
+                this.keyPassword = keyPassword
+            }
+        }
+
         getByName("release") {
             isMinifyEnabled = false
+            if (signingConfigs.findByName("ciRelease") != null) {
+                signingConfig = signingConfigs.getByName("ciRelease")
+            }
         }
     }
     compileOptions {

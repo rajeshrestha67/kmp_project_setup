@@ -1,0 +1,32 @@
+default_platform(:android)
+
+platform :android do
+  desc "Increment version code, build AAB, and upload to Google Play Internal track"
+  lane :internal do
+    gradle_file = "composeApp/build.gradle.kts"
+    gradle_content = File.read(gradle_file)
+    version_code_match = gradle_content.match(/versionCode\s*=\s*(\d+)/)
+
+    UI.user_error!("versionCode not found in #{gradle_file}") unless version_code_match
+
+    current_version_code = version_code_match[1].to_i
+    next_version_code = current_version_code + 1
+    updated_content = gradle_content.sub(
+      /versionCode\s*=\s*\d+/,
+      "versionCode = #{next_version_code}"
+    )
+    File.write(gradle_file, updated_content)
+    UI.message("Version code bumped: #{current_version_code} -> #{next_version_code}")
+
+    gradle(task: "clean")
+    gradle(task: "bundleRelease")
+
+    upload_to_play_store(
+      track: "internal",
+      aab: "composeApp/build/outputs/bundle/release/composeApp-release.aab",
+      skip_upload_metadata: true,
+      skip_upload_images: true,
+      skip_upload_screenshots: true
+    )
+  end
+end
