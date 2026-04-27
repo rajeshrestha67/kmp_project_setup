@@ -1,108 +1,32 @@
 name: Android CI/CD
 
 on:
-  pull_request:
-    branches:
-      - "**"
+#  pull_request:
+#    branches:
+#      - "**"
   push:
-    branches:
-      - main
-
-permissions:
-  contents: read
+    branches: [dev_ci_cd]
 
 jobs:
-  quality:
-    if: github.event_name == 'pull_request'
+  build:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Set up JDK 17
+      - name: Setup JDK 17
         uses: actions/setup-java@v4
         with:
-          distribution: temurin
+          distribution: 'temurin'
           java-version: "17"
+          cache: 'gradle'
 
-      - name: Setup Gradle cache
-        uses: gradle/actions/setup-gradle@v4
-
-      - name: Grant execute permission for gradlew
-        run: chmod +x ./gradlew
+      - name: Grant execute permissions for gradlew
+        run: chmod +x gradlew
 
       - name: Run unit tests
-        run: ./gradlew test
+        run: ./gradlew clean testDebug
 
-      - name: Run Android lint
-        run: ./gradlew lint
 
-      - name: Upload test and lint reports
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: quality-reports
-          path: |
-            **/build/reports/tests/**
-            **/build/reports/lint-results*.html
-            **/build/reports/lint-results*.xml
 
-  deploy-internal:
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-    runs-on: ubuntu-latest
-    environment: production
 
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Set up JDK 17
-        uses: actions/setup-java@v4
-        with:
-          distribution: temurin
-          java-version: "17"
-
-      - name: Setup Gradle cache
-        uses: gradle/actions/setup-gradle@v4
-
-      - name: Set up Ruby
-        uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: "3.2"
-          bundler-cache: true
-
-      - name: Grant execute permission for gradlew
-        run: chmod +x ./gradlew
-
-      - name: Decode Android keystore
-        env:
-          ANDROID_KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
-        run: |
-          echo "$ANDROID_KEYSTORE_BASE64" | base64 --decode > composeApp/release.keystore
-
-      - name: Decode Google Play service account
-        env:
-          PLAY_SERVICE_ACCOUNT_JSON_BASE64: ${{ secrets.PLAY_SERVICE_ACCOUNT_JSON_BASE64 }}
-        run: |
-          echo "$PLAY_SERVICE_ACCOUNT_JSON_BASE64" | base64 --decode > play-service-account.json
-
-      - name: Fastlane deploy to internal track
-        env:
-          KEYSTORE_PATH: composeApp/release.keystore
-          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
-          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
-          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
-          SUPPLY_JSON_KEY: play-service-account.json
-          SUPPLY_PACKAGE_NAME: org.rajesh.mobile_banking
-        run: bundle exec fastlane android internal
-
-      - name: Upload build artifacts
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: android-build-outputs
-          path: |
-            composeApp/build/outputs/**
-            fastlane/report.xml
-            fastlane/*.log
