@@ -1,11 +1,8 @@
-name: Android CI/CD
+name: pull_request
 
 on:
-#  pull_request:
-#    branches:
-#      - "**"
-  push:
-    branches: [dev_ci_cd]
+    pull_request:
+      branches: [main]
 
 jobs:
   build:
